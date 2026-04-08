@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('text_requests', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-    $table->text('input_text'); // NN
-    $table->string('source_channel')->nullable();
-    $table->string('final_label')->nullable();
-    $table->float('final_confidence')->nullable();
-    $table->string('status')->nullable();
-    $table->timestamps();
-});
+        Schema::create('requests', function (Blueprint $table) {
+            $table->id();
+            $table->text('input_text')->nullable();
+            $table->foreignId('image_id')->nullable()->constrained('images')->onDelete('set null');
+            $table->string('final_label')->nullable();
+            $table->float('final_confidence')->nullable();
+            $table->string('status')->nullable();
+            $table->text('reason')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('text_requests');
+        Schema::dropIfExists('requests');
     }
 };
