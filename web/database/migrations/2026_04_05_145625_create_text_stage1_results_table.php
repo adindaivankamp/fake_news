@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('text_stage1_results', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('request_id')->constrained('text_requests')->cascadeOnDelete();
-    $table->foreignId('knowledge_id')->constrained('knowledge_base')->cascadeOnDelete();
-    $table->float('nli_score')->nullable();
-    $table->float('similarity_score')->nullable();
-    $table->string('label')->nullable();
-    $table->boolean('is_stop')->default(false);
-    $table->timestamps();
+        Schema::create('stage1_results', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
+            $table->foreignId('knowledge_id')->constrained('knowledge_base')->onDelete('cascade');
+            $table->float('similarity_score')->nullable();
+            $table->float('nli_score')->nullable();
+            $table->string('predicted_label')->nullable();
+            $table->boolean('is_stop')->default(false);
+            $table->timestamps();
 });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('text_stage1_results');
+        Schema::dropIfExists('stage1_results');
     }
 };

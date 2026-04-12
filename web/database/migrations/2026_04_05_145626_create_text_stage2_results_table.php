@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('text_stage2_results', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('request_id')->constrained('text_requests')->cascadeOnDelete();
-    $table->string('article_title')->nullable();
-    $table->string('article_url')->nullable();
-    $table->date('article_date')->nullable();
-    $table->text('article_content')->nullable();
-    $table->text('chunk_text')->nullable();
-    $table->float('similarity_score')->nullable();
-    $table->float('nli_score')->nullable();
-    $table->string('label')->nullable();
-    $table->timestamps();
+        Schema::create('stage2_results', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
+            $table->string('article_title')->nullable();
+            $table->string('article_url')->nullable();
+            $table->date('article_date')->nullable();
+            $table->text('chunk_text')->nullable();
+            $table->integer('chunk_index')->nullable();
+            $table->float('similarity_score')->nullable();
+            $table->float('nli_score')->nullable();
+            $table->string('predicted_label')->nullable();
+            $table->timestamps();
 });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('text_stage2_results');
+        Schema::dropIfExists('stage2_results');
     }
 };

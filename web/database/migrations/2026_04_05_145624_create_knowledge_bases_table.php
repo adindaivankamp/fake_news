@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('knowledge_base', function (Blueprint $table) {
-    $table->id();
-    $table->string('title')->nullable();
-    $table->text('hoax_text')->nullable();
-    $table->text('fact_text')->nullable();
-    $table->string('category')->nullable();
-    $table->string('source_link')->nullable();
-    $table->json('link_counter')->nullable();
-    $table->date('published_at')->nullable();
-    $table->timestamps();
+            $table->id();
+            $table->string('title')->nullable();
+            $table->text('hoax_text')->nullable();
+            $table->text('fact_text')->nullable();
+            $table->string('category')->nullable();
+            $table->string('source_url')->nullable(); 
+            $table->date('published_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('knowledge_bases');
+        Schema::dropIfExists('knowledge_base');
     }
 };

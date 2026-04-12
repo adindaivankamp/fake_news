@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('image_search_results', function (Blueprint $table) {
+        Schema::create('user_interactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
-            $table->string('source_url')->nullable();
-            $table->float('similarity_score')->nullable();
+            $table->string('source_channel')->nullable();
+            $table->string('interaction_type')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('image_search_results');
+        Schema::dropIfExists('user_interactions');
     }
 };
