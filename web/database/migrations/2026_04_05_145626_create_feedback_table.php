@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('feedbacks', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
-    $table->foreignId('text_request_id')->nullable()->constrained('text_requests')->cascadeOnDelete();
-    $table->foreignId('image_request_id')->nullable()->constrained('image_requests')->cascadeOnDelete();
-    $table->string('feedback')->nullable();
-    $table->timestamps();
-});
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
+            $table->text('feedback')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('feedbacks');
     }
 };
