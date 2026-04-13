@@ -12,13 +12,14 @@ class WaController extends Controller
         // Ambil data dari Fonnte
         $sender = $request->input('sender');
         $message = $request->input('message');
+        $name = $request->input('name');
 
         // DEBUG (biar yakin masuk)
         \Log::info('WA MASUK', [
             'sender' => $sender,
             'message' => $message
         ]);
-        
+    // kirimapi
 
         // 🔥 DUMMY BALASAN (NO LOGIC)
         $reply = "Halo, pesan kamu sudah masuk ke sistem kami ✅";
