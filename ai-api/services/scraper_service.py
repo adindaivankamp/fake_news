@@ -94,6 +94,7 @@ def scrape_single(page, url):
     try:
         page.goto(url)
         page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(2000)
 
         body_text = page.locator("body").inner_text()
 
@@ -121,7 +122,7 @@ def scrape_single(page, url):
 
         # 2 & 3. klaim & Fakta
         match_konten = re.search(
-            r'klaim\s*[:]?\s*(.*?)(?=\n\s*(?:Link Counter|Referensi)\s*[:]?|\Z)',
+            r'Penjelasan\s*[:]?\s*(.*?)(?=\n\s*(?:Link Counter|Referensi)\s*[:]?|\Z)',
             body_text, re.DOTALL | re.IGNORECASE
         )
 
@@ -248,3 +249,43 @@ def retry_scrape_nan(df_to_fix):
 
     print("\n✅ Proses retry selesai!")
     return df_to_fix
+
+# =========================
+# FUNCTION: clean data
+# =========================
+def clean_dataframe(df):
+
+    df['kategori_hoaks'] = df['judul'].apply(
+        lambda x: re.search(r'\[(.*?)\]', x).group(1).strip()
+        if re.search(r'\[(.*?)\]', x) else None
+    )
+
+    df['judul'] = df['judul'].apply(
+        lambda x: re.sub(r'\s*\[.*?\]\s*', ' ', x).strip()
+    )
+
+    df['tanggal'] = df['tanggal'].str.replace(
+        r'[^0-9A-Za-z ]', '', regex=True
+    ).str.strip()
+
+    bulan_dict = {
+        'Januari':'01','Februari':'02','Maret':'03','April':'04','Mei':'05',
+        'Juni':'06','Juli':'07','Agustus':'08','September':'09','Oktober':'10',
+        'November':'11','Desember':'12'
+    }
+
+    def ubah_tanggal_manual(tgl_str):
+        for bulan, angka in bulan_dict.items():
+            if bulan in tgl_str:
+                tgl_str = tgl_str.replace(bulan, angka)
+        return tgl_str
+
+    df['tanggal'] = df['tanggal'].apply(ubah_tanggal_manual)
+    df['tanggal'] = pd.to_datetime(df['tanggal'], dayfirst=True, errors='coerce')
+
+    df = df.dropna(subset=['tanggal'])
+    df = df.sort_values(by='tanggal', ascending=False).reset_index(drop=True)
+
+    df = df.drop_duplicates(subset=['judul'])
+
+    return df

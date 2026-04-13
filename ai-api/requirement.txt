@@ -1,4 +1,3 @@
-flask
 pyarrow
 pandas
 numpy
@@ -9,3 +8,9 @@ tiktoken
 mysql-connector-python
 python-dotenv
 playwright
+feedparser 
+beautifulsoup4
+google-genai
+serpapi
+pillow
+tensorflow

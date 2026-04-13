@@ -7,7 +7,19 @@ from dotenv import load_dotenv
 import subprocess
 
 load_dotenv()
+import chromadb
 
+def init_chroma():
+    client = chromadb.Client()
+
+    print("🚀 Membuat collection baru (cosine)...")
+
+    collection = client.create_collection(
+        name="berita_hoax",
+        metadata={"hnsw:space": "cosine"}
+    )
+
+    print("✅ Collection berhasil dibuat.")
 # ==========================================
 # CONFIG
 # ==========================================
@@ -16,6 +28,8 @@ MODEL_NAME = os.getenv("MODEL_NAME")
 MODEL_DIR = os.getenv("MODEL_DIR")
 NLI_MODEL_NAME = os.getenv("NLI_MODEL_NAME")
 NLI_MODEL_DIR = os.getenv("NLI_MODEL_DIR")
+CHROMA_DIR = os.getenv("CHROMA_DIR")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 
 # ==========================================
 # 1. CLEAR CHROMA
@@ -113,7 +127,21 @@ def download_playwright():
     print("🚀 Menginstall Chromium untuk Playwright...")
     subprocess.run(["playwright", "install", "chromium"], check=True)
     print("✅ Chromium siap digunakan.")
-    
+
+
+# ==========================================
+# DELETE CHROMA
+# ==========================================
+def delete_chroma_collection():
+    client = chromadb.PersistentClient(path=CHROMA_DIR)
+
+    try:
+        client.delete_collection(name=COLLECTION_NAME)
+        print("🗑️ Collection berhasil dihapus.")
+    except Exception as e:
+        print(f"⚠️ Gagal hapus collection: {e}")
+
+
 # ==========================================
 # MAIN
 # ==========================================
@@ -122,7 +150,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--step",
         type=str,
-        choices=["seed", "clear", "model","nli" ,"playwright","all"],
+        choices=["seed", "clear","delete", "model","nli" ,"playwright","all"],
         default="all",
         help="Step yang dijalankan"
     )
@@ -142,6 +170,8 @@ if __name__ == "__main__":
         download_nli_model()
     elif args.step == "playwright":
         download_playwright()
+    elif args.step == "delete":
+        delete_chroma_collection()
     elif args.step == "all":
         clear_chroma(collection)
         seed_parquet_to_chroma(collection)

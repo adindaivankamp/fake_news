@@ -1,33 +1,47 @@
-from flask import Blueprint
-from controllers.search_controller import search_controller
-from flask import Blueprint, jsonify
-from controllers.scraper_controller import run_scraper_pipeline
-search_bp = Blueprint("search", __name__)
+# routes/route.py
+from fastapi import APIRouter, Request
+from controllers.image_detection_controller import detect_image_fake_controller
+from controllers.text_detection_controller import detect_text_fake_news_controller
+from controllers.kb_controller import update_knowledge_base_controller
 
-def init_search_routes(collection, model):
-    @search_bp.route("/search", methods=["POST"])
-    def search():
-        return search_controller(collection, model)
 
-    return search_bp
+def create_routes():
+    router = APIRouter()
 
-def init_scrape_routes(collection, model):
-    scrape_bp = Blueprint("scrape", __name__)
+    # ======================
+    # TEXT DETECTION
+    # ======================
+    @router.post("/text-detection")
+    async def text_detection(request: Request, data: dict):
+        collection = request.app.state.collection
+        transformer = request.app.state.transformer
+        nli = request.app.state.nli
+        client = request.app.state.client
 
-    @scrape_bp.route("/scrape", methods=["POST"])
-    def scrape():
-        try:
-            run_scraper_pipeline(model, collection, batch_size=32)
+        return detect_text_fake_news_controller(
+            collection, transformer, nli, client, data
+        )
 
-            return jsonify({
-                "status": "success",
-                "message": "Scraping dan insert ke DB & Chroma selesai."
-            }), 200
+    # ======================
+    # SCRAPER
+    # ======================
+    @router.post("/scrape")
+    async def scrape(request: Request):
+        transformer = request.app.state.transformer
+        collection = request.app.state.collection
 
-        except Exception as e:
-            return jsonify({
-                "status": "error",
-                "message": str(e)
-            }), 500
+        return update_knowledge_base_controller(
+            transformer, collection
+        )
 
-    return scrape_bp
+    # ======================
+    # IMAGE DETECTION
+    # ======================
+    @router.post("/image-detection")
+    async def image_detection(request: Request, data: dict):
+        browser = request.app.state.browser
+
+        # async karena pakai playwright
+        return await detect_image_fake_controller(browser, data)
+
+    return router
