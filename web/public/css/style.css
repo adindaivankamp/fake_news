@@ -1,0 +1,436 @@
+/* RESET */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f5f5;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/* NAVBAR */
+.navbar {
+    background: white;
+    padding: 0 40px; /* HAPUS padding atas bawah */
+    border-bottom: 1px solid #eee;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    height: 60px; /* kontrol tinggi di sini saja */
+    display: flex;
+    align-items: center;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%; /* penting biar center */
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 40px; /* pakai height, bukan width */
+    width: auto;
+}
+
+/* BUTTON LOGIN */
+.btn-login {
+    background: #b30000;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* HOVER */
+.btn-login:hover {
+    background: #8f0000;
+} 
+
+/* HERO */
+.hero {
+    position: relative;
+    padding: 60px 0;
+    min-height: 420px;
+
+    background: url('/img/landing-page.png') no-repeat right center;
+    background-size: contain;
+     background-blend-mode: lighten;
+    overflow: hidden;
+    
+}
+
+/* OVERLAY FADE */
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to right,
+        rgba(245,245,245,1) 0%,     
+        rgba(245,245,245,0.95) 25%,
+        rgba(245,245,245,0.8) 45%,
+        rgba(245,245,245,0.4) 65%,
+        rgba(245,245,245,0.1) 80%,
+        rgba(245,245,245,0) 100%
+    );
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 80px;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(245,245,245,1)
+    );
+
+    z-index: 1;
+}
+
+/* GARIS MERAH PEMBATAS */
+.hero-border {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(to right, #b30000, #ff4d4d);
+
+    position: relative;
+    z-index: 3; /* lebih tinggi dari overlay */
+
+    margin-top: -4px;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-text h1 {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+
+    color: #8b0000; /* merah tua clean */
+    
+    margin-bottom: 15px;
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: #444;
+    line-height: 1.6;
+    max-width: 420px;
+}
+
+.hero-btn button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* BUTTON */
+.btn-red {
+    background: #b30000;
+    color: white;
+    border: none;
+
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.btn-outline {
+    background: #b30000;
+    border: none;
+    color: white;
+
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* HERO IMAGE */
+.hero-img {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-img img {
+    width: 400px; /* ukuran fix */
+    height: 300px; /* tinggi fix */
+    object-fit: cover; /* ini kunci biar ga rusak */
+    border-radius: 12px; /* biar lebih modern */
+}
+
+/* TOP FEATURES */
+.top-features {
+    position: relative;
+    padding: 50px 0;
+}
+
+/* GARIS MERAH FULL WIDTH */
+.top-features::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100vw; 
+    height: 4px;
+
+    background: linear-gradient(to right, #b30000, #ff4d4d);
+
+    transform: translateX(calc(-50vw + 50%)); 
+}
+
+.top-features .container {
+    display: flex;
+    gap: 20px;
+}
+
+.box {
+    flex: 1;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: left;
+
+    background: white;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+
+    transition: 0.3s;
+}
+
+.box:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+.btn-card {
+    margin-top: 20px;
+    padding: 10px 18px;
+    border-radius: 20px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* WARNA BUTTON */
+.red-btn {
+    background: linear-gradient(to right, #ff7b7b, #b30000);
+    color: white;
+}
+
+.blue-btn {
+    background: linear-gradient(to right, #8fb3ff, #3b6edc);
+    color: white;
+}
+
+.green-btn {
+    background: linear-gradient(to right, #7be0a2, #2ebd70);
+    color: white;
+}
+
+.red {
+    background: rgba(255, 0, 0, 0.05);
+    border: 1.5px solid rgba(255, 0, 0, 0.2);
+}
+
+.blue {
+    background: rgba(0, 100, 255, 0.08);
+    border: 1.5px solid rgba(0, 100, 255, 0.2);
+}
+
+.green {
+    background: rgba(0, 180, 80, 0.08);
+    border: 1.5px solid rgba(0, 180, 80, 0.2);
+}
+
+
+
+/* FITUR */
+.fitur {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.fitur h2 {
+    font-size: 32px;
+    color: #8b0000;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
+}
+
+/* garis bawah */
+.fitur h2::after {
+    content: "";
+    display: block;
+    width: 120px;
+    height: 3px;
+    background: #b30000;
+    margin: 10px auto 0;
+}
+
+.fitur-list {
+    display: flex;
+    gap: 30px;
+}
+
+.card {
+    flex: 1;
+    background: white;
+    padding: 30px;
+    border: 1.5px solid rgba(179,0,0,0.4);
+    border-radius: 16px;
+
+    text-align: left;
+
+    min-height: 220px; /* biar tinggi */
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+
+    transition: 0.3s;
+}
+
+.card h4 {
+    color: #8b0000;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #444;
+    line-height: 1.6;
+}
+
+/* HOVER EFFECT */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+/* HOW */
+.how {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.how h2 {
+    font-size: 32px;
+    color: #8b0000;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.how h2::after {
+    content: "";
+    display: block;
+    width: 120px;
+    height: 3px;
+    background: #b30000;
+    margin: 10px auto 0;
+}
+
+.steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.step-card {
+    background: #fff;
+    border: 1.5px solid rgba(179,0,0,0.4);
+    border-radius: 16px;
+
+    padding: 30px;
+    width: 300px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.step-card h4 {
+    color: #8b0000;
+    margin-bottom: 10px;
+}
+
+.step-card p {
+    color: #444;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.step {
+    padding: 15px 25px;
+    border: 2px solid #b30000;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.arrow {
+    font-size: 40px;
+    color: #b30000;
+    font-weight: bold;
+}
+
+.fitur {
+    position: relative;
+    padding: 60px 0;
+}
+
+/* GARIS MERAH DI BAWAH */
+.fitur::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100vw;
+    height: 4px;
+
+    background: linear-gradient(to right, #b30000, #ff4d4d);
+
+    transform: translateX(calc(-50vw + 50%));
+}
+
+/* FOOTER */
+footer {
+    background: #b30000;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}

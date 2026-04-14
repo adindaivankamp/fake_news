@@ -1,0 +1,28 @@
+.navbar-blue {
+  background: #b30000 !important;
+}
+
+.navbar-blue .nav-link,
+.navbar-blue .fas {
+  color: white !important;
+}
+
+/* scroll effect */
+.navbar-scrolled {
+  background-color: white !important;
+}
+
+.navbar-scrolled .nav-link,
+.navbar-scrolled .fas {
+  color: #b30000 !important;
+}
+
+/* breadcrumb */
+.breadcrumb-item {
+  color: white !important;
+}
+
+.breadcrumb-item.active {
+  color: #ffffff !important;
+  font-weight: bold;
+}
