@@ -5,6 +5,10 @@ from sentence_transformers import SentenceTransformer, CrossEncoder
 from config.chroma_config import get_chroma_collection
 from dotenv import load_dotenv
 import subprocess
+import pandas as pd
+import ast
+from datetime import datetime
+from config.db_config import get_connection
 
 load_dotenv()
 import chromadb
@@ -30,6 +34,7 @@ NLI_MODEL_NAME = os.getenv("NLI_MODEL_NAME")
 NLI_MODEL_DIR = os.getenv("NLI_MODEL_DIR")
 CHROMA_DIR = os.getenv("CHROMA_DIR")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+CSV_PATH = os.getenv("CSV_PATH")
 
 # ==========================================
 # 1. CLEAR CHROMA
@@ -146,7 +151,103 @@ def delete_chroma_collection():
     except Exception as e:
         print(f"⚠️ Gagal hapus collection: {e}")
 
+# ==========================================
+# SEED CSV TO MYSQL
+# ==========================================
 
+def seed_csv_to_mysql(path_csv):
+    # 1. Cek file
+    if not os.path.exists(path_csv):
+        print(f"❌ File tidak ditemukan: {path_csv}")
+        return
+
+    print("📥 Loading data dari CSV...")
+
+    try:
+        df = pd.read_csv(path_csv)
+    except Exception as e:
+        print(f"❌ Gagal membaca CSV: {e}")
+        return
+
+    # 2. Validasi kolom
+    required_cols = {"judul", "klaim", "fakta", "kategori", "link", "link_counter", "tanggal"}
+    if not required_cols.issubset(df.columns):
+        print("❌ Kolom wajib tidak lengkap")
+        return
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # 3. Hindari double insert (opsional tapi recommended)
+    cursor.execute("SELECT COUNT(*) FROM knowledge_base")
+    total = cursor.fetchone()[0]
+
+    if total > 0:
+        print(f"⚠️ Data sudah ada ({total} rows). Skip insert.")
+        cursor.close()
+        conn.close()
+        return
+
+    print(f"🚀 Menyisipkan {len(df)} data ke MySQL...")
+
+    try:
+        for _, row in df.iterrows():
+
+            # Format tanggal
+            published_at = None
+            if pd.notna(row["tanggal"]):
+                try:
+                    published_at = datetime.strptime(row["tanggal"], "%Y-%m-%d")
+                except:
+                    pass
+
+            # Insert ke knowledge_base
+            insert_kb = """
+                INSERT INTO knowledge_base
+                (title, hoax_text, fact_text, category, source_url, published_at, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, NOW(), NOW())
+            """
+
+            cursor.execute(insert_kb, (
+                row["judul"],
+                row["klaim"],
+                row["fakta"],
+                row["kategori"],
+                row["link"],
+                published_at
+            ))
+
+            knowledge_id = cursor.lastrowid
+
+            # Parsing link_counter
+            links = []
+            if pd.notna(row["link_counter"]):
+                try:
+                    links = ast.literal_eval(row["link_counter"])
+                except Exception:
+                    pass
+
+            # Insert ke knowledge_links
+            if isinstance(links, list):
+                insert_link = """
+                    INSERT INTO knowledge_links
+                    (knowledge_id, url, created_at, updated_at)
+                    VALUES (%s, %s, NOW(), NOW())
+                """
+
+                for url in links:
+                    cursor.execute(insert_link, (knowledge_id, url))
+
+        conn.commit()
+        print("✅ Seeder MySQL berhasil!")
+
+    except Exception as e:
+        conn.rollback()
+        print(f"❌ Gagal insert: {e}")
+
+    finally:
+        cursor.close()
+        conn.close()
 # ==========================================
 # MAIN
 # ==========================================
@@ -155,7 +256,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--step",
         type=str,
-        choices=["seed", "clear","delete", "model","nli" ,"playwright","all"],
+        choices=["seed", "clear","delete", "model","nli" ,"playwright","mysql","all"],
         default="all",
         help="Step yang dijalankan"
     )
@@ -177,9 +278,12 @@ if __name__ == "__main__":
         download_playwright()
     elif args.step == "delete":
         delete_chroma_collection()
+    elif args.step == "mysql":
+        seed_csv_to_mysql(CSV_PATH)
     elif args.step == "all":
         clear_chroma(collection)
         seed_parquet_to_chroma(collection)
+        seed_csv_to_mysql(CSV_PATH)
         download_model()
 
     print("=== SETUP SELESAI ===")

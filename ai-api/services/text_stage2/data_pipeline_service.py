@@ -27,9 +27,6 @@ async def run_pipeline(pesan, browser, transformer, limit_rss=7, max_articles=3)
         if not link:
             continue
 
-        if not is_trusted(link):
-            continue
-
         # 🔥 deduplicate di sini
         if link in seen:
             continue
