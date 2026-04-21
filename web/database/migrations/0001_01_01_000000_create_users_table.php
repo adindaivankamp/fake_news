@@ -13,12 +13,14 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('email')->unique()->nullable();
-            $table->timestamp('email_verified_at')->nullable(); 
-            $table->string('password')->nullable(); 
-            $table->string('phone_number')->nullable(); 
-            $table->string('role')->nullable(); 
-            $table->rememberToken(); 
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('role')->nullable();
+            $table->rememberToken();
             $table->timestamps();
+            $table->string('login_token')->nullable();
+            $table->timestamp('token_expired_at')->nullable();
         });
 
         // Tabel Password Reset 

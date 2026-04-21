@@ -26,11 +26,36 @@
 
 </div>
 
-<h2 class="judul-section">Berita Teratas Hari ini</h2>
+<div class="info-update">
+    Data terakhir diperbarui pukul 00.00, 20 April 2026
+</div>
 
-<div class="news-container">
-    <div class="news-card"></div>
-    <div class="news-card"></div>
+<div class="popular-section">
+
+    <div class="popular-header">
+        <i class="fa fa-chart-line"></i>
+        <span>Pencarian Populer</span>
+    </div>
+
+    <div class="popular-container">
+
+        <div class="popular-card">
+            <div class="rank">1</div>
+            <p>Contoh berita hoax tentang wisata</p>
+        </div>
+
+        <div class="popular-card">
+            <div class="rank">2</div>
+            <p>Kabar bantuan sosial Rp1,5 juta</p>
+        </div>
+
+        <div class="popular-card">
+            <div class="rank">3</div>
+            <p>Isu politik dan narasi viral</p>
+        </div>
+
+    </div>
+
 </div>
 
 @endsection

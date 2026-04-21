@@ -21,7 +21,7 @@
             <img src="{{ asset('img/logo-lensa.png') }}" class="logo-img" alt="Logo">
         </div>
 
-        <a href="#" class="btn-login">
+        <a href="{{ route('login') }}" class="btn-login">
             <i class="fa fa-user"></i> Daftar / Masuk
         </a>
     </div>
@@ -53,7 +53,7 @@
         <div class="box red">
             <h4>Akses Penuh</h4>
             <p>Simpan riwayat dan kelola semua informasimu di Lensa Hoax</p>
-            <button class="btn-card red-btn">Daftar atau Masuk</button>
+            <a href="{{ route('login') }}" class="btn-card red-btn">Daftar atau Masuk</a>
         </div>
 
         <div class="box blue">

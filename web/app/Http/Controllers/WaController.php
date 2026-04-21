@@ -8,6 +8,7 @@ use App\Models\MessageCache;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class WaController extends Controller
 {
@@ -19,8 +20,7 @@ class WaController extends Controller
             $message = trim(strtolower($request->input('message')));
             $name = $request->input('name');
 
-            // 🔥 1. CEK / CREATE USER
-            $user = User::firstOrCreate(
+            User::firstOrCreate(
                 ['phone_number' => $sender],
                 ['name' => $name ?? 'User WA']
             );
@@ -40,22 +40,20 @@ class WaController extends Controller
             if (str_starts_with($message, '#detect')) {
 
                 $lastMessage = MessageCache::where('sender_number', $sender)
-                ->where('created_at', '>=', Carbon::now()->subMinutes(5))
-                ->latest() // urut terbaru
-                ->first(); // ambil 1 saja
+                    ->where('created_at', '>=', Carbon::now()->subMinutes(5))
+                    ->latest() // urut terbaru
+                    ->first(); // ambil 1 saja
                 if ($lastMessage) {
 
-                $text = "📩 Pesan sebelumnya:\n\n " . $lastMessage->latest_message;
+                    $text = "📩 Pesan sebelumnya:\n\n " . $lastMessage->latest_message;
 
                     $reply = $text;
 
                     // 🔥 OPTIONAL: HAPUS SETELAH DIPAKAI
                     MessageCache::where('sender_number', $sender)->delete();
-
                 } else {
                     $reply = "⚠️ Tidak ada pesan dalam 5 menit terakhir.";
                 }
-
             } else {
                 $reply = "❓ Command tidak dikenali";
             }
@@ -69,10 +67,9 @@ class WaController extends Controller
             ]);
 
             return response()->json(['status' => 'replied']);
-
         } catch (\Exception $e) {
 
-            \Log::error('ERROR WA', [
+            Log::error('ERROR WA', [
                 'msg' => $e->getMessage(),
                 'line' => $e->getLine()
             ]);
@@ -99,7 +96,7 @@ class WaController extends Controller
 
         // 3. LOGIKA KETUA: Kalau akunnya ada DAN itu bukan akun yang lagi login sekarang -> HAPUS!
         if ($existingUser && $existingUser->id !== $currentUser->id) {
-            $existingUser->delete(); 
+            $existingUser->delete();
         }
 
         // 4. "Kalau ga ada ya create biasa aja" -> Update nomor WA ke akun yang sekarang login
