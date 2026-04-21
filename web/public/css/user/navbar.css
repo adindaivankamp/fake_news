@@ -1,0 +1,255 @@
+/* ==========================================================
+   NAVBAR
+   ========================================================== */
+.lh-navbar {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 74px;
+    background: var(--color-white);
+    box-shadow: var(--shadow-nav);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(18px, 2.6vw, 38px);
+}
+
+/* Logo */
+.lh-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lh-logo__img {
+    width: clamp(95px, 8.4vw, 130px);
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.lh-logo__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-family: var(--font-istok);
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.lh-logo__lensa { color: var(--color-primary-mid); }
+.lh-logo__hoax  { color: var(--color-primary); }
+
+/* Nav icon buttons */
+.lh-nav-icons {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lh-nav-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: var(--radius-circle);
+    background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-white);
+    border: 1px solid #73070B;
+    box-shadow: 0 6px 14px rgba(115, 7, 11, 0.22);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.24s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.22s ease, padding 0.24s ease;
+    flex-shrink: 0;
+}
+
+.lh-nav-btn:hover {
+    width: min(240px, 33vw);
+    background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(115, 7, 11, 0.32);
+    justify-content: flex-start;
+    padding: 0 12px 0 10px;
+}
+
+/* Keep WhatsApp label visible without hover when needed. */
+.lh-nav-btn--whatsapp-visible {
+    width: min(340px, 44vw);
+    justify-content: flex-start;
+    padding: 0 12px 0 10px;
+}
+
+.lh-nav-btn--whatsapp-visible:hover,
+.lh-nav-btn--whatsapp-visible:focus-visible {
+    width: min(340px, 44vw);
+    justify-content: flex-start;
+    padding: 0 12px 0 10px;
+}
+
+.lh-nav-btn:hover,
+.lh-nav-btn:focus-visible {
+    z-index: 20;
+}
+
+.lh-nav-btn:focus-visible {
+    outline: 2px solid #f3b8bf;
+    outline-offset: 2px;
+}
+
+/* Tooltip for top nav icons */
+.lh-nav-tooltip {
+    position: static;
+    color: #ffffff;
+    font-family: var(--font-dmsans);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-left: 0;
+    max-width: 0;
+    white-space: nowrap;
+    letter-spacing: 0.1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: max-width 0.24s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.lh-nav-btn > iconify-icon:first-child {
+    display: block;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.lh-nav-tooltip iconify-icon {
+    display: none;
+}
+
+.lh-nav-tooltip span {
+    color: #ffffff;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lh-nav-btn:hover .lh-nav-tooltip,
+.lh-nav-btn:focus-visible .lh-nav-tooltip {
+    opacity: 1;
+    margin-left: 8px;
+    max-width: 176px;
+    transform: translateX(0);
+}
+
+.lh-nav-tooltip--left {
+    margin-left: 0;
+}
+
+.lh-nav-tooltip--always-visible {
+    opacity: 1;
+    margin-left: 8px;
+    max-width: 220px;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.lh-nav-btn--whatsapp-visible .lh-nav-tooltip span {
+    overflow: visible;
+    text-overflow: clip;
+}
+
+@media (max-width: 900px) {
+    .lh-navbar {
+        padding: 0 12px;
+        height: 68px;
+    }
+
+    .lh-logo__img {
+        width: 108px;
+    }
+
+    .lh-nav-icons {
+        gap: 8px;
+    }
+
+    .lh-nav-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .lh-nav-btn:hover,
+    .lh-nav-btn:focus-visible {
+        width: min(215px, 41vw);
+        padding: 0 12px 0 10px;
+    }
+
+    .lh-nav-btn--whatsapp-visible,
+    .lh-nav-btn--whatsapp-visible:hover,
+    .lh-nav-btn--whatsapp-visible:focus-visible {
+        width: min(260px, 62vw);
+    }
+
+    .lh-nav-btn:hover .lh-nav-tooltip,
+    .lh-nav-btn:focus-visible .lh-nav-tooltip {
+        margin-left: 7px;
+        max-width: 148px;
+    }
+
+    .lh-nav-tooltip {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 560px) {
+    .lh-navbar {
+        height: 70px;
+    }
+
+    .lh-logo__img {
+        width: 100px;
+    }
+
+    .lh-nav-icons {
+        gap: 6px;
+    }
+
+    .lh-nav-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+    }
+
+    .lh-nav-btn--whatsapp-visible,
+    .lh-nav-btn--whatsapp-visible:hover,
+    .lh-nav-btn--whatsapp-visible:focus-visible {
+        width: min(230px, 66vw);
+        padding: 0 10px 0 8px;
+    }
+
+    .lh-nav-btn:hover,
+    .lh-nav-btn:focus-visible {
+        width: min(178px, 48vw);
+        padding: 0 10px 0 8px;
+    }
+
+    .lh-nav-tooltip {
+        display: inline-flex;
+    }
+
+    .lh-nav-btn:hover .lh-nav-tooltip,
+    .lh-nav-btn:focus-visible .lh-nav-tooltip {
+        margin-left: 6px;
+        max-width: 124px;
+    }
+
+    .lh-nav-tooltip--always-visible {
+        margin-left: 6px;
+        max-width: 170px;
+    }
+}
