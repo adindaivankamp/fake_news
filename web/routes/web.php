@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\WaController;
+use App\Http\Controllers\GoogleAuthController;
 
 Route::get('/', function () {
     return view('landing_page.landing');
@@ -34,3 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/link-wa', [WaController::class, 'linkWhatsApp'])->name('wa.link');
 
 });
+
+// Route untuk Google Auth
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
