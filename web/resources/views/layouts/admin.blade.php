@@ -19,19 +19,6 @@
         <img src="{{ asset('img/logo-lensa.png') }}" class="logo-header" alt="Logo">
     </div>
 
-    <!-- KANAN -->
-    <div class="header-right">
-        <input type="text" placeholder="Search">
-
-        <div class="icon-circle">
-            <i class="fa fa-bell"></i>
-        </div>
-
-        <div class="icon-circle">
-            <i class="fa fa-user"></i>
-        </div>
-    </div>
-
 </div>
 
 <div class="admin-layout">
@@ -53,6 +40,13 @@
                 </a>
             </li>
 
+            <li class="{{ request()->is('admin/cek-berita') ? 'active' : '' }}">
+                <a href="/admin/cek-berita">
+                    <i class="fa fa-search"></i>
+                    <span>Cek Berita</span>
+                </a>
+            </li>
+
             <li class="{{ request()->is('admin/riwayat') ? 'active' : '' }}">
                 <a href="/admin/riwayat">
                     <i class="fa fa-globe"></i>
@@ -67,10 +61,17 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#">
+            <li class="{{ request()->is('admin/umpanbalik') ? 'active' : '' }}">
+                <a href="/admin/umpanbalik">
                     <i class="fa fa-comment"></i>
                     <span>Umpan Balik</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa fa-cog"></i>
+                    <span>Setting</span>
                 </a>
             </li>
         </ul>
