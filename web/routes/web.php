@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\UmpanBalikController;
 use App\Http\Controllers\WaController;
 
 Route::get('/', function () {
@@ -11,6 +12,8 @@ Route::get('/', function () {
 });
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+Route::get('/admin/user', [UserController::class, 'index']);
+Route::get('/admin/umpanbalik', [UmpanBalikController::class, 'index']);
 
 // RIWAYAT
 Route::get('/admin/riwayat', [RiwayatController::class, 'index']);

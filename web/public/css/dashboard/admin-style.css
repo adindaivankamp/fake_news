@@ -1,6 +1,6 @@
 html, body {
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden; 
 }
 
 /* RESET */
@@ -242,4 +242,175 @@ body {
 .sidebar ul li a i {
     min-width: 20px;
     text-align: center;
+}
+
+/* USER PAGE */
+.user-container {
+    padding: 20px;
+}
+
+/* SEARCH CONTAINER */
+.search-box {
+    display: flex;
+    justify-content: flex-end; /* 👉 pindah ke kanan */
+    margin-bottom: 20px;
+}
+
+/* INPUT */
+.search-box input {
+    padding: 10px 15px;
+    width: 300px;
+    border: 2px solid #b30000;
+    border-right: none;
+    border-radius: 20px 0 0 20px; /* 👉 tumpul kiri */
+    outline: none;
+}
+
+/* BUTTON */
+.search-box button {
+    padding: 10px 15px;
+    background: #b30000;
+    color: white;
+    border: none;
+    border-radius: 0 20px 20px 0; /* 👉 tumpul kanan */
+    cursor: pointer;
+}
+
+/* TABLE */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #b30000;
+}
+
+.user-table th {
+    background: #f8f8f8;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #b30000;
+}
+
+.user-table td {
+    padding: 15px;
+    border-bottom: 1px solid #b30000;
+}
+
+/* CONTAINER */
+.umpanbalik-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* CARD */
+.umpanbalik-card {
+    border: 2px solid #b30000;
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+}
+
+/* HEADER */
+.umpanbalik-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #b30000;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.umpanbalik-header h3 {
+    margin: 0;
+    color: #800000;
+}
+
+.umpanbalik-header span {
+    color: #800000;
+}
+
+/* TEXT */
+.umpanbalik-card p {
+    color: #800000;
+    line-height: 1.6;
+}
+
+/* BUTTON */
+.umpanbalik-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.umpanbalik-action button {
+    background: #b30000;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.umpanbalik-action button:hover {
+    background: #800000;
+}
+
+.info-update {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px solid #800000;
+    border-radius: 12px;
+    background: #f5e6e6;
+    font-weight: 500;
+}
+
+.popular-section {
+    margin-top: 20px;
+}
+
+.popular-header {
+    background: linear-gradient(to right, #b30000, #800000);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px 10px 0 0;
+    font-size: 18px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.popular-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border: 2px solid #b30000;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.popular-card {
+    flex: 1;
+    border: 2px solid #b30000;
+    border-radius: 10px;
+    padding: 15px;
+    position: relative;
+    background: white;
+}
+
+.rank {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: orange;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
