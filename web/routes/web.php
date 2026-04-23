@@ -7,7 +7,8 @@ use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PencarianController;
 use App\Http\Controllers\UmpanBalikController;
 use App\Http\Controllers\WaController;
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\Api\HoaxDetectionController;
+
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -23,12 +24,12 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('das
 
 // Pencarian 
 
-    Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
-    Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
-    Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
-    Route::get('/dapatkan-whatsapp', function () {
-        return view('whatsapp');
-    })->name('whatsapp.page');
+Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
+Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
+Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
+Route::get('/dapatkan-whatsapp', function () {
+    return view('whatsapp');
+})->name('whatsapp.page');
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 Route::get('/admin/user', [UserController::class, 'index']);
@@ -55,13 +56,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 Route::any('/wa-webhook', [WaController::class, 'webhook']);
-Route::post('/detect-hoax', [ApiController::class, 'detectHoax']);
 
 //login menggunakan wa di web
 Route::get('/login-wa', [AuthController::class, 'showPhoneForm']);
 Route::post('/login-wa/request', [AuthController::class, 'requestToken']);
 Route::get('/login-wa/verify', [AuthController::class, 'showTokenForm']);
 Route::post('/login-wa/verify', [AuthController::class, 'verifyToken']);
+
+//uji coba deteksi hoax
+Route::get('/uji-coba-deteksi', function () {
+    return view('uji-coba-deteksi');
+});
+Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText']);
 
 
 
@@ -73,3 +79,7 @@ Route::middleware(['auth'])->group(function () {
     // Route buat nyambungin WA
     Route::post('/link-wa', [WaController::class, 'linkWhatsApp'])->name('wa.link');
 });
+
+// Route untuk Google Auth
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
