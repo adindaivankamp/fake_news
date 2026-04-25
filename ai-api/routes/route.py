@@ -15,7 +15,11 @@ def create_routes():
             request.app.state.nli,
             request.app.state.client,
             data,
-            request.app.state.browser
+            request.app.state.browser,
+            request.app.state.searx_session,
+            request.app.state.headers,
+            request.app.state.text_classifier,
+
         )
 
     @router.post("/scrape")

@@ -132,3 +132,47 @@ def llm_fallback_func(klaim, chunks, client):
         "result": result,
         "chunks": chunks
     }
+    
+import json
+
+def llm_query_extractor_fallback(text, client):
+    prompt = f"""
+You are a query extraction system for a news fact-checking search engine.
+
+Task:
+Extract a short, factual search query from the input text.
+
+Rules:
+- Focus only on factual information (entities, events, locations, dates)
+- Ignore opinions, warnings, and irrelevant phrases
+- Do NOT summarize the text
+- Do NOT add new information
+- Output must be max 12 words
+- Output must be keyword-style search query
+- Return ONLY valid JSON
+
+FORMAT OUTPUT:
+{{
+  "query": "your extracted search query here"
+}}
+
+INPUT TEXT:
+{text}
+"""
+
+    response = client.models.generate_content(
+        model="gemma-3-27b-it",
+        contents=prompt,
+    )
+
+    raw_text = response.text.strip()
+
+    # remove markdown if exists
+    if raw_text.startswith("```json"):
+        raw_text = raw_text[7:-3].strip()
+    elif raw_text.startswith("```"):
+        raw_text = raw_text[3:-3].strip()
+
+    result = json.loads(raw_text)
+
+    return result
