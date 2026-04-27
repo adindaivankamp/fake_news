@@ -1,16 +1,18 @@
 @extends('layouts.admin')
 
 @section('title', 'Data Pengguna')
+@section('header-search')
+<form action="" method="GET" class="header-search-modern">
+    <input type="text" name="search" placeholder="Search...">
+    <button type="submit">
+        <i class="fa fa-search"></i>
+    </button>
+</form>
+@endsection
 
 @section('content')
 
 <div class="user-container">
-
-    <!-- SEARCH -->
-    <div class="search-box">
-        <input type="text" placeholder="Search">
-        <button><i class="fa fa-search"></i></button>
-    </div>
 
     <!-- TABLE -->
     <table class="user-table">
