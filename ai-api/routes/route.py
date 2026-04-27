@@ -10,7 +10,8 @@ def create_routes():
     @router.post("/text-detection")
     def text_detection(request: Request, data: dict):
         return detect_text_fake_news_controller(
-            request.app.state.collection,
+            request.app.state.text_request,
+            request.app.state.knowledge_base,
             request.app.state.transformer,
             request.app.state.nli,
             request.app.state.client,
@@ -26,7 +27,7 @@ def create_routes():
     def scrape(request: Request):
         return update_knowledge_base_controller(
             request.app.state.transformer,
-            request.app.state.collection
+            request.app.state.knowledge_base,
         )
 
     @router.post("/image-detection")

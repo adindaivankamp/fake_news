@@ -122,16 +122,20 @@ pip install -r requirements.txt
 ```
 
 ---
-
-### ⚙️ 4. Run AI Service
+### 📦 4. Install Tools
+```bash
+python setup.py --step all
+```
+---
+### ⚙️ 5. Run AI Service
 
 ```bash
-uvicorn main:app --reload
+uvicorn app:app --reload
 ```
 
 ---
 
-### 🌐 5. Run Web App (Laravel)
+### 🌐 6. Run Web App (Laravel)
 
 ```bash
 php artisan serve

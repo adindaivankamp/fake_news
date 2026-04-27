@@ -24,7 +24,9 @@ async def lifespan(app: FastAPI):
     print(f"Running in {Config.ENV} mode, DEBUG={Config.DEBUG}")
 
     # INIT dependencies
-    app.state.collection = get_chroma_collection()
+    app.state.knowledge_base = get_chroma_collection("knowledge_base")
+    app.state.text_request = get_chroma_collection("text_request")
+    
     app.state.transformer = get_transformer_model()
     app.state.nli = get_nli_model()
     app.state.text_classifier = get_text_classifier()

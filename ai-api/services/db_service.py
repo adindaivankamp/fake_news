@@ -13,67 +13,50 @@ def get_latest_title():
         return result[0].lower() if result else ""
 
 def insert_to_mysql(df):
-    """
-    Simpan dataframe ke MySQL (normalized):
-    - knowledge_base (utama)
-    - knowledge_links (relasi 1-to-many)
-
-    Kolom df:
-    title, link, category, klaim/penjelasan, fact_text, link_counter (list url)
-    """
 
     list_id_chroma = []
 
-    # replace NaN -> None
     df = df.where(pd.notnull(df), None)
 
     insert_kb_query = """
-        INSERT INTO knowledge_base (title,source_url, category, hoax_text, fact_text)
-        VALUES (%s, %s, %s, %s, %s)
-    """
-
-    insert_link_query = """
-        INSERT INTO knowledge_links (knowledge_id, url)
-        VALUES (%s, %s)
+        INSERT INTO knowledge_base 
+        (title, source_url, category, hoax_text, fact_text, link_counter)
+        VALUES (%s, %s, %s, %s, %s, %s)
     """
 
     with closing(get_connection()) as db, closing(db.cursor()) as cursor:
         for _, row in df.iterrows():
 
             teks_hoaks = row.get('klaim') or row.get('penjelasan')
+
             links = row.get('link_counter')
 
-            # 🔧 handle kalau links masih string JSON
+            # handle string JSON
             if isinstance(links, str):
                 try:
                     links = json.loads(links)
                 except:
-                    links = None
+                    links = []
 
-            # 🔥 insert ke knowledge_base
+            if not isinstance(links, list):
+                links = []
+
             cursor.execute(insert_kb_query, (
                 row.get('judul'),
                 row.get('link'),
                 row.get('kategori_hoaks'),
                 teks_hoaks,
-                row.get('fakta')
+                row.get('fakta'),
+                json.dumps(links)
             ))
 
             kb_id = cursor.lastrowid
             list_id_chroma.append(str(kb_id))
 
-            # 🔥 insert ke knowledge_links (batch)
-            if links and isinstance(links, list):
-                link_data = [(kb_id, url) for url in links if url]
-
-                if link_data:
-                    cursor.executemany(insert_link_query, link_data)
-
         db.commit()
 
     print(f"✅ Berhasil menyimpan {len(list_id_chroma)} data ke MySQL.")
     return list_id_chroma
-
 
 def get_row_by_id(id_):
     """Ambil seluruh kolom dari knowledge_base kecuali id"""

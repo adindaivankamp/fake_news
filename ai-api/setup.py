@@ -9,6 +9,7 @@ import pandas as pd
 import ast
 from datetime import datetime
 from config.db_config import get_connection
+import json
 
 load_dotenv()
 import chromadb
@@ -18,8 +19,12 @@ def init_chroma():
 
     print("🚀 Membuat collection baru (cosine)...")
 
-    collection = client.create_collection(
-        name="berita_hoax",
+    knowledge_base = client.create_collection(
+        name="knowledge_base",
+        metadata={"hnsw:space": "cosine"}
+    )
+    text_request = client.create_collection(
+        name="text_request",
         metadata={"hnsw:space": "cosine"}
     )
 
@@ -33,39 +38,54 @@ MODEL_DIR = os.getenv("MODEL_DIR")
 NLI_MODEL_NAME = os.getenv("NLI_MODEL_NAME")
 NLI_MODEL_DIR = os.getenv("NLI_MODEL_DIR")
 CHROMA_DIR = os.getenv("CHROMA_DIR")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 CSV_PATH = os.getenv("CSV_PATH")
 
 # ==========================================
 # 1. CLEAR CHROMA
 # ==========================================
-def clear_chroma(collection):
-    total = collection.count()
+def clear_knowledge_base(knowledge_base):
+    total = knowledge_base.count()
 
     if total == 0:
         print("⚠️ ChromaDB sudah kosong.")
         return
 
-    print(f"⚠️ Menghapus {total} data dari ChromaDB...")
+    print(f"⚠️ Menghapus {total} knowledge_base dari ChromaDB...")
 
-    data = collection.get()
+    data = knowledge_base.get()
     ids = data.get("ids", [])
 
-    collection.delete(ids=ids)
+    knowledge_base.delete(ids=ids)
+
+    print("✅ Data berhasil dihapus.")
+
+def clear_text_request(text_request):
+    total = text_request.count()
+
+    if total == 0:
+        print("⚠️ ChromaDB sudah kosong.")
+        return
+
+    print(f"⚠️ Menghapus {total} text_request dari ChromaDB...")
+
+    data = text_request.get()
+    ids = data.get("ids", [])
+
+    text_request.delete(ids=ids)
 
     print("✅ Data berhasil dihapus.")
 
 # ==========================================
 # 2. SEED PARQUET → CHROMA
 # ==========================================
-def seed_parquet_to_chroma(collection, path_file=PARQUET_PATH):
+def seed_parquet_to_chroma(knowledge_base, path_file=PARQUET_PATH):
     # Cek file
     if not os.path.exists(path_file):
         print(f"❌ File tidak ditemukan: {path_file}")
         return
 
     # Hindari double insert
-    total_data = collection.count()
+    total_data = knowledge_base.count()
     if total_data > 0:
         print(f"⚠️ Chroma sudah berisi {total_data} data. Skip insert.")
         return
@@ -91,7 +111,7 @@ def seed_parquet_to_chroma(collection, path_file=PARQUET_PATH):
     print(f"Menyisipkan {len(ids_list)} vektor ke ChromaDB...")
 
     try:
-        collection.add(
+        knowledge_base.add(
             ids=ids_list,
             embeddings=vektor_list
         )
@@ -146,7 +166,8 @@ def delete_chroma_collection():
     client = chromadb.PersistentClient(path=CHROMA_DIR)
 
     try:
-        client.delete_collection(name=COLLECTION_NAME)
+        client.delete_collection(name="knowledge_base")
+        client.delete_collection(name="text_request")
         print("🗑️ Collection berhasil dihapus.")
     except Exception as e:
         print(f"⚠️ Gagal hapus collection: {e}")
@@ -154,8 +175,34 @@ def delete_chroma_collection():
 # ==========================================
 # SEED CSV TO MYSQL
 # ==========================================
+from contextlib import closing
 
+def clean_mysql_knowledge_base():
+    """
+    Bersihkan semua data knowledge_base (JSON schema version)
+    dipakai sebelum seed ulang CSV
+    """
+
+    try:
+        with closing(get_connection()) as conn, closing(conn.cursor()) as cursor:
+
+            print("🧹 Cleaning knowledge_base...")
+
+            # hapus semua data
+            cursor.execute("DELETE FROM knowledge_base")
+
+            # reset auto increment (biar ID mulai dari 1 lagi)
+            cursor.execute("ALTER TABLE knowledge_base AUTO_INCREMENT = 1")
+
+            conn.commit()
+
+        print("✅ Knowledge base berhasil dibersihkan")
+
+    except Exception as e:
+        print(f"❌ Gagal clean knowledge base: {e}")
+        
 def seed_csv_to_mysql(path_csv):
+
     # 1. Cek file
     if not os.path.exists(path_csv):
         print(f"❌ File tidak ditemukan: {path_csv}")
@@ -178,7 +225,7 @@ def seed_csv_to_mysql(path_csv):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # 3. Hindari double insert (opsional tapi recommended)
+    # 3. Cek data existing
     cursor.execute("SELECT COUNT(*) FROM knowledge_base")
     total = cursor.fetchone()[0]
 
@@ -193,7 +240,7 @@ def seed_csv_to_mysql(path_csv):
     try:
         for _, row in df.iterrows():
 
-            # Format tanggal
+            # format tanggal
             published_at = None
             if pd.notna(row["tanggal"]):
                 try:
@@ -201,11 +248,22 @@ def seed_csv_to_mysql(path_csv):
                 except:
                     pass
 
-            # Insert ke knowledge_base
+            # parsing JSON links (list)
+            links = []
+            if pd.notna(row["link_counter"]):
+                try:
+                    links = ast.literal_eval(row["link_counter"])
+                except:
+                    links = []
+
+            # convert ke JSON string
+            links_json = json.dumps(links)
+
+            # insert knowledge_base (tanpa tabel relasi)
             insert_kb = """
                 INSERT INTO knowledge_base
-                (title, hoax_text, fact_text, category, source_url, published_at, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, NOW(), NOW())
+                (title, hoax_text, fact_text, category, source_url, link_counter, published_at, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
             """
 
             cursor.execute(insert_kb, (
@@ -214,29 +272,9 @@ def seed_csv_to_mysql(path_csv):
                 row["fakta"],
                 row["kategori"],
                 row["link"],
+                links_json,
                 published_at
             ))
-
-            knowledge_id = cursor.lastrowid
-
-            # Parsing link_counter
-            links = []
-            if pd.notna(row["link_counter"]):
-                try:
-                    links = ast.literal_eval(row["link_counter"])
-                except Exception:
-                    pass
-
-            # Insert ke knowledge_links
-            if isinstance(links, list):
-                insert_link = """
-                    INSERT INTO knowledge_links
-                    (knowledge_id, url, created_at, updated_at)
-                    VALUES (%s, %s, NOW(), NOW())
-                """
-
-                for url in links:
-                    cursor.execute(insert_link, (knowledge_id, url))
 
         conn.commit()
         print("✅ Seeder MySQL berhasil!")
@@ -256,7 +294,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--step",
         type=str,
-        choices=["seed", "clear","delete", "model","nli" ,"playwright","mysql","all"],
+        choices=["seed", "clear","delete", "model","nli" ,"playwright","mysql_seed","mysql_clean","all"],
         default="all",
         help="Step yang dijalankan"
     )
@@ -264,12 +302,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Init Chroma dari config (bukan dari sini lagi)
-    collection = get_chroma_collection()
+    text_request = get_chroma_collection("text_request")
+    knowledge_base = get_chroma_collection("knowledge_base")
 
     if args.step == "clear":
-        clear_chroma(collection)
+        clear_knowledge_base(knowledge_base)
+        clear_text_request(text_request)
     elif args.step == "seed":
-        seed_parquet_to_chroma(collection)
+        seed_parquet_to_chroma(knowledge_base)
     elif args.step == "model":
         download_model()
     elif args.step == "nli":
@@ -278,12 +318,18 @@ if __name__ == "__main__":
         download_playwright()
     elif args.step == "delete":
         delete_chroma_collection()
-    elif args.step == "mysql":
+    elif args.step == "mysql_seed":
         seed_csv_to_mysql(CSV_PATH)
+    elif args.step == "mysql_clean":
+        clean_mysql_knowledge_base()
     elif args.step == "all":
-        clear_chroma(collection)
-        seed_parquet_to_chroma(collection)
+        clear_knowledge_base(knowledge_base)
+        clear_text_request(text_request)
+        seed_parquet_to_chroma(knowledge_base)
+        clean_mysql_knowledge_base()
         seed_csv_to_mysql(CSV_PATH)
         download_model()
+        download_nli_model()
+        download_playwright()
 
     print("=== SETUP SELESAI ===")

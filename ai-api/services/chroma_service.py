@@ -1,7 +1,7 @@
 import torch
 
-def search_similar(collection, query_embedding, top_k=5):
-    results = collection.query(
+def search_similar(knowledge_base, query_embedding, top_k=5):
+    results = knowledge_base.query(
         query_embeddings=[query_embedding],
         n_results=top_k
     )
@@ -13,17 +13,18 @@ def search_similar(collection, query_embedding, top_k=5):
     for i in range(len(ids)):
         output.append({
             "id": ids[i],
-            "score": distances[i]  # makin kecil = makin mirip
+            "score": distances[i],  # makin kecil = makin mirip
+            "query_embedding": query_embedding
         })
 
     return output
 
 
-def search_from_text(collection, model, query_text, top_k=5):
+def search_from_text(knowledge_base, model, query_text, top_k=5):
     query_embedding = model.encode(query_text).tolist()
-    return search_similar(collection, query_embedding, top_k)
+    return search_similar(knowledge_base, query_embedding, top_k)
     
-def insert_to_chroma(df, list_id, model, collection, batch_size=32):
+def insert_to_chroma(df, list_id, model, knowledge_base, batch_size=32):
     
     df['teks_vektor'] = df.get('klaim', df.get('penjelasan')).fillna("")
     list_teks = df['teks_vektor'].tolist()
@@ -38,9 +39,19 @@ def insert_to_chroma(df, list_id, model, collection, batch_size=32):
         device=device
     ).tolist()
     
-    collection.add(
+    knowledge_base.add(
         ids=clean_ids,
         embeddings=list_vektor,
     )
     
     print("🎉 Semua proses selesai! Data tersinkronisasi di MySQL dan ChromaDB.")
+    
+def input_text_request(text_request, vector, request_id):
+
+    if vector is None or len(vector) == 0:
+        raise ValueError("Vector tidak boleh kosong")
+
+    text_request.add(
+        ids=[str(request_id)],
+        embeddings=[vector]
+    )
