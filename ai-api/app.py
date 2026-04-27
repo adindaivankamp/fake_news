@@ -9,9 +9,10 @@ from config.chroma_config import get_chroma_collection
 from config.transformer_config import get_transformer_model
 from config.nli_config import get_nli_model
 from config.genai_client import get_client
-from config.clasifier_config import get_text_classifier
+from config.clasifier_config import get_text_classifier, get_img_classifier
 from config.config import Config
 from config.session_config import create_searx_session, get_headers
+from config.distance_model_config import get_distance_model
 
 from playwright.async_api import async_playwright
 
@@ -27,7 +28,9 @@ async def lifespan(app: FastAPI):
     app.state.transformer = get_transformer_model()
     app.state.nli = get_nli_model()
     app.state.text_classifier = get_text_classifier()
-    app.state.image_classifier = None
+    app.state.image_classifier = get_img_classifier()
+    app.state.distance_model = get_distance_model()
+    
     app.state.client = get_client()
 
     # INIT Playwright (async)

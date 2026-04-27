@@ -1,10 +1,9 @@
 from services.img_stage1.search_service import get_search_result
 from services.img_stage1.metadata_service import extract_metadata
 from services.img_stage1.feature_service import compute_features
-from services.img_stage1.model_service import predict
+import numpy as np
 
-
-async def detect_image_fake_controller(data):
+def detect_image_fake_controller(image_classifier, distance_model, data):
     try:
         # 1. input
         image_url = data.get("image_url")
@@ -12,7 +11,7 @@ async def detect_image_fake_controller(data):
             return {"error": "image_url is required"}
 
         # 2. search (SerpAPI / Lens)
-        search_results, err = await get_search_result(image_url)
+        search_results, err = get_search_result(image_url)
 
         if err:
             return {"error": err}
@@ -28,17 +27,21 @@ async def detect_image_fake_controller(data):
 
         # 4. feature engineering
         similarity_score, avg_date_scaled, enriched_data = compute_features(
-            image_url, data_list
+            image_url, data_list, distance_model
         )
 
         # 5. prediction
-        predictions = predict(similarity_score, avg_date_scaled)
-
+        proba = image_classifier.predict_proba([[similarity_score, avg_date_scaled]])[0]
+        prediction = int(np.argmax(proba))
+        confidence = float(np.max(proba))
+        
         # 6. response (FastAPI style)
+        
         return {
             "similarity_score": similarity_score,
             "avg_date_scaled": avg_date_scaled,
-            "predictions": predictions,
+            "prediction": prediction,
+            "confidence": confidence,
             "data": enriched_data
         }
 

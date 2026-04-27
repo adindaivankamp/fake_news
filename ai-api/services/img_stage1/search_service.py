@@ -1,7 +1,7 @@
 from serpapi import GoogleSearch
 from config.config import Config
 
-async def get_search_result(img_url, limit=40):
+def get_search_result(img_url, limit=40):
     params = {
         "engine": "google_lens",
         "url": img_url,

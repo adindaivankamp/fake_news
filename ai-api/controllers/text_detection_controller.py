@@ -1,7 +1,7 @@
 from services.text_pipeline_service import process_fake_news_pipeline
 from services.text_service import clean_text_light
 
-async def detect_text_fake_news_controller(collection, transformer, nli,client,data,browser, searx_session, headers, text_classifier):
+def detect_text_fake_news_controller(collection, transformer, nli,client,data,browser, searx_session, headers, text_classifier):
 
     print("Received query:", data)
     print("type(data):", type(data))
@@ -11,7 +11,7 @@ async def detect_text_fake_news_controller(collection, transformer, nli,client,d
     query = data["query"]
     query = clean_text_light(query)
     
-    result = await process_fake_news_pipeline(
+    result = process_fake_news_pipeline(
         raw_text=query,
         collection=collection,
         transformer=transformer,
