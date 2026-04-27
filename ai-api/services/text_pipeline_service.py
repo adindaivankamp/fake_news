@@ -5,7 +5,7 @@ from services.llm_service import extract_claim_and_query,llm_query_extractor_fal
 import numpy as np
 # from text_stage3_service import finalize_stage3
 
-async def process_fake_news_pipeline(raw_text, collection, transformer, nli,client,browser, text_classifier , searx_session, headers):
+def process_fake_news_pipeline(raw_text, collection, transformer, nli,client,browser, text_classifier , searx_session, headers):
 
     # ===== STAGE 1 =====
     s1 = run_stage1_kb_check(collection, transformer, nli, raw_text)

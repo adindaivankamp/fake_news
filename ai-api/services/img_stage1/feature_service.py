@@ -5,7 +5,7 @@ import requests
 from PIL import Image
 import numpy as np
 
-from .image_model_service import load_img_model, calculate_distance
+from .image_model_service import  calculate_distance
 
 
 DISTANCE_THRESHOLD = 0.4414
@@ -14,15 +14,14 @@ DISTANCE_THRESHOLD = 0.4414
 # =========================
 # MAIN PIPELINE
 # =========================
-def compute_features(image_url, data_list):
+def compute_features(image_url, data_list, distance_model):
     if not data_list:
         return 0.0, 0.0, []
 
-    sim_model = load_img_model()
     input_img = load_from_url(image_url)
 
     enriched_data = _compute_image_features(
-        data_list, sim_model, input_img
+        data_list, distance_model, input_img
     )
 
     similarity_score = get_similarity_score(enriched_data)
@@ -39,7 +38,7 @@ def compute_features(image_url, data_list):
 # =========================
 # IMAGE FEATURE COMPUTATION
 # =========================
-def _compute_image_features(data_list, sim_model, input_img):
+def _compute_image_features(data_list, distance_model, input_img):
     enriched = []
 
     for item in data_list:
@@ -47,7 +46,7 @@ def _compute_image_features(data_list, sim_model, input_img):
 
         try:
             img_target = load_from_url(new_item["thumbnail"])
-            distance = calculate_distance(sim_model, input_img, img_target)
+            distance = calculate_distance(distance_model, input_img, img_target)
 
             new_item["img_distance"] = float(distance)
             new_item["pred_label"] = (
