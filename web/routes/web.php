@@ -5,9 +5,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PencarianController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UmpanBalikController;
 use App\Http\Controllers\WaController;
 use App\Http\Controllers\Api\HoaxDetectionController;
+use App\Http\Controllers\GoogleAuthController;
 
 use App\Http\Controllers\AuthController;
 
@@ -23,7 +25,6 @@ Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
 // Pencarian 
-
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
 Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
 Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
@@ -42,8 +43,8 @@ Route::post('/admin/riwayat/update/{id}', [RiwayatController::class, 'update']);
 Route::get('/admin/riwayat/delete/{id}', [RiwayatController::class, 'delete']);
 // Route untuk Webhook dari WhatsApp (Di luar middleware auth karena diakses oleh sistem/API)
 
-// 🔥 GROUP ADMIN
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+// GROUP ADMIN
+Route::prefix('admin')->group(function () {
 
     // DASHBOARD
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
@@ -68,7 +69,6 @@ Route::get('/uji-coba-deteksi', function () {
     return view('uji-coba-deteksi');
 });
 Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText']);
-
 
 
 // Route khusus untuk user yang sudah login di Web

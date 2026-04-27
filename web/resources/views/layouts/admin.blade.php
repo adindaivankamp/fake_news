@@ -19,6 +19,25 @@
         <img src="{{ asset('img/logo-lensa.png') }}" class="logo-header" alt="Logo">
     </div>
 
+    <!-- KANAN -->
+    <div class="header-right">
+
+        @hasSection('header-search')
+            @yield('header-search')
+        @endif
+
+        <!-- ADMIN INFO -->
+        <div class="admin-info">
+            <div class="admin-text">
+                <strong>Admin</strong>
+            </div>
+            <div class="admin-icon">
+                <i class="fa fa-user"></i>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <div class="admin-layout">
