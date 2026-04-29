@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ImageSearchResult extends Model
 {
-    //
+    protected $casts = [
+    'source_url' => 'array',
+];
 }
