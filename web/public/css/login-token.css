@@ -1,0 +1,355 @@
+/* ============================================================
+   Lensa Hoax - OTP WhatsApp Page
+   ============================================================ */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f3f3f3;
+    color: #2D0909;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+:root {
+    --color-white: #FFFFFF;
+    --shadow-nav: 0px 4px 10px rgba(0,0,0,0.14);
+    --radius-circle: 50px;
+    --otp-nav-height: 74px;
+}
+
+.lh-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    width: 100%;
+    height: var(--otp-nav-height);
+    background: var(--color-white);
+    box-shadow: var(--shadow-nav);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(18px, 2.6vw, 38px);
+}
+
+.lh-logo {
+    display: flex;
+    align-items: center;
+}
+
+.lh-logo__img {
+    width: clamp(95px, 8.4vw, 130px);
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.lh-nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lh-nav-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-circle);
+    background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    border: 1px solid #73070B;
+    box-shadow: 0 6px 14px rgba(115, 7, 11, 0.22);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.24s ease, transform 0.2s ease, box-shadow 0.22s ease, padding 0.24s ease;
+}
+
+.lh-nav-btn:hover,
+.lh-nav-btn:focus-visible {
+    width: min(240px, 33vw);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(115, 7, 11, 0.32);
+    justify-content: flex-start;
+    padding: 0 12px 0 10px;
+    outline: none;
+}
+
+.lh-nav-tooltip {
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 0;
+    max-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: max-width 0.24s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.lh-nav-tooltip iconify-icon {
+    display: none;
+}
+
+.lh-nav-btn:hover .lh-nav-tooltip,
+.lh-nav-btn:focus-visible .lh-nav-tooltip {
+    opacity: 1;
+    margin-left: 8px;
+    max-width: 176px;
+    transform: translateX(0);
+}
+
+.otp-page {
+    height: calc(100vh - var(--otp-nav-height));
+    min-height: calc(100vh - var(--otp-nav-height));
+    margin-top: var(--otp-nav-height);
+    display: grid;
+    grid-template-columns: minmax(420px, 56%) minmax(340px, 44%);
+    background: #F7F7F7;
+    overflow: hidden;
+}
+
+.otp-page__hero {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+    background: linear-gradient(90deg, #f4d4db 0%, #f6e2e5 45%, #f7f7f7 100%);
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
+}
+
+.hero-fade {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(24%, 220px);
+    background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 100%);
+}
+
+.otp-panel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 40px 24px 34px;
+}
+
+.otp-panel__inner {
+    width: 100%;
+    max-width: 450px;
+}
+
+.otp-panel__title {
+    font-size: clamp(28px, 2.2vw, 40px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #73070B;
+    margin-bottom: 8px;
+}
+
+.otp-panel__subtitle {
+    font-size: clamp(16px, 1.05vw, 22px);
+    font-weight: 600;
+    line-height: 1.35;
+    color: #2D0909;
+    margin-bottom: 22px;
+    max-width: 420px;
+}
+
+.alert {
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.alert--success {
+    background: #e8f8ec;
+    color: #1b6d30;
+    border: 1px solid #9adbb0;
+}
+
+.alert--error {
+    background: #feecec;
+    color: #8f1f1f;
+    border: 1px solid #efb0b0;
+}
+
+.otp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.otp-form--secondary {
+    margin-top: 10px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2D0909;
+}
+
+.form-input {
+    width: 100%;
+    height: 56px;
+    border: 1px solid rgba(45, 9, 9, 0.35);
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2D0909;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.form-input:focus {
+    border-color: #9e1a1f;
+    box-shadow: 0 0 0 3px rgba(158, 26, 31, 0.15);
+}
+
+.form-input--otp {
+    letter-spacing: 0.2em;
+    text-align: center;
+}
+
+.btn-primary,
+.btn-secondary {
+    height: 56px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: #73070B;
+    border-color: rgba(115, 7, 11, 0.35);
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 14px rgba(45, 9, 9, 0.15);
+}
+
+.otp-panel__back {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 22px;
+}
+
+.back-link {
+    font-size: clamp(14px, 0.82vw, 18px);
+    font-weight: 700;
+    color: #2D0909;
+}
+
+.back-link:hover {
+    opacity: 0.7;
+}
+
+@media (max-width: 992px) {
+    .lh-navbar {
+        padding: 0 12px;
+        height: 68px;
+    }
+
+    .lh-logo__img {
+        width: 108px;
+    }
+
+    .otp-page {
+        margin-top: 68px;
+        height: calc(100vh - 68px);
+        min-height: calc(100vh - 68px);
+        grid-template-columns: 1fr;
+    }
+
+    .otp-page__hero {
+        display: none;
+    }
+
+    .otp-panel {
+        padding: 28px 16px;
+        justify-content: center;
+    }
+
+    .otp-panel__inner {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lh-navbar {
+        height: 70px;
+    }
+
+    .lh-logo__img {
+        width: 100px;
+    }
+
+    .lh-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .lh-nav-btn:hover,
+    .lh-nav-btn:focus-visible {
+        width: min(178px, 48vw);
+        padding: 0 10px 0 8px;
+    }
+
+    .lh-nav-btn:hover .lh-nav-tooltip,
+    .lh-nav-btn:focus-visible .lh-nav-tooltip {
+        margin-left: 6px;
+        max-width: 124px;
+    }
+
+    .otp-page {
+        margin-top: 70px;
+        height: calc(100vh - 70px);
+        min-height: calc(100vh - 70px);
+    }
+
+    .otp-panel {
+        padding: 22px 14px;
+    }
+
+    .form-input,
+    .btn-primary,
+    .btn-secondary {
+        height: 52px;
+        font-size: 15px;
+    }
+}

@@ -84,22 +84,22 @@ class WaController extends Controller
     {
         // 1. Validasi inputan form dari web
         $request->validate([
-            'wa_number' => 'required|numeric'
+            'wa_number' => 'required'
         ]);
 
         /** @var \App\Models\User $currentUser */
         $currentUser = Auth::user();
-        $waNumber = $request->wa_number;
+        $waNumber = trim($request->wa_number);
 
         // 2. Cek apakah ada akun di DB yang udah pake nomor WA ini
         $existingUser = User::where('phone_number', $waNumber)->first();
 
-        // 3. LOGIKA KETUA: Kalau akunnya ada DAN itu bukan akun yang lagi login sekarang -> HAPUS!
-        if ($existingUser && $existingUser->id !== $currentUser->id) {
-            $existingUser->delete();
+        // 3. Kalau nomor belum terdaftar di database, arahkan user ke menu WhatsApp
+        if (!$existingUser) {
+            return back()->with('error', 'Nomor ini belum terdaftar. Silakan cek via WhatsApp pada menu Dapatkan Melalui WhatsApp.');
         }
 
-        // 4. "Kalau ga ada ya create biasa aja" -> Update nomor WA ke akun yang sekarang login
+        // 4. Nomor terdaftar, jadi boleh dipasangkan ke akun web yang sedang login
         $currentUser->phone_number = $waNumber;
         $currentUser->save();
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\HoaxDetectionController;
 use App\Http\Controllers\GoogleAuthController;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('landing_page.landing');
@@ -61,7 +62,7 @@ Route::any('/wa-webhook', [WaController::class, 'webhook']);
 //login menggunakan wa di web
 Route::get('/login-wa', [AuthController::class, 'showPhoneForm']);
 Route::post('/login-wa/request', [AuthController::class, 'requestToken']);
-Route::get('/login-wa/verify', [AuthController::class, 'showTokenForm']);
+Route::get('/login-wa/verify', [AuthController::class, 'showTokenForm'])->name('login.wa.verify');
 Route::post('/login-wa/verify', [AuthController::class, 'verifyToken']);
 
 //uji coba deteksi hoax
@@ -73,6 +74,9 @@ Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText']);
 
 // Route khusus untuk user yang sudah login di Web
 Route::middleware(['auth'])->group(function () {
+
+    // Profile update
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 
     // ... (taruh route dashboard lu di sini nanti kalau ada)
 

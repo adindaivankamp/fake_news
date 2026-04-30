@@ -24,86 +24,230 @@ a {
     color: inherit;
 }
 
+:root {
+    --color-white: #FFFFFF;
+    --shadow-nav: 0px 4px 10px rgba(0,0,0,0.14);
+    --radius-circle: 50px;
+    --font-dmsans: 'DM Sans', sans-serif;
+    --login-nav-height: 74px;
+}
+
 /* ============================================================
    NAVBAR
    ============================================================ */
-.navbar {
+.lh-navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    height: 60px;
-    background: #ffffff;
-    border-bottom: 1px solid #eee;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: var(--login-nav-height);
+    background: var(--color-white);
+    box-shadow: var(--shadow-nav);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
+    padding: 0 clamp(18px, 2.6vw, 38px);
 }
 
-.navbar__logo {
+.lh-logo {
     display: flex;
     align-items: center;
+    gap: 8px;
 }
 
-.navbar__logo-img {
-    height: 40px;
-    width: auto;
+.lh-logo__img {
+    width: clamp(95px, 8.4vw, 130px);
+    height: auto;
     display: block;
+    object-fit: contain;
 }
 
-/* Navbar action buttons */
-.navbar__actions {
+.lh-nav-icons {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
 }
 
-.nav-btn {
+.lh-nav-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: var(--radius-circle);
+    background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: #73070B;
-    transition: opacity 0.2s, transform 0.2s ease;
+    color: var(--color-white);
+    border: 1px solid #73070B;
+    box-shadow: 0 6px 14px rgba(115, 7, 11, 0.22);
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.24s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.22s ease, padding 0.24s ease;
     flex-shrink: 0;
 }
 
-.nav-btn:hover {
-    opacity: 0.85;
-    transform: scale(1.05);
+.lh-nav-btn:hover {
+    width: min(240px, 33vw);
+    background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(115, 7, 11, 0.32);
+    justify-content: flex-start;
+    padding: 0 12px 0 10px;
 }
 
-.nav-btn svg {
-    width: 22px;
-    height: 22px;
+.lh-nav-btn:hover,
+.lh-nav-btn:focus-visible {
+    z-index: 20;
 }
 
-.nav-btn--trend svg {
-    width: 24px;
-    height: 24px;
+.lh-nav-btn:focus-visible {
+    width: min(240px, 33vw);
+    justify-content: flex-start;
+    padding: 0 12px 0 10px;
+    outline: 2px solid #f3b8bf;
+    outline-offset: 2px;
+}
+
+.lh-nav-btn > iconify-icon:first-child {
+    display: block;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.lh-nav-tooltip {
+    position: static;
+    color: #ffffff;
+    font-family: var(--font-dmsans);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-left: 0;
+    max-width: 0;
+    white-space: nowrap;
+    letter-spacing: 0.1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: max-width 0.24s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.lh-nav-tooltip iconify-icon {
+    display: none;
+}
+
+.lh-nav-tooltip span {
+    color: #ffffff;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lh-nav-btn:hover .lh-nav-tooltip,
+.lh-nav-btn:focus-visible .lh-nav-tooltip {
+    opacity: 1;
+    margin-left: 8px;
+    max-width: 176px;
+    transform: translateX(0);
+}
+
+@media (max-width: 992px) {
+    .lh-navbar {
+        padding: 0 12px;
+        height: 68px;
+    }
+
+    .lh-logo__img {
+        width: 108px;
+    }
+
+    .lh-nav-icons {
+        gap: 8px;
+    }
+
+    .lh-nav-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .lh-nav-btn:hover,
+    .lh-nav-btn:focus-visible {
+        width: min(215px, 41vw);
+        padding: 0 12px 0 10px;
+    }
+
+    .lh-nav-btn:hover .lh-nav-tooltip,
+    .lh-nav-btn:focus-visible .lh-nav-tooltip {
+        margin-left: 7px;
+        max-width: 148px;
+    }
+
+    .lh-nav-tooltip {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lh-navbar {
+        height: 70px;
+    }
+
+    .lh-logo__img {
+        width: 100px;
+    }
+
+    .lh-nav-icons {
+        gap: 6px;
+    }
+
+    .lh-nav-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+    }
+
+    .lh-nav-btn:hover,
+    .lh-nav-btn:focus-visible {
+        width: min(178px, 48vw);
+        padding: 0 10px 0 8px;
+    }
+
+    .lh-nav-btn:hover .lh-nav-tooltip,
+    .lh-nav-btn:focus-visible .lh-nav-tooltip {
+        margin-left: 6px;
+        max-width: 124px;
+    }
+
+    .lh-nav-tooltip {
+        display: inline-flex;
+    }
 }
 
 /* ============================================================
    LOGIN PAGE LAYOUT
    ============================================================ */
 .login-page {
-    min-height: 100vh;
-    padding-top: 60px;
+    height: calc(100vh - var(--login-nav-height));
+    min-height: calc(100vh - var(--login-nav-height));
+    margin-top: var(--login-nav-height);
+    padding-top: 0;
     display: grid;
-    grid-template-columns: minmax(460px, 58%) minmax(360px, 42%);
+    grid-template-columns: minmax(420px, 56%) minmax(340px, 44%);
     background: #F7F7F7;
-    overflow: clip;
+    overflow: hidden;
 }
 
 /* ---------- Hero / Left image column ---------- */
 .login-page__hero {
     position: relative;
-    min-height: calc(100vh - 60px);
+    min-height: 100%;
     overflow: hidden;
     display: flex;
     align-items: stretch;
@@ -134,18 +278,18 @@ a {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 30px 56px 28px 44px;
-    min-height: calc(100vh - 60px);
+    padding: 24px 40px 24px 34px;
+    min-height: 100%;
 }
 
 .login-panel__inner {
     width: 100%;
-    max-width: 500px;
+    max-width: 440px;
 }
 
 /* Title */
 .login-panel__title {
-    font-size: clamp(32px, 2.75vw, 48px);
+    font-size: clamp(28px, 2.2vw, 40px);
     font-weight: 600;
     line-height: 1.2;
     color: #73070B;
@@ -154,12 +298,12 @@ a {
 
 /* Subtitle */
 .login-panel__subtitle {
-    font-size: clamp(18px, 1.35vw, 30px);
+    font-size: clamp(16px, 1.05vw, 22px);
     font-weight: 600;
-    line-height: 1.28;
+    line-height: 1.35;
     color: #2D0909;
-    margin-bottom: 38px;
-    max-width: 430px;
+    margin-bottom: 28px;
+    max-width: 400px;
 }
 
 /* ============================================================
@@ -168,8 +312,8 @@ a {
 .login-panel__buttons {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 34px;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
 .btn-social {
@@ -177,14 +321,14 @@ a {
     align-items: center;
     gap: 14px;
     width: 100%;
-    max-width: 470px;
-    height: 68px;
-    padding: 0 20px;
-    border-radius: 26px;
+    max-width: 420px;
+    height: 58px;
+    padding: 0 16px;
+    border-radius: 18px;
     border: 1px solid rgba(45, 9, 9, 0.45);
     font-family: 'DM Sans', sans-serif;
     font-weight: 700;
-    font-size: clamp(18px, 1.02vw, 26px);
+    font-size: clamp(15px, 0.95vw, 20px);
     line-height: 1.2;
     color: #000000;
     cursor: pointer;
@@ -218,8 +362,8 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
 }
 
@@ -240,11 +384,11 @@ a {
 .login-panel__back {
     display: flex;
     justify-content: flex-end;
-    max-width: 470px;
+    max-width: 420px;
 }
 
 .back-link {
-    font-size: clamp(16px, 0.95vw, 22px);
+    font-size: clamp(14px, 0.82vw, 18px);
     font-weight: 700;
     color: #2D0909;
     transition: opacity 0.15s;
@@ -260,11 +404,11 @@ a {
 
 @media (max-width: 1280px) {
     .login-page {
-        grid-template-columns: minmax(420px, 56%) minmax(340px, 44%);
+        grid-template-columns: minmax(390px, 54%) minmax(320px, 46%);
     }
 
     .login-page__hero {
-        min-height: calc(100vh - 60px);
+        min-height: 100%;
     }
 
     .hero-image {
@@ -273,25 +417,32 @@ a {
     }
 
     .login-panel {
-        padding: 24px 34px;
+        padding: 20px 28px;
     }
 
     .login-panel__subtitle {
-        font-size: clamp(17px, 1.35vw, 24px);
+        font-size: clamp(15px, 1.2vw, 20px);
     }
 }
 
 @media (max-width: 992px) {
+    :root {
+        --login-nav-height: 68px;
+    }
+
     .login-page {
         grid-template-columns: 1fr;
         align-items: stretch;
-        padding-top: 56px;
+        height: calc(100vh - var(--login-nav-height));
+        min-height: calc(100vh - var(--login-nav-height));
+        margin-top: var(--login-nav-height);
+        padding-top: 0;
     }
 
     .login-page__hero {
         position: relative;
         width: 100%;
-        min-height: 330px;
+        min-height: min(240px, 34vh);
         justify-content: center;
         align-items: stretch;
         padding: 0;
@@ -313,79 +464,42 @@ a {
     }
 
     .login-panel {
-        min-height: auto;
-        padding: 18px 22px 38px;
+        min-height: 0;
+        padding: 14px 18px 18px;
         justify-content: center;
+        overflow-y: auto;
     }
 
     .login-panel__inner {
-        max-width: 500px;
+        max-width: 420px;
     }
 
     .btn-social {
-        max-width: 500px;
-    }
-
-    .navbar {
-        height: 56px;
-        padding: 0 24px;
-    }
-
-    .navbar__logo-img {
-        height: 36px;
-    }
-
-    .nav-btn {
-        width: 38px;
-        height: 38px;
-    }
-
-    .nav-btn svg {
-        width: 19px;
-        height: 19px;
+        max-width: 420px;
     }
 
     .login-panel__title {
-        font-size: clamp(30px, 5.8vw, 42px);
+        font-size: clamp(26px, 5.2vw, 34px);
     }
 
     .login-panel__subtitle {
-        font-size: clamp(17px, 3.2vw, 24px);
-        margin-bottom: 24px;
+        font-size: clamp(15px, 2.7vw, 18px);
+        margin-bottom: 16px;
     }
 
     .login-panel__buttons {
-        gap: 14px;
-        margin-bottom: 26px;
+        gap: 10px;
+        margin-bottom: 16px;
     }
 }
 
 @media (max-width: 480px) {
-    .navbar {
-        padding: 0 14px;
-    }
-
-    .navbar__actions {
-        gap: 10px;
-    }
-
-    .navbar__logo-img {
-        height: 32px;
-    }
-
-    .nav-btn {
-        width: 34px;
-        height: 34px;
-    }
-
-    .nav-btn svg,
-    .nav-btn--trend svg {
-        width: 17px;
-        height: 17px;
+    :root {
+        --login-nav-height: 70px;
     }
 
     .login-page__hero {
-        min-height: 248px;
+        min-height: min(190px, 30vh);
     }
 
     .hero-image {
@@ -393,24 +507,24 @@ a {
     }
 
     .login-panel {
-        padding: 10px 16px 30px;
+        padding: 10px 14px 14px;
     }
 
     .login-panel__title {
-        font-size: 30px;
+        font-size: 24px;
     }
 
     .login-panel__subtitle {
-        font-size: 16px;
-        margin-bottom: 18px;
+        font-size: 14px;
+        margin-bottom: 12px;
     }
 
     .btn-social {
-        height: 58px;
-        font-size: 16px;
-        gap: 10px;
+        height: 52px;
+        font-size: 14px;
+        gap: 8px;
         padding: 0 14px;
-        border-radius: 18px;
+        border-radius: 14px;
     }
 
     .btn-social__icon {
@@ -423,6 +537,6 @@ a {
     }
 
     .back-link {
-        font-size: 16px;
+        font-size: 14px;
     }
 }

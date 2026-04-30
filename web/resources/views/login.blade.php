@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 
     {{-- Vite / compiled CSS (gunakan salah satu sesuai setup) --}}
     {{-- @vite(['resources/css/login.css']) --}}
@@ -19,25 +20,28 @@
 <body>
 
     {{-- ===== NAVBAR ===== --}}
-    <header class="navbar">
-        <a href="{{ route('landing') }}" class="navbar__logo" aria-label="Lensa Hoax">
-            <img src="{{ asset('img/logo-lensa.png') }}" alt="Logo Lensa Hoax" class="navbar__logo-img">
+    <header class="lh-navbar">
+        <a href="{{ route('landing') }}" class="lh-logo" aria-label="Lensa Hoax">
+            <img src="{{ asset('img/logo-lensa.png') }}" alt="Logo Lensa Hoax" class="lh-logo__img">
         </a>
 
-        <nav class="navbar__actions">
+        <nav class="lh-nav-icons" aria-label="Aksi pengguna">
             {{-- Trending button --}}
-            <a href="#" class="nav-btn nav-btn--trend" title="Trending">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <polyline points="16 7 22 7 22 13" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            <a href="#" class="lh-nav-btn" aria-label="Tren" title="Trending">
+                <iconify-icon icon="iconamoon:trend-up-fill" width="26" height="26"></iconify-icon>
+                <span class="lh-nav-tooltip" role="tooltip">
+                    <iconify-icon icon="iconamoon:trend-up-fill" width="18" height="18"></iconify-icon>
+                    <span>Pencarian Terpopuler</span>
+                </span>
             </a>
+
             {{-- WhatsApp button --}}
-            <a href="https://wa.me/" target="_blank" class="nav-btn nav-btn--wa" title="WhatsApp">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#fff"/>
-                    <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.763.461 3.418 1.268 4.852L2 22l5.31-1.237A9.956 9.956 0 0012.004 22C17.53 22 22 17.523 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.172a8.15 8.15 0 01-4.149-1.131l-.297-.177-3.154.735.765-3.073-.194-.316a8.169 8.169 0 01-1.314-4.51c0-4.517 3.674-8.19 8.19-8.19 4.517 0 8.19 3.673 8.19 8.19 0 4.516-3.673 8.172-8.037 8.172z" fill="#fff"/>
-                </svg>
+            <a href="{{ route('whatsapp.page') }}" class="lh-nav-btn" aria-label="WhatsApp" title="WhatsApp">
+                <iconify-icon icon="garden:whatsapp-fill-16" width="24" height="24"></iconify-icon>
+                <span class="lh-nav-tooltip" role="tooltip">
+                    <iconify-icon icon="garden:whatsapp-fill-16" width="18" height="18"></iconify-icon>
+                    <span>Hubungkan via WhatsApp</span>
+                </span>
             </a>
         </nav>
     </header>
@@ -74,7 +78,7 @@
                     </a>
 
                     {{-- WhatsApp Login --}}
-                    <a href="#" class="btn-social btn-social--whatsapp" aria-disabled="true">
+                    <a href="{{ route('login.wa.verify') }}" class="btn-social btn-social--whatsapp">
                         <span class="btn-social__icon">
                             {{-- WhatsApp SVG --}}
                             <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -88,7 +92,7 @@
                                 </defs>
                             </svg>
                         </span>
-                        <span class="btn-social__label">Dapatkan melalui Whatsapp</span>
+                        <span class="btn-social__label">Hubungkan dengan Akun Whatsapp</span>
                     </a>
 
                 </div>

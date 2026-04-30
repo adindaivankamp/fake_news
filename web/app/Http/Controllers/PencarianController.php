@@ -16,7 +16,7 @@ class PencarianController extends Controller
      */
     public function index()
     {
-        return view('pencarian');
+        return view('user.pencarian');
     }
 
     /**

@@ -1,0 +1,305 @@
+/* Profile Popup Styles */
+
+.lh-profile-popup {
+    position: fixed;
+    top: 74px;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+    max-width: 320px;
+    background: transparent;
+    pointer-events: none;
+}
+
+.lh-profile-popup[hidden] {
+    display: none;
+}
+
+.lh-profile-popup:not([hidden]) {
+    pointer-events: auto;
+}
+
+.lh-profile-popup__card {
+    position: relative;
+    background: linear-gradient(135deg, #73070B 0%, #B8201D 100%);
+    border-radius: 16px;
+    padding: 20px 16px;
+    margin: 12px 12px 0 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: slideInDown 0.2s ease-out;
+    min-width: 280px;
+    max-width: 320px;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lh-profile-popup__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    background: #ffffff;
+    border-radius: 50%;
+    margin: 0 auto 4px;
+    color: #73070B;
+}
+
+.lh-profile-popup__field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.lh-profile-popup__field:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.lh-profile-popup__field iconify-icon {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.9);
+    width: 18px;
+    height: 18px;
+}
+
+.lh-profile-popup__field span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.lh-profile-popup__logout-form {
+    margin: 0;
+}
+
+.lh-profile-popup__logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: none;
+    border-radius: 10px;
+    color: #73070B;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    margin-top: 4px;
+}
+
+.lh-profile-popup__logout:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.lh-profile-popup__logout:active {
+    transform: translateY(0);
+}
+
+.lh-profile-popup__logout iconify-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.lh-profile-popup__logout span {
+    flex: 1;
+    text-align: center;
+}
+
+/* Overlay untuk menutup popup saat klik di luar */
+.lh-profile-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background: transparent;
+}
+
+/* Field Edit Modal */
+.lh-field-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lh-field-edit-modal[hidden] {
+    display: none;
+}
+
+.lh-field-edit-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.lh-field-edit-modal__card {
+    position: relative;
+    z-index: 2001;
+    background: #ffffff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lh-field-edit-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.lh-field-edit-modal__header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b1517;
+}
+
+.lh-field-edit-modal__close {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.lh-field-edit-modal__close:hover {
+    color: #333;
+}
+
+.lh-field-edit-modal__form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lh-field-edit-modal__input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.lh-field-edit-modal__input:focus {
+    outline: none;
+    border-color: #73070B;
+    box-shadow: 0 0 0 2px rgba(115, 7, 11, 0.1);
+}
+
+.lh-field-edit-modal__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.lh-field-edit-modal__btn-cancel,
+.lh-field-edit-modal__btn-save {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border: none;
+}
+
+.lh-field-edit-modal__btn-cancel {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.lh-field-edit-modal__btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.lh-field-edit-modal__btn-save {
+    background: linear-gradient(135deg, #73070B 0%, #B8201D 100%);
+    color: #ffffff;
+}
+
+.lh-field-edit-modal__btn-save:hover {
+    opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .lh-profile-popup {
+        top: 64px;
+        max-width: calc(100% - 20px);
+    }
+
+    .lh-profile-popup__card {
+        margin: 8px 10px 0 auto;
+        min-width: auto;
+    }
+
+    .lh-profile-popup__field {
+        font-size: 13px;
+    }
+
+    .lh-profile-popup__logout {
+        font-size: 13px;
+    }
+}

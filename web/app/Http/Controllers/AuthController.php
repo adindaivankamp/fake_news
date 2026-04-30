@@ -12,7 +12,7 @@ class AuthController extends Controller
     // 🔥 HALAMAN INPUT NOMOR
     public function showPhoneForm()
     {
-        return view('auth.login-phone');
+        return redirect()->route('login.wa.verify');
     }
 
     // 🔥 REQUEST TOKEN
@@ -25,7 +25,7 @@ class AuthController extends Controller
         $user = User::where('phone_number', $request->phone_number)->first();
 
         if (!$user) {
-            return back()->with('error', 'Nomor tidak ditemukan');
+            return back()->with('error', 'Nomor ini belum terdaftar. Silakan cek via WhatsApp pada menu Dapatkan Melalui WhatsApp.');
         }
 
         $token = rand(100000, 999999);
@@ -52,10 +52,6 @@ class AuthController extends Controller
     // 🔥 HALAMAN INPUT TOKEN
     public function showTokenForm()
     {
-        if (!session('phone_number')) {
-            return redirect('/login-wa');
-        }
-
         return view('auth.login-token');
     }
 
