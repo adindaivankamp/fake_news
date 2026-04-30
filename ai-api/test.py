@@ -1,32 +1,20 @@
-from config.chroma_config import get_chroma_collection
-import os
+import joblib
+import numpy as np
 
-collection = get_chroma_collection("knowledge_base")
+# load model
+model = joblib.load("./models/rf_model.pkl")
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-IMG_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "prediction_images"))
 
-print("IMG_DIR:", IMG_DIR)
-print("Base directory:", BASE_DIR)
+# susun fitur (HARUS urut sesuai training)
+X = [[
+        0.6967,	0.0513,	0.043902,	0.856553,	0.059734
+]]
 
-# ======================
-# BASIC INFO
-# ======================
-print("\n===== CHROMA INFO =====")
-print("Total data:", collection.count())
+# prediksi
+pred = model.predict(X)
+proba = model.predict_proba(X)
 
-# ======================
-# SAMPLE DATA (IMPORTANT)
-# ======================
-print("\n===== SAMPLE DATA =====")
-sample = collection.peek(2)  # lebih aman daripada get full
-print(sample)
-
-# ======================
-# COLLECTION METADATA
-# ======================
-print("\n===== METADATA =====")
-try:
-    print(collection.metadata)
-except Exception as e:
-    print("No metadata or not available:", e)
+print("Prediction:", pred[0])
+print("Confidence:", max(proba[0]))
+print(proba)
+print(model.classes_)

@@ -5,8 +5,8 @@ from .search_service import search_news
 from .feature_service import extract_features
 
 FEATURE_ORDER = [
-    "time_consistency_score",
     "message_similarity_score",
+    "time_consistency_score",
     "mean_entailment",
     "mean_contradiction",
     "std_entailment",

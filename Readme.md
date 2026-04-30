@@ -130,7 +130,7 @@ python setup.py --step all
 ### ⚙️ 5. Run AI Service
 
 ```bash
-uvicorn app:app --reload
+uvicorn app:app 
 ```
 
 ---
