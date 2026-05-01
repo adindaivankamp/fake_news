@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('hoax_text')->nullable();
             $table->text('fact_text')->nullable();
             $table->string('category')->nullable();
-            $table->string('source_url')->nullable(); 
+            $table->string('source_url')->nullable();
             $table->date('published_at')->nullable();
             $table->timestamps();
         });

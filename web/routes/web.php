@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+// Controllers
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RiwayatController;
@@ -10,80 +12,108 @@ use App\Http\Controllers\UmpanBalikController;
 use App\Http\Controllers\WaController;
 use App\Http\Controllers\Api\HoaxDetectionController;
 use App\Http\Controllers\GoogleAuthController;
-
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC ROUTES
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('landing_page.landing');
 })->name('landing');
 
-// Login
-Route::get('/masuk', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/masuk', [LoginController::class, 'login'])->name('login.post');
-Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
-
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-
-// Pencarian 
+// Pencarian
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
 Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
 Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
+
+// WhatsApp page
 Route::get('/dapatkan-whatsapp', function () {
     return view('whatsapp');
 })->name('whatsapp.page');
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
-Route::get('/admin/user', [UserController::class, 'index']);
-Route::get('/admin/umpanbalik', [UmpanBalikController::class, 'index']);
-
-// RIWAYAT
-Route::get('/admin/riwayat', [RiwayatController::class, 'index']);
-Route::get('/admin/riwayat/edit/{id}', [RiwayatController::class, 'edit']);
-Route::post('/admin/riwayat/update/{id}', [RiwayatController::class, 'update']);
-Route::get('/admin/riwayat/delete/{id}', [RiwayatController::class, 'delete']);
-// Route untuk Webhook dari WhatsApp (Di luar middleware auth karena diakses oleh sistem/API)
-
-// GROUP ADMIN
-Route::prefix('admin')->group(function () {
-
-    // DASHBOARD
-    Route::get('/dashboard', [AdminController::class, 'dashboard']);
-
-    // RIWAYAT
-    Route::get('/riwayat', [RiwayatController::class, 'index']);
-    Route::get('/riwayat/edit/{id}', [RiwayatController::class, 'edit']);
-    Route::post('/riwayat/update/{id}', [RiwayatController::class, 'update']);
-    Route::get('/riwayat/delete/{id}', [RiwayatController::class, 'delete']);
-});
-
-Route::any('/wa-webhook', [WaController::class, 'webhook']);
-
-//login menggunakan wa di web
-Route::get('/login-wa', [AuthController::class, 'showPhoneForm']);
-Route::post('/login-wa/request', [AuthController::class, 'requestToken']);
-Route::get('/login-wa/verify', [AuthController::class, 'showTokenForm'])->name('login.wa.verify');
-Route::post('/login-wa/verify', [AuthController::class, 'verifyToken']);
-
-//uji coba deteksi hoax
+// Uji coba deteksi
 Route::get('/uji-coba-deteksi', function () {
     return view('uji-coba-deteksi');
 });
 Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText']);
 
 
-// Route khusus untuk user yang sudah login di Web
-Route::middleware(['auth'])->group(function () {
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES
+|--------------------------------------------------------------------------
+*/
 
-    // Profile update
-    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+// Login web
+Route::get('/masuk', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/masuk', [LoginController::class, 'login'])->name('login.post');
+Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
 
-    // ... (taruh route dashboard lu di sini nanti kalau ada)
-
-    // Route buat nyambungin WA
-    Route::post('/link-wa', [WaController::class, 'linkWhatsApp'])->name('wa.link');
+// Login via WhatsApp
+Route::prefix('login-wa')->group(function () {
+    Route::get('/', [AuthController::class, 'showPhoneForm']);
+    Route::post('/request', [AuthController::class, 'requestToken']);
+    Route::get('/verify', [AuthController::class, 'showTokenForm'])->name('login.wa.verify');
+    Route::post('/verify', [AuthController::class, 'verifyToken']);
 });
 
-// Route untuk Google Auth
-Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
-Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
+// Google Auth
+Route::prefix('auth/google')->group(function () {
+    Route::get('/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+    Route::get('/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // User
+    Route::get('/user', [UserController::class, 'index']);
+
+    // Umpan balik
+    Route::get('/umpanbalik', [UmpanBalikController::class, 'index']);
+
+    // Riwayat
+    Route::prefix('riwayat')->group(function () {
+        Route::get('/', [RiwayatController::class, 'index']);
+        Route::get('/edit/{id}', [RiwayatController::class, 'edit']);
+        Route::post('/update/{id}', [RiwayatController::class, 'update']);
+        Route::get('/delete/{id}', [RiwayatController::class, 'delete']);
+    });
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| WHATSAPP WEBHOOK (NO AUTH)
+|--------------------------------------------------------------------------
+*/
+
+Route::any('/wa-webhook', [WaController::class, 'webhook']);
+
+
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATED USER ROUTES
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+
+    // Profile
+    Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+
+    // Link WhatsApp
+    Route::post('/link-wa', [WaController::class, 'linkWhatsApp'])->name('wa.link');
+});
