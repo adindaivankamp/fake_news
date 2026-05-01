@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('stage2_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
-            $table->string('article_title')->nullable();
-            $table->string('article_url')->nullable();
-            $table->date('article_date')->nullable();
-            $table->text('chunk_text')->nullable();
-            $table->integer('chunk_index')->nullable();
-            $table->float('similarity_score')->nullable();
-            $table->float('nli_score')->nullable();
-            $table->string('predicted_label')->nullable();
+            $table->float('time_credibility')->nullable();
+            $table->float('title_credibility')->nullable();
+            $table->float('mean_contradiction')->nullable();
+            $table->float('mean_entailment')->nullable();
+            $table->float('std_contradiction')->nullable();
+            $table->json('url')->nullable();
             $table->timestamps();
 });
     }

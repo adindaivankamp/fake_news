@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('knowledge_id')->constrained('knowledge_base')->onDelete('cascade');
             $table->float('similarity_score')->nullable();
             $table->float('nli_score')->nullable();
-            $table->string('predicted_label')->nullable();
             $table->boolean('is_stop')->default(false);
             $table->timestamps();
 });

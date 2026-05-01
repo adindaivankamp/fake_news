@@ -44,18 +44,6 @@ class DatabaseSeeder extends Seeder
         }
         DB::table('users')->insert($userData);
 
-        // 2. Seeder Riwayat (Judul pencarian hoax yang realistis)
-        $riwayats = [
-            ['judul' => 'Cek Fakta: Benarkah bawang putih rebus bisa menyembuhkan COVID-19?', 'hoax_percentage' => 95],
-            ['judul' => 'Pesan berantai WhatsApp tentang pembagian kuota internet gratis 100GB dari pemerintah.', 'hoax_percentage' => 88],
-            ['judul' => 'Informasi pendaftaran CPNS jalur VIP tanpa tes.', 'hoax_percentage' => 98],
-            ['judul' => 'Video uang kertas pecahan baru Rp 1.000.000 bergambar Soekarno-Hatta.', 'hoax_percentage' => 92],
-            ['judul' => 'Berita pemadaman listrik serentak se-Jawa Timur selama 3 hari berturut-turut.', 'hoax_percentage' => 75],
-        ];
-
-        $riwayatData = array_map(fn($r) => array_merge($r, ['created_at' => $now, 'updated_at' => $now]), $riwayats);
-        DB::table('riwayat')->insert($riwayatData);
-
         // 3. Seeder Images (Nama file gambar bukti hoax)
         $images = [
             ['file_path' => 'uploads/images/ss_grup_keluarga_covid.jpg', 'original_filename' => 'ss_grup_keluarga_covid.jpg'],
@@ -72,11 +60,11 @@ class DatabaseSeeder extends Seeder
 
         // 4. Seeder Requests (Teks input asli copas dari pesan viral)
         $requests = [
-            ['input_text' => 'Tolong sebarkan! Rebusan bawang putih dan air hangat 2 gelas sehari bisa membunuh virus di tenggorokan sebelum masuk ke paru-paru.', 'final_label' => 'HOAX', 'final_confidence' => 0.96, 'status' => 'completed', 'reason' => 'Telah dibantah oleh WHO dan Kemenkes.'],
-            ['input_text' => 'BANTUAN KUOTA GRATIS 100GB UNTUK PELAJAR. Klik link berikut untuk klaim sebelum kehabisan: http://bantuan-kuota-gratis.site/klaim', 'final_label' => 'HOAX', 'final_confidence' => 0.99, 'status' => 'completed', 'reason' => 'Link phishing, bukan domain resmi pemerintah (go.id).'],
-            ['input_text' => 'Telah dibuka pendaftaran CPNS Jalur Khusus (VIP) langsung penempatan wilayah Malang Raya. Hubungi nomor ini untuk syarat dan biaya administrasi.', 'final_label' => 'HOAX', 'final_confidence' => 0.95, 'status' => 'completed', 'reason' => 'Pendaftaran CPNS hanya melalui portal resmi BKN (sscasn.bkn.go.id).'],
-            ['input_text' => 'Ini penampakan uang baru pecahan 1 juta rupiah yang sudah mulai diedarkan oleh Bank Indonesia hari ini.', 'final_label' => 'DISINFORMASI', 'final_confidence' => 0.89, 'status' => 'completed', 'reason' => 'Gambar yang beredar adalah uang spesimen/uang peringatan, bukan alat pembayaran sah.'],
-            ['input_text' => 'INFO PENTING! Akan ada pemadaman listrik total di seluruh Jawa Timur tanggal 25-27 April karena perbaikan gardu induk.', 'final_label' => 'HOAX', 'final_confidence' => 0.85, 'status' => 'pending', 'reason' => 'Menunggu verifikasi lanjutan, belum ada rilis resmi dari PLN.'],
+            ['input_text' => 'Tolong sebarkan! Rebusan bawang putih dan air hangat 2 gelas sehari bisa membunuh virus di tenggorokan sebelum masuk ke paru-paru.', 'final_label' => 'HOAX', 'final_confidence' => 0.96, 'status' => 'completed'],
+            ['input_text' => 'BANTUAN KUOTA GRATIS 100GB UNTUK PELAJAR. Klik link berikut untuk klaim sebelum kehabisan: http://bantuan-kuota-gratis.site/klaim', 'final_label' => 'HOAX', 'final_confidence' => 0.99, 'status' => 'completed'],
+            ['input_text' => 'Telah dibuka pendaftaran CPNS Jalur Khusus (VIP) langsung penempatan wilayah Malang Raya. Hubungi nomor ini untuk syarat dan biaya administrasi.', 'final_label' => 'HOAX', 'final_confidence' => 0.95, 'status' => 'completed'],
+            ['input_text' => 'Ini penampakan uang baru pecahan 1 juta rupiah yang sudah mulai diedarkan oleh Bank Indonesia hari ini.', 'final_label' => 'DISINFORMASI', 'final_confidence' => 0.89, 'status' => 'completed'],
+            ['input_text' => 'INFO PENTING! Akan ada pemadaman listrik total di seluruh Jawa Timur tanggal 25-27 April karena perbaikan gardu induk.', 'final_label' => 'HOAX', 'final_confidence' => 0.85, 'status' => 'pending'],
         ];
 
         $requestData = array_map(function($req, $index) use ($now) {
@@ -86,11 +74,11 @@ class DatabaseSeeder extends Seeder
 
         // 5. Seeder Image Search Results (Link ke situs fact-checker)
         $imageSearchResults = [
-            ['source_url' => 'https://turnbackhoax.id/2020/01/bawang-putih-sembuhkan-virus-corona', 'similarity_score' => 0.92],
-            ['source_url' => 'https://kominfo.go.id/content/detail/hoaks-kuota-gratis', 'similarity_score' => 0.98],
-            ['source_url' => 'https://www.bkn.go.id/pengumuman/awas-penipuan-cpns', 'similarity_score' => 0.85],
-            ['source_url' => 'https://turnbackhoax.id/2021/05/uang-pecahan-1-juta', 'similarity_score' => 0.90],
-            ['source_url' => 'https://web.pln.co.id/media/siaran-pers/klarifikasi-hoaks-pemadaman', 'similarity_score' => 0.77],
+            ['source_url' => 'https://turnbackhoax.id/2020/01/bawang-putih-sembuhkan-virus-corona', 'similarity_score' => 0.92, 'mean_date_score' => 0.90],
+            ['source_url' => 'https://kominfo.go.id/content/detail/hoaks-kuota-gratis', 'similarity_score' => 0.98, 'mean_date_score' => 0.85],
+            ['source_url' => 'https://www.bkn.go.id/pengumuman/awas-penipuan-cpns', 'similarity_score' => 0.85, 'mean_date_score' => 0.80],
+            ['source_url' => 'https://turnbackhoax.id/2021/05/uang-pecahan-1-juta', 'similarity_score' => 0.90, 'mean_date_score' => 0.88],
+            ['source_url' => 'https://web.pln.co.id/media/siaran-pers/klarifikasi-hoaks-pemadaman', 'similarity_score' => 0.77, 'mean_date_score' => 0.75],
         ];
 
         $imgSearchResultData = array_map(function($res, $index) use ($now) {
@@ -100,11 +88,11 @@ class DatabaseSeeder extends Seeder
 
         // 6. Seeder Stage 1 Results (Hasil deteksi awal AI)
         $stage1Results = [
-            ['similarity_score' => 0.95, 'nli_score' => 0.88, 'predicted_label' => 'HOAX', 'is_stop' => true],
-            ['similarity_score' => 0.99, 'nli_score' => 0.92, 'predicted_label' => 'HOAX', 'is_stop' => true],
-            ['similarity_score' => 0.85, 'nli_score' => 0.80, 'predicted_label' => 'HOAX', 'is_stop' => false],
-            ['similarity_score' => 0.70, 'nli_score' => 0.65, 'predicted_label' => 'DISINFORMASI', 'is_stop' => false],
-            ['similarity_score' => 0.60, 'nli_score' => 0.55, 'predicted_label' => 'HOAX', 'is_stop' => false],
+            ['similarity_score' => 0.95, 'nli_score' => 0.88,'is_stop' => true],
+            ['similarity_score' => 0.99, 'nli_score' => 0.92, 'is_stop' => true],
+            ['similarity_score' => 0.85, 'nli_score' => 0.80, 'is_stop' => false],
+            ['similarity_score' => 0.70, 'nli_score' => 0.65, 'is_stop' => false],
+            ['similarity_score' => 0.60, 'nli_score' => 0.55, 'is_stop' => false],
         ];
 
         $stage1Data = array_map(function($res, $index) use ($now) {
@@ -128,25 +116,38 @@ class DatabaseSeeder extends Seeder
 
         // 8. Seeder Stage 2 Results (Ekstraksi artikel berita asli)
         $stage2Results = [
-            ['article_title' => '[SALAH] Bawang Putih Dapat Menyembuhkan Virus Corona', 'article_url' => 'https://turnbackhoax.id/bawang-putih', 'chunk_text' => 'WHO menegaskan bahwa tidak ada bukti bawang putih dapat melindungi seseorang dari infeksi COVID-19.', 'predicted_label' => 'HOAX'],
-            ['article_title' => 'Awas Penipuan Link Phishing Kuota Gratis Kemdikbud', 'article_url' => 'https://kominfo.go.id/awas-phishing', 'chunk_text' => 'Masyarakat diimbau untuk tidak mengklik tautan tidak resmi yang menjanjikan kuota internet gratis.', 'predicted_label' => 'HOAX'],
-            ['article_title' => 'BKN Tegaskan Tidak Ada Jalur VIP CPNS', 'article_url' => 'https://bkn.go.id/klarifikasi-vip', 'chunk_text' => 'Penerimaan CPNS selalu dilakukan secara transparan melalui sistem CAT, tanpa adanya jalur khusus atau VIP.', 'predicted_label' => 'HOAX'],
-            ['article_title' => 'Penjelasan BI Soal Viral Uang Rp 1 Juta', 'article_url' => 'https://bi.go.id/klarifikasi-uang', 'chunk_text' => 'Uang tersebut merupakan lembar spesimen atau uang specimen (house note) hasil cetakan Peruri.', 'predicted_label' => 'DISINFORMASI'],
-            ['article_title' => '[HOAKS] Pemadaman Listrik 3 Hari di Jawa Timur', 'article_url' => 'https://turnbackhoax.id/pln-jatim', 'chunk_text' => 'PLN UID Jawa Timur mengklarifikasi bahwa pesan berantai mengenai pemadaman total adalah tidak benar.', 'predicted_label' => 'HOAX'],
-        ];
+    [
+        'urls' => [
+            'https://turnbackhoax.id/bawang-putih',
+            'https://kominfo.go.id/awas-phishing'
+        ]
+    ],
+    [
+        'urls' => [
+            'https://bkn.go.id/klarifikasi-vip',
+            'https://bi.go.id/klarifikasi-uang'
+        ]
+    ]
+];
 
         $stage2Data = array_map(function($res, $index) use ($now) {
-            return array_merge($res, [
-                'request_id' => $index + 1,
-                'article_date' => $now->copy()->subDays(rand(1, 30))->format('Y-m-d'),
-                'chunk_index' => 1,
-                'similarity_score' => 0.85 + ($index * 0.02),
-                'nli_score' => 0.80 + ($index * 0.03),
-                'created_at' => $now,
-                'updated_at' => $now
-            ]);
-        }, $stage2Results, array_keys($stage2Results));
-        DB::table('stage2_results')->insert($stage2Data);
+    return [
+        'request_id' => $index + 1,
+        'time_credibility' => 0.80 + ($index * 0.03),
+        'title_credibility' => 0.78 + ($index * 0.04),
+        'mean_contradiction' => 0.10 + ($index * 0.01),
+        'mean_entailment' => 0.70 + ($index * 0.02),
+        'std_contradiction' => 0.05 + ($index * 0.005),
+
+        // ⬇️ INI PENTING
+        'url' => json_encode($res['urls']),
+
+        'created_at' => $now,
+        'updated_at' => $now
+    ];
+}, $stage2Results, array_keys($stage2Results));
+
+DB::table('stage2_results')->insert($stage2Data);
 
         // 9. Seeder User Interactions
         $userInteractions = [

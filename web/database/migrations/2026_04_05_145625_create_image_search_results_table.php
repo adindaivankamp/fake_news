@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
             $table->string('source_url')->nullable();
             $table->float('similarity_score')->nullable();
+            $table->float('mean_date_score')->nullable();
             $table->timestamps();
         });
     }
