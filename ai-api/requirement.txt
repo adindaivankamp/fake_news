@@ -11,6 +11,8 @@ playwright
 feedparser 
 beautifulsoup4
 google-genai
-serpapi
 pillow
 tensorflow
+fastapi 
+uvicorn
+google-search-results

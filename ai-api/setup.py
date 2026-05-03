@@ -295,6 +295,7 @@ if __name__ == "__main__":
         "--step",
         type=str,
         choices=["seed", "clear","delete", "model","nli" ,"playwright","mysql_seed","mysql_clean","all"],
+
         default="all",
         help="Step yang dijalankan"
     )
@@ -328,8 +329,10 @@ if __name__ == "__main__":
         seed_parquet_to_chroma(knowledge_base)
         clean_mysql_knowledge_base()
         seed_csv_to_mysql(CSV_PATH)
+        
+        # 2. Models
         download_model()
         download_nli_model()
         download_playwright()
 
-    print("=== SETUP SELESAI ===")
+    print("\n=== SETUP SELESAI ===")
