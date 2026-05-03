@@ -1,5 +1,5 @@
 from sklearn.metrics.pairwise import cosine_similarity
-from services.nli_service import run_nli
+from services.nli_service import run_nli_top_label
 from .data_pipeline_service import run_pipeline
 from services.llm_service import llm_fallback_func
 
@@ -25,7 +25,7 @@ def retrieve_top_k(query, transformer, chunk_vectors, chunks, k=5):
 # =========================
 def apply_nli(nli_model, query, chunks):
     pairs = [(c["text"], query) for c in chunks]
-    results = run_nli(nli_model, pairs)
+    results = run_nli_top_label(nli_model, pairs)
 
     for i in range(len(chunks)):
         chunks[i]["nli_label"] = results[i]["label"]

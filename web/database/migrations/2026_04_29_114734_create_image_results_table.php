@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('knowledge_links', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('knowledge_id')->constrained('knowledge_base')->onDelete('cascade');
-            $table->string('url');
-            $table->timestamps();
+        Schema::create('image_results', function (Blueprint $table) {
+        $table->id();
+        $table->string('link_img')->nullable();
+        $table->string('title')->nullable();
+        $table->timestamps();
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('knowledge_links');
+        Schema::dropIfExists('image_results');
     }
 };

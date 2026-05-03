@@ -106,26 +106,6 @@ async def scrape_article(page, url):
         }
 
 
-# ==============================
-# SCRAPE MULTIPLE URL
-# ==============================
-# async def scrape_article(page: Page, url: str):
-#     try:
-#         await page.goto(url, timeout=15000)
-
-#         title = await page.title()
-#         content = await page.content()
-
-#         return {
-#             "url": url,
-#             "title": title,
-#             "content": content
-#         }
-
-#     except Exception as e:
-#         print(f"❌ Error scrape {url}: {e}")
-#         return None
-
 async def scrape_one(context, url):
     print("SCRAPING:", url)
     async with semaphore:

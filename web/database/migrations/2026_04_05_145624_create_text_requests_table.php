@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('final_label')->nullable();
             $table->float('final_confidence')->nullable();
             $table->string('status')->nullable();
-            $table->text('reason')->nullable();
             $table->timestamps();
         });
     }
