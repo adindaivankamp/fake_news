@@ -27,7 +27,7 @@
 
         <nav class="lh-nav-icons" aria-label="Aksi pengguna">
             {{-- Trending button --}}
-            <a href="#" class="lh-nav-btn" aria-label="Tren" title="Trending">
+            <a href="{{ route('pencarian.populer') }}" class="lh-nav-btn" aria-label="Tren" title="Trending">
                 <iconify-icon icon="iconamoon:trend-up-fill" width="26" height="26"></iconify-icon>
                 <span class="lh-nav-tooltip" role="tooltip">
                     <iconify-icon icon="iconamoon:trend-up-fill" width="18" height="18"></iconify-icon>
@@ -64,7 +64,7 @@
                 <div class="login-panel__buttons">
 
                     {{-- Google Login --}}
-                    <a href="#" class="btn-social btn-social--google" aria-disabled="true">
+                    <a href="{{ route('google.redirect') }}" class="btn-social btn-social--google">
                         <span class="btn-social__icon">
                             {{-- Google "G" SVG --}}
                             <svg width="28" height="28" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -78,7 +78,7 @@
                     </a>
 
                     {{-- WhatsApp Login --}}
-                    <a href="{{ route('login.wa.verify') }}" class="btn-social btn-social--whatsapp">
+                    <a href="{{ route('login.wa') }}" class="btn-social btn-social--whatsapp">
                         <span class="btn-social__icon">
                             {{-- WhatsApp SVG --}}
                             <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

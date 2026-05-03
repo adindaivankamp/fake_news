@@ -28,6 +28,10 @@ Route::get('/', function () {
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
 Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
 Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
+// Pencarian terpopuler (halaman statis)
+Route::get('/pencarian/populer', function () {
+    return view('user.pencarian-terpopuler');
+})->name('pencarian.populer');
 
 // WhatsApp page
 Route::get('/dapatkan-whatsapp', function () {
@@ -100,10 +104,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::any('/wa-webhook', [WaController::class, 'webhook']);
 
 // Login using WhatsApp (web)
-Route::get('/login-wa', [AuthController::class, 'showPhoneForm']);
-Route::post('/login-wa/request', [AuthController::class, 'requestToken']);
+Route::get('/login-wa', [AuthController::class, 'showPhoneForm'])->name('login.wa');
+Route::post('/login-wa/request', [AuthController::class, 'requestToken'])->name('login.wa.request');
 Route::get('/login-wa/verify', [AuthController::class, 'showTokenForm'])->name('login.wa.verify');
-Route::post('/login-wa/verify', [AuthController::class, 'verifyToken']);
+Route::post('/login-wa/verify', [AuthController::class, 'verifyToken'])->name('login.wa.verify.post');
 
 
 /*
