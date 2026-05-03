@@ -6,7 +6,7 @@
 
     <!-- Nav Icons -->
     <nav class="lh-nav-icons {{ isset($variant) && $variant === 'wa' ? 'wa-nav-actions' : '' }}" @if(isset($variant) && $variant === 'wa') aria-label="Aksi pengguna" @endif>
-        <a href="#" class="lh-nav-btn {{ isset($variant) && $variant === 'wa' ? 'wa-nav-btn' : '' }}" aria-label="Tren" onclick="alert('Fitur Tren akan segera hadir')">
+        <a href="{{ route('pencarian.populer') }}" class="lh-nav-btn {{ isset($variant) && $variant === 'wa' ? 'wa-nav-btn' : '' }}" aria-label="Pencarian Terpopuler">
             <iconify-icon icon="iconamoon:trend-up-fill" width="26" height="26"></iconify-icon>
             <span class="lh-nav-tooltip {{ isset($variant) && $variant === 'wa' ? '' : '' }}" role="tooltip">
                 <iconify-icon icon="iconamoon:trend-up-fill" width="18" height="18"></iconify-icon>

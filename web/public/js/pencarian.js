@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnUnggah = document.getElementById('btnUnggah');
     const btnTelusuri = document.getElementById('btnTelusuri');
     const hasilPenelusuran = document.getElementById('hasilPenelusuran');
+    const searchParams = new URLSearchParams(window.location.search);
+    const prefilledInformasi = (searchParams.get('informasi') || searchParams.get('q') || '').trim();
 
     // Get CSRF token from meta tag
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
@@ -304,4 +306,13 @@ document.addEventListener('DOMContentLoaded', function () {
             Masukkan informasi atau upload gambar untuk mulai penelusuran
         </div>
     `;
+
+    if (prefilledInformasi) {
+        inputInformasi.value = prefilledInformasi;
+        hasilPenelusuran.innerHTML = `
+            <div class="lh-result-empty">
+                Informasi dari pencarian populer sudah terisi. Klik Telusuri untuk memulai verifikasi.
+            </div>
+        `;
+    }
 });
