@@ -362,6 +362,108 @@
     padding: 22px;
 }
 
+.lh-filter-modal--period .lh-filter-modal__card {
+    width: min(432px, 100%);
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid #5d0507;
+    background: linear-gradient(180deg, #b91b18 0%, #a31311 100%);
+    box-shadow: 0 18px 34px rgba(44, 4, 5, 0.45);
+}
+
+.lh-filter-modal--period .lh-filter-modal__header,
+.lh-filter-modal--period .lh-filter-modal__description,
+.lh-filter-modal--period .lh-filter-modal__close {
+    display: none;
+}
+
+.lh-filter-modal--period .lh-filter-modal__options {
+    margin-top: 0;
+}
+
+.lh-period-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lh-period-picker__yearbar {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) 56px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f6 100%);
+    border: 1px solid rgba(77, 18, 20, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.lh-period-picker__nav {
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: #4a1415;
+    cursor: pointer;
+    transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.lh-period-picker__nav:hover,
+.lh-period-picker__nav:focus-visible {
+    transform: translateY(-1px);
+    background: rgba(184, 27, 24, 0.08);
+    outline: none;
+}
+
+.lh-period-picker__year {
+    text-align: center;
+    font-family: var(--font-istok);
+    font-size: clamp(26px, 6vw, 34px);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #4a1415;
+}
+
+.lh-period-picker__months {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.lh-period-picker__month {
+    min-height: 52px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid #5a1213;
+    background: #fffdfd;
+    font-family: var(--font-poppins);
+    font-size: 17px;
+    font-weight: 700;
+    color: #4a1415;
+    cursor: pointer;
+    transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.lh-period-picker__month:hover,
+.lh-period-picker__month:focus-visible {
+    transform: translateY(-1px);
+    border-color: #381010;
+    box-shadow: 0 10px 18px rgba(31, 6, 6, 0.16);
+    outline: none;
+}
+
+.lh-period-picker__month--selected {
+    background: #f6f68a;
+    border-color: #8d7a00;
+    color: #4a1415;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 10px 20px rgba(61, 50, 0, 0.14);
+}
+
 .lh-filter-modal__header {
     display: flex;
     align-items: flex-start;
@@ -518,5 +620,38 @@ body.lh-filter-lock {
     .lh-filter-modal__card {
         padding: 18px 16px;
         border-radius: 20px;
+    }
+
+    .lh-filter-modal--period .lh-filter-modal__card {
+        width: min(100%, 380px);
+        padding: 12px;
+    }
+
+    .lh-period-picker {
+        gap: 12px;
+    }
+
+    .lh-period-picker__yearbar {
+        grid-template-columns: 44px minmax(0, 1fr) 44px;
+        gap: 6px;
+        padding: 6px 8px;
+        border-radius: 16px;
+    }
+
+    .lh-period-picker__nav {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+    }
+
+    .lh-period-picker__months {
+        gap: 10px;
+    }
+
+    .lh-period-picker__month {
+        min-height: 46px;
+        padding: 8px 10px;
+        border-radius: 14px;
+        font-size: 15px;
     }
 }

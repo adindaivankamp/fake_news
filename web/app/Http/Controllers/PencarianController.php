@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ImageDetectionController;
 
 class PencarianController extends Controller
 {
@@ -103,61 +104,17 @@ class PencarianController extends Controller
      *
      * Endpoint: POST /telusuri-gambar
      * Request: multipart/form-data dengan key "gambar"
+     * Delegasi ke ImageDetectionController untuk processing sebenarnya
      */
     public function telusuriGambar(Request $request): JsonResponse
     {
-        try {
-            // Validasi file
-            $validated = $request->validate([
-                'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Max 5MB
-            ]);
+        // Rename 'gambar' menjadi 'image' untuk kompatibilitas dengan ImageDetectionController
+        $request->merge([
+            'image' => $request->file('gambar')
+        ]);
 
-            $file = $validated['gambar'];
-
-            // Simpan file sementara
-            $path = $file->store('temp-uploads', 'public');
-
-            Log::info('Image search submitted', [
-                'user_id' => Auth::id(),
-                'filename' => $file->getClientOriginalName(),
-                'size' => $file->getSize(),
-            ]);
-
-            // TODO: Integrasikan dengan image detection API
-            // Contoh:
-            // $result = Http::post(env('AI_API_URL') . '/image-check', [
-            //     'image' => base64_encode(file_get_contents(storage_path('app/public/' . $path))),
-            //     'user_id' => auth()->id(),
-            // ]);
-
-            return response()->json([
-                'success'    => true,
-                'verdict'    => 'unclear',
-                'confidence' => 38,
-                'summary'    => 'Gambar sedang dianalisis menggunakan teknologi deteksi konten. '
-                              . 'Sistem memeriksa keaslian, manipulasi, dan konteks gambar.',
-                'sources'    => [
-                    ['title' => 'Google Reverse Image Search', 'url' => 'https://images.google.com'],
-                ],
-                'image_path' => $path, // Untuk debugging, hapus di production
-            ]);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File tidak valid. Gunakan format JPEG, PNG, atau GIF (max 5MB).',
-                'errors'  => $e->errors(),
-            ], 422);
-        } catch (\Exception $e) {
-            Log::error('Image search error', [
-                'user_id' => Auth::id(),
-                'error'   => $e->getMessage(),
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengupload gambar.',
-            ], 500);
-        }
+        // Delegasi ke ImageDetectionController
+        $imageDetectionController = new ImageDetectionController();
+        return $imageDetectionController->detect($request);
     }
 }

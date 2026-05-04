@@ -19,20 +19,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const state = {
         category: 'hoax',
         period: 'Juni 2026',
+        periodYear: 2026,
         modalType: null,
     };
+
+    const monthNames = [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember',
+    ];
 
     const categoryOptions = [
         { value: 'all', label: 'Semua Kategori', description: 'Tampilkan semua pencarian populer tanpa filter kategori.' },
         { value: 'hoax', label: 'Hoax', description: 'Menampilkan tema yang terindikasi hoaks atau kabar menyesatkan.' },
         { value: 'fakta', label: 'Fakta', description: 'Menampilkan tema yang terverifikasi benar.' },
-    ];
-
-    const periodOptions = [
-        { value: 'Juni 2026', label: 'Juni 2026', description: 'Periode yang paling ramai saat ini.' },
-        { value: 'Mei 2026', label: 'Mei 2026', description: 'Lihat topik terpopuler dari bulan Mei 2026.' },
-        { value: 'April 2026', label: 'April 2026', description: 'Lihat pencarian teratas pada April 2026.' },
-        { value: 'Maret 2026', label: 'Maret 2026', description: 'Arsip pencarian populer bulan Maret 2026.' },
     ];
 
     const popularItems = [
@@ -107,16 +116,20 @@ document.addEventListener('DOMContentLoaded', function () {
     function openModal(type) {
         state.modalType = type;
 
+        modal.classList.toggle('lh-filter-modal--period', type === 'period');
+
         if (type === 'category') {
             modalEyebrow.textContent = 'Filter kategori';
             modalTitle.textContent = 'Pilih kategori pencarian';
             modalDescription.textContent = 'Pilih apakah Anda ingin melihat topik hoax, fakta, atau semua kategori.';
             renderOptions(categoryOptions, state.category, type);
         } else {
+            const periodParts = parsePeriod(state.period);
+            state.periodYear = periodParts.year;
             modalEyebrow.textContent = 'Filter periode';
             modalTitle.textContent = 'Pilih bulan dan tahun';
             modalDescription.textContent = 'Pilih periode bulan dan tahun untuk melihat tema pencarian yang paling ramai.';
-            renderOptions(periodOptions, state.period, type);
+            renderPeriodPicker(state.periodYear);
         }
 
         modal.removeAttribute('hidden');
@@ -126,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function closeModal() {
         modal.setAttribute('hidden', '');
         document.body.classList.remove('lh-filter-lock');
+        modal.classList.remove('lh-filter-modal--period');
         state.modalType = null;
     }
 
@@ -141,11 +155,68 @@ document.addEventListener('DOMContentLoaded', function () {
         }).join('');
     }
 
+    function renderPeriodPicker(year) {
+        modalOptions.innerHTML = `
+            <div class="lh-period-picker">
+                <div class="lh-period-picker__yearbar">
+                    <button type="button" class="lh-period-picker__nav" data-period-nav="prev" aria-label="Tahun sebelumnya">
+                        <iconify-icon icon="mdi:chevron-left" width="30" height="30"></iconify-icon>
+                    </button>
+                    <div class="lh-period-picker__year">${escapeHtml(String(year))}</div>
+                    <button type="button" class="lh-period-picker__nav" data-period-nav="next" aria-label="Tahun berikutnya">
+                        <iconify-icon icon="mdi:chevron-right" width="30" height="30"></iconify-icon>
+                    </button>
+                </div>
+                <div class="lh-period-picker__months">
+                    ${monthNames.map(monthName => {
+                        const optionValue = `${monthName} ${year}`;
+                        const isSelected = optionValue === state.period;
+                        return `
+                            <button type="button" class="lh-period-picker__month ${isSelected ? 'lh-period-picker__month--selected' : ''}" data-option-value="${escapeHtml(optionValue)}" data-option-type="period">
+                                ${escapeHtml(monthName)}
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    function parsePeriod(period) {
+        const match = String(period).match(/^(.+)\s(\d{4})$/);
+        if (!match) {
+            return { month: 'Juni', year: 2026 };
+        }
+
+        return {
+            month: match[1],
+            year: Number(match[2]),
+        };
+    }
+
+    function shiftPeriodYear(delta) {
+        state.periodYear += delta;
+        renderPeriodPicker(state.periodYear);
+    }
+
     function updateLabels() {
-        categoryLabel.textContent = state.category === 'all'
+        const categoryDisplay = state.category === 'all'
             ? 'Semua Kategori'
             : state.category.charAt(0).toUpperCase() + state.category.slice(1);
+        
+        categoryLabel.textContent = categoryDisplay;
         periodLabel.textContent = state.period;
+        
+        // Update trigger buttons in title
+        const categoryTrigger = document.querySelector('[data-filter-trigger="category"]');
+        const periodTrigger = document.querySelector('[data-filter-trigger="period"]');
+        
+        if (categoryTrigger) {
+            categoryTrigger.textContent = categoryDisplay;
+        }
+        if (periodTrigger) {
+            periodTrigger.textContent = state.period;
+        }
     }
 
     function renderGrid() {
@@ -210,6 +281,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     modalOptions.addEventListener('click', function (event) {
+        const periodNavButton = event.target.closest('[data-period-nav]');
+        if (periodNavButton) {
+            const direction = periodNavButton.dataset.periodNav;
+            shiftPeriodYear(direction === 'next' ? 1 : -1);
+            return;
+        }
+
         const optionButton = event.target.closest('[data-option-value]');
         if (!optionButton) return;
 
@@ -219,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (type === 'category') {
             state.category = value;
         } else {
+            state.periodYear = parsePeriod(value).year;
             state.period = value;
         }
 
