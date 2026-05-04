@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         // 1. Seeder Users (Menggunakan data pengguna lokal)
         $users = [
-            ['name' => 'M. Reishi Fauzi', 'email' => 'reishi@admin.com', 'role' => 'admin', 'phone_number' => '081234567890'],
+            ['name' => 'M. Reishi Fauzi', 'email' => 'reishi@admin.com', 'role' => 'admin', 'phone_number' => '085773071834'],
             ['name' => 'Axelo', 'email' => 'axelo@student.com', 'role' => 'user', 'phone_number' => '081298765432'],
             ['name' => 'Firman', 'email' => 'firman@student.com', 'role' => 'user', 'phone_number' => '081345678901'],
             ['name' => 'Gilang', 'email' => 'gilang@student.com', 'role' => 'user', 'phone_number' => '085612345678'],

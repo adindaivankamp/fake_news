@@ -13,6 +13,7 @@ use App\Http\Controllers\WaController;
 use App\Http\Controllers\Api\HoaxDetectionController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ use App\Http\Controllers\AuthController;
 |--------------------------------------------------------------------------
 */
 
+// Landing Page
 Route::get('/', function () {
     return view('landing_page.landing');
 })->name('landing');
@@ -28,8 +30,12 @@ Route::get('/', function () {
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
 Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
 Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
+// Pencarian terpopuler (halaman statis)
+Route::get('/pencarian/populer', function () {
+    return view('user.pencarian-terpopuler');
+})->name('pencarian.populer');
 
-// WhatsApp page
+// WhatsApp Page
 Route::get('/dapatkan-whatsapp', function () {
     return view('whatsapp');
 })->name('whatsapp.page');
@@ -47,7 +53,7 @@ Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText']);
 |--------------------------------------------------------------------------
 */
 
-// Login web
+// Login Web
 Route::get('/masuk', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/masuk', [LoginController::class, 'login'])->name('login.post');
 Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
@@ -66,22 +72,28 @@ Route::prefix('auth/google')->group(function () {
     Route::get('/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 });
 
+    Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
+    Route::get('/pencarian-terpopuler', function () {
+        return view('user.pencarian-terpopuler');
+    })->name('pencarian.populer');
+    Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
+    Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN ROUTES
+| ADMIN ROUTES (PROTECTED)
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // User
+    // User Management
     Route::get('/user', [UserController::class, 'index']);
 
-    // Umpan balik
+    // Umpan Balik
     Route::get('/umpanbalik', [UmpanBalikController::class, 'index']);
 
     // Riwayat
@@ -91,16 +103,24 @@ Route::prefix('admin')->group(function () {
         Route::post('/update/{id}', [RiwayatController::class, 'update']);
         Route::get('/delete/{id}', [RiwayatController::class, 'delete']);
     });
+
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| WHATSAPP WEBHOOK (NO AUTH)
+| WHATSAPP WEBHOOK & API (NO AUTH)
 |--------------------------------------------------------------------------
 */
 
 Route::any('/wa-webhook', [WaController::class, 'webhook']);
+Route::post('/detect-hoax', [ApiController::class, 'detectHoax']);
+
+// Login using WhatsApp (web)
+Route::get('/login-wa', [AuthController::class, 'showPhoneForm'])->name('login.wa');
+Route::post('/login-wa/request', [AuthController::class, 'requestToken'])->name('login.wa.request');
+Route::get('/login-wa/verify', [AuthController::class, 'showTokenForm'])->name('login.wa.verify');
+Route::post('/login-wa/verify', [AuthController::class, 'verifyToken'])->name('login.wa.verify.post');
 
 
 /*
@@ -111,7 +131,7 @@ Route::any('/wa-webhook', [WaController::class, 'webhook']);
 
 Route::middleware(['auth'])->group(function () {
 
-    // Profile
+    // Update Profile
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 
     // Link WhatsApp

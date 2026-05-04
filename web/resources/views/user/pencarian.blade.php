@@ -8,6 +8,14 @@
     @include('user.partials.navbar')
 
     @include('user.partials.hero-bg')
+    <!-- ========== NAVBAR ========== -->
+    <header class="lh-navbar">
+        <!-- Logo -->
+        <a href="{{ route('beranda') }}" class="lh-logo">
+            <img src="{{ asset('img/logo-lensa.png') }}" alt="Logo Lensa Hoax" class="lh-logo__img">
+        </a>
+
+    @include('user.partials.hero-bg')
 
     <!-- ========== MAIN CONTENT ========== -->
     <main class="lh-main">
@@ -30,6 +38,13 @@
                         name="informasi"
                         placeholder="Ketik, Tempel, atau Unggah informasi ....."
                     ></textarea>
+                    <!-- Image preview area -->
+                    <div id="imagePreviewContainer" style="display: none; margin-top: 16px;">
+                        <img id="imagePreview" src="" alt="Preview gambar" style="max-width: 100%; max-height: 300px; border-radius: 8px; display: block; margin-bottom: 8px;">
+                        <p id="imagePreviewText" style="text-align: center; font-size: 12px; color: #666; margin: 0;">
+                            ✓ Gambar siap untuk diteliti
+                        </p>
+                    </div>
                 </div>
                 <div class="lh-card__footer">
                     <button class="lh-btn lh-btn--upload" id="btnUnggah" type="button">

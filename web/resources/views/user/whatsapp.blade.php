@@ -17,6 +17,44 @@
 <body>
     <div class="wa-page">
         @include('user.partials.navbar', ['variant' => 'wa', 'activeWhatsApp' => true])
+        <header class="lh-navbar wa-navbar">
+            <a href="{{ route('beranda') }}" class="lh-logo wa-logo" aria-label="Kembali ke Pencarian">
+                <img src="{{ asset('img/logo-lensa.png') }}" alt="Logo Lensa Hoax" class="lh-logo__img wa-logo__img">
+            </a>
+
+            <nav class="lh-nav-icons wa-nav-actions" aria-label="Aksi pengguna">
+                <a href="#" class="lh-nav-btn wa-nav-btn" aria-label="Tren">
+                    <iconify-icon icon="iconamoon:trend-up-fill" width="26" height="26"></iconify-icon>
+                    <span class="lh-nav-tooltip" role="tooltip">
+                        <iconify-icon icon="iconamoon:trend-up-fill" width="18" height="18"></iconify-icon>
+                        <span>Pencarian Terpopuler</span>
+                    </span>
+                </a>
+                <a href="#" class="lh-nav-btn wa-nav-btn" aria-label="Riwayat">
+                    <iconify-icon icon="fontisto:history" width="24" height="24"></iconify-icon>
+                    <span class="lh-nav-tooltip" role="tooltip">
+                        <iconify-icon icon="fontisto:history" width="17" height="17"></iconify-icon>
+                        <span>Riwayat Pencarian Anda</span>
+                    </span>
+                </a>
+                <a href="{{ route('whatsapp.page') }}" class="lh-nav-btn lh-nav-btn--whatsapp-visible wa-nav-btn wa-nav-btn--whatsapp wa-nav-btn--active" aria-label="Dapatkan melalui WhatsApp" aria-current="page">
+                    <iconify-icon icon="garden:whatsapp-fill-16" width="24" height="24"></iconify-icon>
+                    <span class="lh-nav-tooltip lh-nav-tooltip--always-visible" role="tooltip">
+                        <iconify-icon icon="garden:whatsapp-fill-16" width="18" height="18"></iconify-icon>
+                        <span>Dapatkan Melalui Whatsapp</span>
+                    </span>
+                </a>
+                <a href="#" class="lh-nav-btn wa-nav-btn js-profile-toggle" aria-label="Profil" aria-controls="user-profile-popup" aria-expanded="false" data-profile-toggle="user-profile-popup">
+                    <iconify-icon icon="mdi:user" width="26" height="26"></iconify-icon>
+                    <span class="lh-nav-tooltip lh-nav-tooltip--left" role="tooltip">
+                        <iconify-icon icon="mdi:user" width="18" height="18"></iconify-icon>
+                        <span>Profil Pengguna</span>
+                    </span>
+                </a>
+            </nav>
+
+            @include('user.partials.profile-popup', ['popupId' => 'user-profile-popup'])
+        </header>
 
         <main class="wa-content">
             <section class="wa-hero">

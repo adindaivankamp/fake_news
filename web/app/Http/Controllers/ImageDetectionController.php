@@ -66,6 +66,9 @@ class ImageDetectionController extends Controller
                 // 7. RETURN SESUAI FIGMA
                 return response()->json([
                     'status' => 'success',
+                    'verdict' => strtolower($finalLabel),
+                    'confidence' => $hoaxPercentage,
+                    'summary' => 'Analisis gambar menunjukkan indikasi ' . $finalLabel . ' dengan tingkat kepercayaan ' . $hoaxPercentage . '%.',
                     'data' => [
                         'indication' => $finalLabel,
                         'confidence_score' => [

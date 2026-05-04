@@ -10,9 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnUnggah = document.getElementById('btnUnggah');
     const btnTelusuri = document.getElementById('btnTelusuri');
     const hasilPenelusuran = document.getElementById('hasilPenelusuran');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const searchParams = new URLSearchParams(window.location.search);
+    const prefilledInformasi = (searchParams.get('informasi') || searchParams.get('q') || '').trim();
 
     // Get CSRF token from meta tag
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    // State: store uploaded file for later processing
+    let uploadedFile = null;
 
     // ==================== Event Listeners ====================
 
@@ -20,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
      * Handle upload button click
      */
     btnUnggah.addEventListener('click', function () {
+        clearImagePreview(); // Clear previous preview if any
         fileInput.click();
     });
 
@@ -45,14 +53,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Upload gambar
-        uploadImage(file);
+        // Store file and show preview
+        uploadedFile = file;
+        showImagePreview(file);
     });
 
     /**
      * Handle search button click
      */
     btnTelusuri.addEventListener('click', function () {
+        // If file is uploaded, search by image
+        if (uploadedFile) {
+            performImageSearch(uploadedFile);
+            return;
+        }
+
+        // Otherwise, search by text
         const informasi = inputInformasi.value.trim();
 
         if (!informasi) {
@@ -78,13 +94,48 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    /**
+     * Clear image preview when user focuses on textarea
+     */
+    inputInformasi.addEventListener('focus', function () {
+        if (uploadedFile) {
+            clearImagePreview();
+        }
+    });
+
     // ==================== Functions ====================
+
+    /**
+     * Show image preview in input panel
+     */
+    function showImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imageDataUrl = e.target.result;
+            imagePreview.src = imageDataUrl;
+            imagePreviewContainer.style.display = 'block';
+            inputInformasi.style.display = 'none'; // Hide textarea when image is shown
+        };
+        reader.readAsDataURL(file);
+    }
+
+    /**
+     * Clear image preview and show textarea again
+     */
+    function clearImagePreview() {
+        imagePreviewContainer.style.display = 'none';
+        imagePreview.src = '';
+        inputInformasi.style.display = 'block';
+        uploadedFile = null;
+        fileInput.value = '';
+    }
 
     /**
      * Search by text
      */
     function searchText(informasi) {
         showLoading();
+        clearImagePreview(); // Clear image preview when searching by text
 
         fetch('/telusuri', {
             method: 'POST',
@@ -116,9 +167,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * Upload and search by image
+     * Perform image search
      */
-    function uploadImage(file) {
+    function performImageSearch(file) {
         showLoading();
 
         const formData = new FormData();
@@ -138,9 +189,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                if (data.success) {
-                    displayResult(data);
-                    fileInput.value = ''; // Reset file input
+                // Support both 'status' and 'success' response format
+                const isSuccess = data.status === 'success' || data.success === true;
+                
+                if (isSuccess) {
+                    // Handle both response formats
+                    const resultData = data.data || data;
+                    displayResult(resultData);
+                    clearImagePreview();
                 } else {
                     showError(data.message || 'Gagal mengupload gambar. Silakan coba lagi.');
                     fileInput.value = '';
@@ -180,7 +236,11 @@ document.addEventListener('DOMContentLoaded', function () {
      * Display search result
      */
     function displayResult(data) {
-        const { verdict, confidence, summary, sources } = data;
+        // Handle image detection response format (with nested 'data' key)
+        let verdict = data.verdict || data.indication;
+        let confidence = data.confidence || data.confidence_score?.hoax || 50;
+        let summary = data.summary;
+        let sources = data.sources;
 
         // Normalize and map verdict label
         const normalizedVerdict = String(verdict || '').toLowerCase();
@@ -188,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
             hoax: { label: 'HOAX', className: 'lh-verdict--hoax' },
             valid: { label: 'FAKTA', className: 'lh-verdict--valid' },
             unclear: { label: 'PERLU VERIFIKASI', className: 'lh-verdict--unclear' },
+            fakta: { label: 'FAKTA', className: 'lh-verdict--valid' },
         };
 
         const verdictInfo = verdictMap[normalizedVerdict] || verdictMap.unclear;
@@ -304,4 +365,13 @@ document.addEventListener('DOMContentLoaded', function () {
             Masukkan informasi atau upload gambar untuk mulai penelusuran
         </div>
     `;
+
+    if (prefilledInformasi) {
+        inputInformasi.value = prefilledInformasi;
+        hasilPenelusuran.innerHTML = `
+            <div class="lh-result-empty">
+                Informasi dari pencarian populer sudah terisi. Klik Telusuri untuk memulai verifikasi.
+            </div>
+        `;
+    }
 });

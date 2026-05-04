@@ -1,0 +1,657 @@
+/* Popular search page */
+.lh-popular-page {
+    position: relative;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: #220708;
+    overflow: hidden;
+}
+
+.lh-popular-main {
+    position: relative;
+    z-index: 2;
+    width: min(1160px, calc(100% - 44px));
+    margin: 0 auto;
+    padding: 18px 0 40px;
+}
+
+.lh-popular-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 22px 22px;
+    padding: 20px clamp(16px, 2.4vw, 26px) 20px;
+    background: linear-gradient(180deg, #97090b 0%, #b71819 100%);
+    box-shadow: 0 12px 24px rgba(111, 8, 10, 0.2);
+    color: #fffdf6;
+}
+
+.lh-popular-hero::before,
+.lh-popular-hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(255, 198, 92, 0.16);
+}
+
+.lh-popular-hero::before {
+    width: 220px;
+    height: 220px;
+    right: -100px;
+    top: -130px;
+}
+
+.lh-popular-hero::after {
+    width: 160px;
+    height: 160px;
+    left: -85px;
+    bottom: -92px;
+}
+
+.lh-popular-hero__eyebrow {
+    font-family: var(--font-poppins);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.88;
+    margin-bottom: 12px;
+}
+
+.lh-popular-hero__title {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    font-family: var(--font-istok);
+    font-size: clamp(18px, 2.2vw, 28px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.lh-filter-trigger {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #ffe67a;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 2px 1px;
+    border-bottom: 1.5px solid #ffe67a;
+    border-radius: 0;
+    transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.lh-filter-trigger:hover,
+.lh-filter-trigger:focus-visible {
+    color: #fff39f;
+    border-bottom-color: #fff39f;
+    transform: translateY(-1px);
+    outline: none;
+}
+
+.lh-popular-hero__subtitle {
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    font-family: var(--font-poppins);
+    font-size: 14px;
+    line-height: 1.52;
+    color: rgba(255, 248, 240, 0.93);
+    max-width: 860px;
+}
+
+.lh-popular-hero__meta {
+    position: relative;
+    z-index: 1;
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.lh-popular-hero__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 233, 164, 0.24);
+    color: #fffdf6;
+    font-family: var(--font-poppins);
+    font-size: 12px;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+}
+
+.lh-popular-hero__chip strong {
+    color: #ffe67a;
+}
+
+.lh-popular-hero__chip--soft {
+    background: rgba(255, 244, 218, 0.16);
+}
+
+.lh-popular-grid-wrap {
+    position: relative;
+    z-index: 1;
+    margin-top: 20px;
+}
+
+.lh-popular-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.lh-popular-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 410px;
+    padding: 18px 14px 14px;
+    border: 2px solid #8b1112;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fffdfd 0%, #fff7f7 100%);
+    box-shadow: 0 18px 26px rgba(114, 16, 19, 0.1);
+}
+
+.lh-popular-card__medal {
+    position: absolute;
+    left: 14px;
+    top: -2px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-dmsans);
+    font-size: 20px;
+    font-weight: 800;
+    color: #f9b100;
+    border: 4px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.lh-popular-card__medal::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -26px;
+    width: 22px;
+    height: 36px;
+    transform: translateX(-50%);
+    clip-path: polygon(50% 100%, 0 0, 100% 0);
+    background: #3b9df3;
+}
+
+.lh-popular-card__medal--gold {
+    background: linear-gradient(180deg, #ffd94b 0%, #f8b71d 100%);
+}
+
+.lh-popular-card__medal--silver {
+    background: linear-gradient(180deg, #ededf1 0%, #c7c7d1 100%);
+    color: #8a8d95;
+}
+
+.lh-popular-card__medal--bronze {
+    background: linear-gradient(180deg, #ffcb73 0%, #ea971d 100%);
+    color: #9c4f11;
+}
+
+.lh-popular-card__medal--gold::after,
+.lh-popular-card__medal--silver::after,
+.lh-popular-card__medal--bronze::after {
+    content: attr(data-rank);
+    position: relative;
+    z-index: 1;
+}
+
+.lh-popular-card__excerpt {
+    min-height: 206px;
+    padding: 14px 12px 12px;
+    border: 2px solid #8f4a4d;
+    border-radius: 12px;
+    background: #fff8f8;
+    font-family: var(--font-poppins);
+    font-size: 15px;
+    line-height: 1.45;
+    color: #222;
+}
+
+.lh-popular-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 0 0;
+}
+
+.lh-popular-card__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.lh-popular-card__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 70px;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #8b1112;
+    background: #fff;
+    color: #c9221c;
+    font-family: var(--font-dmsans);
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.lh-popular-card__headline {
+    margin: 1px 0 0;
+    font-family: var(--font-poppins);
+    font-size: 16px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #352020;
+}
+
+.lh-popular-card__count {
+    margin-top: 4px;
+    font-family: var(--font-poppins);
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 700;
+    color: #4d2225;
+}
+
+.lh-popular-card__count strong {
+    color: #c31e1b;
+}
+
+.lh-popular-card__footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 6px;
+}
+
+.lh-popular-card__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 132px;
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #a40f12 0%, #8e0a0d 100%);
+    color: #fff;
+    font-family: var(--font-poppins);
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 10px 18px rgba(126, 12, 15, 0.16);
+    transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.lh-popular-card__btn:hover,
+.lh-popular-card__btn:focus-visible {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    outline: none;
+}
+
+.lh-popular-empty {
+    margin-top: 18px;
+    padding: 24px;
+    text-align: center;
+    border: 2px dashed rgba(139, 17, 18, 0.28);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #5f171a;
+}
+
+.lh-popular-empty h2 {
+    font-family: var(--font-istok);
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.lh-popular-empty p {
+    font-family: var(--font-poppins);
+    font-size: 14px;
+}
+
+.lh-filter-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.lh-filter-modal[hidden] {
+    display: none;
+}
+
+.lh-filter-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(70, 7, 8, 0.52);
+    backdrop-filter: blur(5px);
+}
+
+.lh-filter-modal__card {
+    position: relative;
+    z-index: 1;
+    width: min(680px, 100%);
+    border-radius: 24px;
+    border: 2px solid #ffcb7c;
+    background: linear-gradient(180deg, #fffaf5 0%, #fff3ee 100%);
+    box-shadow: 0 28px 60px rgba(40, 6, 7, 0.34);
+    padding: 22px;
+}
+
+.lh-filter-modal--period .lh-filter-modal__card {
+    width: min(432px, 100%);
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid #5d0507;
+    background: linear-gradient(180deg, #b91b18 0%, #a31311 100%);
+    box-shadow: 0 18px 34px rgba(44, 4, 5, 0.45);
+}
+
+.lh-filter-modal--period .lh-filter-modal__header,
+.lh-filter-modal--period .lh-filter-modal__description,
+.lh-filter-modal--period .lh-filter-modal__close {
+    display: none;
+}
+
+.lh-filter-modal--period .lh-filter-modal__options {
+    margin-top: 0;
+}
+
+.lh-period-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lh-period-picker__yearbar {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) 56px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #fff8f6 100%);
+    border: 1px solid rgba(77, 18, 20, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.lh-period-picker__nav {
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    color: #4a1415;
+    cursor: pointer;
+    transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.lh-period-picker__nav:hover,
+.lh-period-picker__nav:focus-visible {
+    transform: translateY(-1px);
+    background: rgba(184, 27, 24, 0.08);
+    outline: none;
+}
+
+.lh-period-picker__year {
+    text-align: center;
+    font-family: var(--font-istok);
+    font-size: clamp(26px, 6vw, 34px);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #4a1415;
+}
+
+.lh-period-picker__months {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.lh-period-picker__month {
+    min-height: 52px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid #5a1213;
+    background: #fffdfd;
+    font-family: var(--font-poppins);
+    font-size: 17px;
+    font-weight: 700;
+    color: #4a1415;
+    cursor: pointer;
+    transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.lh-period-picker__month:hover,
+.lh-period-picker__month:focus-visible {
+    transform: translateY(-1px);
+    border-color: #381010;
+    box-shadow: 0 10px 18px rgba(31, 6, 6, 0.16);
+    outline: none;
+}
+
+.lh-period-picker__month--selected {
+    background: #f6f68a;
+    border-color: #8d7a00;
+    color: #4a1415;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 10px 20px rgba(61, 50, 0, 0.14);
+}
+
+.lh-filter-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.lh-filter-modal__eyebrow {
+    margin-bottom: 6px;
+    font-family: var(--font-poppins);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c21f1d;
+}
+
+.lh-filter-modal__title {
+    font-family: var(--font-istok);
+    font-size: clamp(24px, 2.2vw, 32px);
+    line-height: 1.15;
+    color: #6f0c0f;
+}
+
+.lh-filter-modal__close {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    background: #8e0a0d;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.lh-filter-modal__close:hover,
+.lh-filter-modal__close:focus-visible {
+    transform: scale(1.04);
+    filter: brightness(1.08);
+    outline: none;
+}
+
+.lh-filter-modal__description {
+    margin-top: 10px;
+    font-family: var(--font-poppins);
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4e1e20;
+}
+
+.lh-filter-modal__options {
+    margin-top: 18px;
+    display: grid;
+    gap: 12px;
+}
+
+.lh-filter-option {
+    width: 100%;
+    border: 2px solid rgba(139, 17, 18, 0.2);
+    border-radius: 18px;
+    background: #fff;
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.lh-filter-option:hover,
+.lh-filter-option:focus-visible {
+    transform: translateY(-1px);
+    border-color: #8b1112;
+    box-shadow: 0 12px 18px rgba(126, 12, 15, 0.1);
+    outline: none;
+}
+
+.lh-filter-option--selected {
+    border-color: #8b1112;
+    background: linear-gradient(180deg, #fff6f1 0%, #ffe9db 100%);
+}
+
+.lh-filter-option__label {
+    display: block;
+    font-family: var(--font-poppins);
+    font-size: 16px;
+    font-weight: 800;
+    color: #6f0c0f;
+}
+
+.lh-filter-option__description {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-poppins);
+    font-size: 13px;
+    line-height: 1.45;
+    color: #5f3d3e;
+}
+
+body.lh-filter-lock {
+    overflow: hidden;
+}
+
+@media (max-width: 1080px) {
+    .lh-popular-main {
+        width: min(100%, calc(100% - 28px));
+    }
+
+    .lh-popular-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .lh-popular-main {
+        width: min(100%, calc(100% - 20px));
+        padding-top: 14px;
+    }
+
+    .lh-popular-hero {
+        padding: 18px 14px 16px;
+        border-radius: 0 0 22px 22px;
+    }
+
+    .lh-popular-hero__eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+    }
+
+    .lh-popular-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .lh-popular-card {
+        min-height: auto;
+        padding: 16px 12px 12px;
+    }
+
+    .lh-popular-card__excerpt {
+        min-height: 170px;
+        font-size: 14px;
+    }
+
+    .lh-popular-card__headline {
+        font-size: 15px;
+    }
+
+    .lh-popular-card__btn {
+        min-width: 100%;
+    }
+
+    .lh-filter-modal__card {
+        padding: 18px 16px;
+        border-radius: 20px;
+    }
+
+    .lh-filter-modal--period .lh-filter-modal__card {
+        width: min(100%, 380px);
+        padding: 12px;
+    }
+
+    .lh-period-picker {
+        gap: 12px;
+    }
+
+    .lh-period-picker__yearbar {
+        grid-template-columns: 44px minmax(0, 1fr) 44px;
+        gap: 6px;
+        padding: 6px 8px;
+        border-radius: 16px;
+    }
+
+    .lh-period-picker__nav {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+    }
+
+    .lh-period-picker__months {
+        gap: 10px;
+    }
+
+    .lh-period-picker__month {
+        min-height: 46px;
+        padding: 8px 10px;
+        border-radius: 14px;
+        font-size: 15px;
+    }
+}
