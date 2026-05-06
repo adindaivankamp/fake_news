@@ -10,6 +10,6 @@ class ImageResult extends Model
 
     public function stage1Results()
     {
-        return $this->hasMany(TextStage1Result::class, 'image_results_id');
+        return $this->hasMany(Stage1Results::class, 'image_results_id');
     }
 }

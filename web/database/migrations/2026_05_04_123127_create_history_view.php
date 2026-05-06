@@ -14,6 +14,9 @@ return new class extends Migration
         DB::statement("
             CREATE OR REPLACE VIEW history_view AS
             SELECT 
+                ui.id AS interaction_id,
+                u.id AS user_id,
+                r.id AS request_id, 
                 u.name AS username,
                 r.input_text,
                 r.created_at,

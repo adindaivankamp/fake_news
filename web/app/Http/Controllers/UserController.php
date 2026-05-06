@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Users;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,7 +20,7 @@ class UserController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        /** @var User|null $user */
+        /** @var Users|null $user */
         $user = Auth::user();
         
         if (!$user) {
@@ -46,7 +47,7 @@ class UserController extends Controller
         $validated = $validator->validated();
 
         if (!empty($validated['phone_number'])) {
-            $registeredPhone = User::where('phone_number', $validated['phone_number'])->first();
+            $registeredPhone = Users::where('phone_number', $validated['phone_number'])->first();
 
             if (!$registeredPhone) {
                 return response()->json([
@@ -75,7 +76,7 @@ class UserController extends Controller
     public function getUserData()
     {
         // Ambil semua data user
-        $users = User::all();
+        $users = Users::all();
 
         return response()->json([
             'status' => 'success',
