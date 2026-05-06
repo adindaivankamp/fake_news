@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Image;
+use App\Models\Images;
 use App\Models\TextRequest; 
 use App\Models\ImageSearchResult;
+use App\Models\ImageSearchResults;
+use App\Models\Requests;
 use Illuminate\Support\Facades\Http;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
@@ -20,17 +23,20 @@ class ImageDetectionController extends Controller
         try {
             // 1. Upload ke Cloudinary
             $file = $request->file('image');
-            $upload = Cloudinary::upload($file->getRealPath(), ['folder' => 'fake_news_system']);
+            $tujuanupload = public_path('input');
+            $file->move($tujuanupload, $file->getClientOriginalName());
+            $pathLokal = $tujuanupload . '/' . $file->getClientOriginalName();
+            $upload = Cloudinary::upload($pathLokal, ['folder' => 'fake_news_system']);
             $url = $upload->getSecurePath();
 
             // 2. Simpan ke tabel 'images'
-            $imgRecord = Image::create([
-                'file_path' => $url,
+            $imgRecord = Images::create([
+                'file_path' => $url,    
                 'original_filename' => $file->getClientOriginalName(),
             ]);
 
             // 3. Inisialisasi awal di tabel 'requests'
-            $newReq = TextRequest::create([
+            $newReq = Requests::create([
                 'image_id' => $imgRecord->id,
                 'status' => 'processing'
             ]);
@@ -42,7 +48,7 @@ class ImageDetectionController extends Controller
                 $res = $response->json();
 
                 // 5. Simpan ke tabel 'image_search_results'
-                ImageSearchResult::create([
+                ImageSearchResults::create([
                     'request_id' => $newReq->id,
                     'source_url' => $res['data'],
                     'similarity_score' => $res['similarity_score'],
