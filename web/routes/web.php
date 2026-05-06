@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\HoaxDetectionController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ImageDetectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,7 @@ Route::get('/uji-coba-deteksi', function () {
 });
 Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText'])
     ->name('detect.text');
-
+Route::post('/api/detect-image', [ImageDetectionController::class, 'detect'])->name('detect.image');
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ Route::prefix('auth/google')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+// Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -107,7 +108,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/delete/{id}', [RiwayatController::class, 'delete']);
     });
 
-});
+// });
 
 
 /*

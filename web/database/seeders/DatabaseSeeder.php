@@ -74,13 +74,23 @@ class DatabaseSeeder extends Seeder
 
         // 5. Seeder Image Search Results (Link ke situs fact-checker)
         $imageSearchResults = [
-            ['source_url' => 'https://turnbackhoax.id/2020/01/bawang-putih-sembuhkan-virus-corona', 'similarity_score' => 0.92, 'mean_date_score' => 0.90],
-            ['source_url' => 'https://kominfo.go.id/content/detail/hoaks-kuota-gratis', 'similarity_score' => 0.98, 'mean_date_score' => 0.85],
-            ['source_url' => 'https://www.bkn.go.id/pengumuman/awas-penipuan-cpns', 'similarity_score' => 0.85, 'mean_date_score' => 0.80],
-            ['source_url' => 'https://turnbackhoax.id/2021/05/uang-pecahan-1-juta', 'similarity_score' => 0.90, 'mean_date_score' => 0.88],
-            ['source_url' => 'https://web.pln.co.id/media/siaran-pers/klarifikasi-hoaks-pemadaman', 'similarity_score' => 0.77, 'mean_date_score' => 0.75],
-        ];
-
+    [
+        'source_url' => json_encode([
+            'https://turnbackhoax.id/2020/01/bawang-putih-sembuhkan-virus-corona',
+            'https://cekfakta.com/bawang-putih-corona'
+        ]),
+        'similarity_score' => 0.92,
+        'mean_date_score' => 0.90
+    ],
+    [
+        'source_url' => json_encode([
+            'https://kominfo.go.id/content/detail/hoaks-kuota-gratis',
+            'https://cekfakta.com/kuota-gratis-hoaks'
+        ]),
+        'similarity_score' => 0.98,
+        'mean_date_score' => 0.85
+    ],
+];
         $imgSearchResultData = array_map(function($res, $index) use ($now) {
             return array_merge($res, ['request_id' => $index + 1, 'created_at' => $now, 'updated_at' => $now]);
         }, $imageSearchResults, array_keys($imageSearchResults));

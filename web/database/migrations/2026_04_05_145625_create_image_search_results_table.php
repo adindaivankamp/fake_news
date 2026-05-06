@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('image_search_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
-            $table->string('source_url')->nullable();
+            $table->json('source_url')->nullable();
             $table->float('similarity_score')->nullable();
             $table->float('mean_date_score')->nullable();
             $table->timestamps();
