@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +22,7 @@ class AuthController extends Controller
             'phone_number' => 'required'
         ]);
 
-        $user = User::where('phone_number', $request->phone_number)->first();
+        $user = Users::where('phone_number', $request->phone_number)->first();
 
         if (!$user) {
             return back()->with('error', 'Nomor ini belum terdaftar. Silakan cek via WhatsApp pada menu Dapatkan Melalui WhatsApp.');
@@ -64,7 +64,7 @@ class AuthController extends Controller
 
         $phone = session('phone_number');
 
-        $user = User::where('phone_number', $phone)
+        $user = Users::where('phone_number', $phone)
             ->where('login_token', $request->token)
             ->first();
 
@@ -85,6 +85,13 @@ class AuthController extends Controller
 
         session()->forget('phone_number');
 
-        return redirect('/')->with('success', 'Login berhasil');
+        // 🔥 CEK ROLE DAN REDIRECT SESUAI HAK AKSES
+        // Berdasarkan web.php kamu sebelumnya, route admin bernama 'dashboard'
+        if ($user->role === 'admin') {
+            return redirect()->route('dashboard')->with('success', 'Login berhasil sebagai Admin');
+        }
+
+        // Redirect untuk user biasa (misalnya diarahkan ke route 'beranda' atau 'landing')
+        return redirect()->route('beranda')->with('success', 'Login berhasil');
     }
 }

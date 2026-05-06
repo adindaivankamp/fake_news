@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\MessageCache;
-use App\Models\User;
+use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -20,11 +20,11 @@ class WaController extends Controller
             $message = trim(strtolower($request->input('message')));
             $name = $request->input('name');
 
-            User::firstOrCreate(
+            Users::firstOrCreate(
                 ['phone_number' => $sender],
                 ['name' => $name ?? 'User WA']
             );
-
+            
             // 🔥 2. JIKA BUKAN COMMAND (#)
             if (!str_contains($message, '#')) {
 
@@ -92,7 +92,7 @@ class WaController extends Controller
         $waNumber = trim($request->wa_number);
 
         // 2. Cek apakah ada akun di DB yang udah pake nomor WA ini
-        $existingUser = User::where('phone_number', $waNumber)->first();
+        $existingUser = Users::where('phone_number', $waNumber)->first();
 
         // 3. Kalau nomor belum terdaftar di database, arahkan user ke menu WhatsApp
         if (!$existingUser) {
