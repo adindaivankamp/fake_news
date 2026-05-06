@@ -40,7 +40,7 @@
                 <iconify-icon icon="garden:whatsapp-fill-16" width="24" height="24"></iconify-icon>
                 <span class="lh-nav-tooltip" role="tooltip">
                     <iconify-icon icon="garden:whatsapp-fill-16" width="18" height="18"></iconify-icon>
-                    <span>Hubungkan via WhatsApp</span>
+                    <span>Dapatkan Melalui WhatsApp</span>
                 </span>
             </a>
         </nav>

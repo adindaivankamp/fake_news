@@ -29,14 +29,42 @@
                 <span>Dapatkan Melalui Whatsapp</span>
             </span>
         </a>
-        <a href="#" class="lh-nav-btn lh-nav-btn--user js-profile-toggle {{ isset($variant) && $variant === 'wa' ? 'wa-nav-btn' : '' }}" aria-label="Profil" aria-controls="user-profile-popup" aria-expanded="false" data-profile-toggle="user-profile-popup">
-            <iconify-icon icon="mdi:user" width="26" height="26"></iconify-icon>
-            <span class="lh-nav-tooltip lh-nav-tooltip--left" role="tooltip">
-                <iconify-icon icon="mdi:user" width="18" height="18"></iconify-icon>
-                <span>Profil Pengguna</span>
-            </span>
-        </a>
+        @if(session('user_login'))
+            {{-- SUDAH LOGIN --}}
+            <a href="#"
+            class="lh-nav-btn lh-nav-btn--user js-profile-toggle {{ isset($variant) && $variant === 'wa' ? 'wa-nav-btn' : '' }}"
+            aria-label="Profil"
+            aria-controls="user-profile-popup"
+            aria-expanded="false"
+            data-profile-toggle="user-profile-popup">
+
+                <iconify-icon icon="mdi:user" width="26" height="26"></iconify-icon>
+
+                <span class="lh-nav-tooltip lh-nav-tooltip--left" role="tooltip">
+                    <iconify-icon icon="mdi:user" width="18" height="18"></iconify-icon>
+                    <span>Profil Pengguna</span>
+                </span>
+            </a>
+
+        @else
+
+            {{-- BELUM LOGIN --}}
+            <a href="{{ route('login') }}"
+            class="lh-nav-btn lh-nav-btn--user {{ isset($variant) && $variant === 'wa' ? 'wa-nav-btn' : '' }}"
+            aria-label="Daftar atau Masuk">
+
+                <iconify-icon icon="mdi:user" width="26" height="26"></iconify-icon>
+
+                <span class="lh-nav-tooltip lh-nav-tooltip--left" role="tooltip">
+                    <iconify-icon icon="mdi:user" width="18" height="18"></iconify-icon>
+                    <span>Daftar | Masuk</span>
+                </span>
+            </a>
+
+        @endif
     </nav>
 
-    @include('user.partials.profile-popup', ['popupId' => 'user-profile-popup'])
+    @if(session('user_login'))
+        @include('user.partials.profile-popup', ['popupId' => 'user-profile-popup'])
+    @endif
 </header>
