@@ -45,7 +45,6 @@
 
 <!-- GRID -->
 <div class="riwayat-grid">
-
     @foreach($data as $item)
 
     <div 
@@ -132,8 +131,12 @@
 
                 data-judul="{{ $item['judul'] }}"
                 data-deskripsi="{{ $item['deskripsi'] }}"
+                data-penjelasan="{{ $item['penjelasan'] }}"
                 data-hoax="{{ $item['hoax'] }}"
                 data-benar="{{ $item['benar'] }}"
+
+                data-user="{{ $item['user'] }}"
+                data-date="{{ $item['date'] }}"
             >
                 Selengkapnya
             </button>
@@ -169,13 +172,15 @@
         <!-- HEADER -->
         <div class="popup-top">
 
-            <div class="popup-user">
-                @Rini Wulandari
-            </div>
+            <p class="popup-user" id="popupUser"></p>
 
-            <div class="popup-date">
-                Minggu, 7 Juni 2025
-            </div>
+            <p class="popup-date" id="popupDate"></p>
+
+            <div 
+                class="popup-delete-status" 
+                id="popupDeleteStatus"
+                style="display: none;"
+            ></div>
 
         </div>
 
@@ -218,7 +223,7 @@
             <!-- RIGHT -->
             <div class="popup-result">
 
-                Hasil verifikasi menunjukkan bahwa sebagian besar informasi ini, yakni sekitar 70%, mengandung unsur hoaks atau ketidaksesuaian fakta. Mohon untuk memvalidasi kembali sumber informasi sebelum menyebarkannya.
+                <p class="popup-penjelasan" id="popupPenjelasan"></p>
 
             </div>
 
@@ -272,9 +277,9 @@ document.getElementById('searchInput').addEventListener('keyup', function () {
 
     cards.forEach(card => {
 
-        let title = card.dataset.title;
+        let text = card.innerText.toLowerCase();
 
-        if (title.includes(keyword)) {
+        if (text.includes(keyword)) {
 
             card.style.display = 'block';
 
@@ -302,23 +307,57 @@ const popupTitle = document.getElementById('popupTitle');
 const popupDesc = document.getElementById('popupDesc');
 const popupHoax = document.getElementById('popupHoax');
 const popupBenar = document.getElementById('popupBenar');
+const popupDeleteStatus = document.getElementById('popupDeleteStatus');
+
+let deletedCards = {};
+const popupUser = document.getElementById('popupUser');
+const popupDate = document.getElementById('popupDate');
 
 document.querySelectorAll('.open-popup').forEach(button => {
 
     button.addEventListener('click', function () {
         currentCard = this.closest('.riwayat-card');
-
         popupTitle.innerHTML =
             `⚠️ ${this.dataset.judul} ⚠️`;
 
         popupDesc.innerText =
             this.dataset.deskripsi;
 
+        popupPenjelasan.innerText =
+            this.dataset.penjelasan;
+
+        popupUser.innerText =
+            this.dataset.user;
+
+        popupDate.innerText =
+            this.dataset.date;
+
         popupHoax.innerText =
             this.dataset.hoax + '%';
 
         popupBenar.innerText =
             this.dataset.benar + '%';
+
+        if (currentCard.dataset.deleted === "true") {
+
+             popupDeleteStatus.style.display = 'flex';
+
+            popupDeleteStatus.textContent =
+                `Dihapus • ${currentCard.dataset.deletedDate}`;
+
+            deletePopup.innerHTML =
+                '<i class="fa fa-undo"></i>';
+
+        } else {
+
+            popupDeleteStatus.style.display = 'none';
+
+            popupDeleteStatus.innerHTML = '';
+
+            deletePopup.innerHTML =
+                '<i class="fa fa-trash"></i>';
+
+        }
 
         popupOverlay.classList.add('active');
 
@@ -346,15 +385,20 @@ deletePopup.addEventListener('click', function () {
 
     if (!currentCard) return;
 
-    document
-        .getElementById('deleteOverlay')
-        .classList.add('active');
+    if (currentCard.dataset.deleted === "true") {
 
-});
+        currentCard.dataset.deleted = "false";
+        currentCard.dataset.deletedDate = "";
 
-deletePopup.addEventListener('click', function () {
+        popupDeleteStatus.style.display = 'none';
+        popupDeleteStatus.innerHTML = '';
 
-    if (!currentCard) return;
+        deletePopup.innerHTML =
+            '<i class="fa fa-trash"></i>';
+
+        return;
+
+    }
 
     document
         .getElementById('deleteOverlay')
@@ -374,9 +418,29 @@ function confirmDelete() {
 
     if (!currentCard) return;
 
-    currentCard.remove();
+    const now = new Date();
 
-    popupOverlay.classList.remove('active');
+    const formattedDate =
+        now.toLocaleDateString('id-ID', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+    currentCard.dataset.deleted = "true";
+
+    currentCard.dataset.deletedDate =
+        formattedDate;
+
+     // MUNCULKAN BOX
+    popupDeleteStatus.style.display = 'flex';
+
+    popupDeleteStatus.innerHTML =
+        `Dihapus • ${formattedDate}`;
+
+    deletePopup.innerHTML =
+        '<i class="fa fa-undo"></i>';
 
     closeDeletePopup();
 

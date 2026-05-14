@@ -477,3 +477,14 @@
     background: #b8201d;
     color: white;
 }
+
+.popup-delete-status{
+    background: linear-gradient(#c71f1f, #8d0000);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px 10px 0 0;
+    font-weight: 600;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+}

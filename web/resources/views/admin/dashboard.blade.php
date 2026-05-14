@@ -62,7 +62,58 @@
         <div class="section-header">
             <h2><i class="fa fa-chart-line"></i> Pencarian Populer</h2>
         </div>
+        
+        <div class="dashboard-popular-grid">
 
+            @foreach($dashboardPopular as $item)
+
+            <div class="dashboard-popular-card">
+
+                <div class="dashboard-popular-rank">
+                    #{{ $item['rank'] }} {{ $item['badge'] }}
+                </div>
+
+                <div class="dashboard-popular-excerpt">
+                    {{ $item['title'] }}
+                </div>
+
+                <div class="dashboard-popular-content">
+
+                    <div class="dashboard-popular-row">
+
+                        <span class="dashboard-popular-badge">
+                            {{ $item['badge'] }}
+                        </span>
+
+                        <h3 class="dashboard-popular-headline">
+                            {{ $item['headline'] }}
+                        </h3>
+
+                    </div>
+
+                    <p class="dashboard-popular-count">
+                        <strong>{{ $item['count'] }}</strong>
+                        orang mencari informasi serupa
+                    </p>
+
+                    <div class="dashboard-popular-footer">
+
+                        <a href="{{ route('pencarian.populer') }}"
+                        class="dashboard-popular-btn">
+
+                            Detail Lengkap
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @endforeach
+
+        </div>
     </div>
 
 </div>
