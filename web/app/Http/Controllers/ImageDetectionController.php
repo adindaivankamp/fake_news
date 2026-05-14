@@ -93,20 +93,15 @@ class ImageDetectionController extends Controller
                     'verdict' => strtolower($finalLabel),
                     'confidence' => $hoaxPercentage,
                     'summary' => 'Analisis gambar menunjukkan indikasi ' . $finalLabel . ' dengan tingkat kepercayaan ' . $hoaxPercentage . '%.',
+                    'sources' => $links,
+
                     'data' => [
                         'indication' => $finalLabel,
                         'confidence_score' => [
                             'hoax' => $hoaxPercentage,
-                            'fakta' => $factPercentage
+                            'fact' => $factPercentage
                         ],
-                        'image_preview' => $url,
-                        'sources' => collect($res['data'])->map(function($item) {
-                            return [
-                                'title' => $item['title'],
-                                'url' => $item['link'],
-                                'date' => $item['date'] ?? 'N/A'
-                            ];
-                        })
+                        'image_preview' => $url
                     ]
                 ]);
             }

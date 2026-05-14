@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Users;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,25 +11,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        $json = '[
-            {
-                "nama": "Budi Pratomo",
-                "email": "budiprtmo34@gmail.com",
-                "whatsapp": "085876542319"
-            },
-            {
-                "nama": "Siti Hartini",
-                "email": "sitih4rtini@gmail.com",
-                "whatsapp": "085476549315"
-            },
-            {
-                "nama": "Andi Santoso",
-                "email": "sansand@gmail.com",
-                "whatsapp": "085476549318"
-            }
-        ]';
+        $usersFromDb = Users::all();
 
-        $users = json_decode($json, true);
+        $users = $usersFromDb->map(function ($user) {
+            return [
+                'nama' => $user->name,
+                'email' => $user->email,
+                'whatsapp' => $user->phone_number
+            ];
+        })->toArray();
 
         return view('admin.user', compact('users'));
     }
@@ -102,30 +91,20 @@ class UserController extends Controller
      */
     public function getUserData()
     {
-        $json = '[
-            {
-                "nama": "Budi Pratomo",
-                "email": "budiprtmo34@gmail.com",
-                "whatsapp": "085876542319"
-            },
-            {
-                "nama": "Siti Hartini",
-                "email": "sitih4rtini@gmail.com",
-                "whatsapp": "085476549315"
-            },
-            {
-                "nama": "Andi Santoso",
-                "email": "sansand@gmail.com",
-                "whatsapp": "085476549318"
-            }
-        ]';
+        $usersFromDb = Users::all();
 
-        $users = json_decode($json, true);
+        $userData = $usersFromDb->map(function ($user) {
+            return [
+                'nama' => $user->name,
+                'email' => $user->email,
+                'whatsapp' => $user->phone_number
+            ];
+        });
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data pengguna berhasil dimuat.',
-            'data' => $users
+            'data' => $userData
         ]);
     }
 }
