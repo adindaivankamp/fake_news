@@ -3,7 +3,6 @@ from services.text_stage2.text_stage2_service import run_stage2_web_check
 from services.text_stage3.text_stage3_service import run_stage3_online_search
 from services.llm_service import extract_claim_and_query,llm_query_extractor_fallback 
 import numpy as np
-
 def process_fake_news_pipeline(
     raw_text,
     collection,
@@ -15,17 +14,31 @@ def process_fake_news_pipeline(
     searx_session,
     headers
 ):
+
     try:
 
-        # ===== STAGE 1 =====
-        s1 = run_stage1_kb_check(collection, transformer, nli, raw_text)
+        # =========================
+        # STAGE 1
+        # =========================
+        s1 = run_stage1_kb_check(
+            collection,
+            transformer,
+            nli,
+            raw_text
+        )
 
+        # simpan embedding dari stage 1
+        query_embedding = s1.get("query_embedding")
+        
+
+        # kalau sukses langsung return
         if s1.get("status") == "success":
             s1["stage"] = "stage_1"
             return s1
 
-
-        # ===== STAGE 2 =====
+        # =========================
+        # STAGE 2
+        # =========================
         s2 = run_stage3_online_search(
             raw_text,
             transformer,
@@ -35,14 +48,22 @@ def process_fake_news_pipeline(
             text_classifier
         )
 
+        # tempel embedding stage 1
+        s2["query_embedding"] = query_embedding
+
         if s2.get("status") == "success":
             s2["stage"] = "stage_2"
             return s2
 
-
-        # ===== FALLBACK LLM =====
+        # =========================
+        # FALLBACK LLM
+        # =========================
         if s2.get("status") == "fail":
-            query = llm_query_extractor_fallback(raw_text, client)
+
+            query = llm_query_extractor_fallback(
+                raw_text,
+                client
+            )
 
             s2_retry = run_stage3_online_search(
                 query,
@@ -53,11 +74,16 @@ def process_fake_news_pipeline(
                 text_classifier
             )
 
+            # tempel embedding juga
+            s2_retry["query_embedding"] = query_embedding
+
             if s2_retry.get("status") == "success":
                 s2_retry["stage"] = "stage_2"
                 return s2_retry
 
-        # ===== FINAL FALLBACK =====
+            return s2_retry
+        
+         # ===== FINAL FALLBACK =====
         # fact_check_data = extract_clean_query(raw_text, transformer)
 
         # query = fact_check_data
@@ -67,17 +93,25 @@ def process_fake_news_pipeline(
         # artikel = await run_stage2_web_check(query, klaim, transformer, nli, client, browser)
 
         return {
-            "status": "fail"
+            "status": "fail",
+            "query_embedding": query_embedding
         }
 
     except Exception as e:
 
-        # ===== GLOBAL ERROR HANDLING =====
+        # =========================
+        # GLOBAL ERROR
+        # =========================
         return {
             "status": "error",
-            "message": str(e)
+            "message": str(e),
+            "query_embedding": (
+                query_embedding
+                if "query_embedding" in locals()
+                else None
+            )
         }
-
+    
 
 def extract_clean_query(text,transformer):
     words = list(set(text.lower().split()))

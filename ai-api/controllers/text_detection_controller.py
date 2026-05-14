@@ -23,9 +23,9 @@ def detect_text_fake_news_controller(text_request, knowledge_base, transformer, 
             searx_session=searx_session,
             headers=headers,
         )
+        if result.get("status") == "success":
 
-        if result.get("status") == "success" and result.get("data"):
-            embedding = result["data"][0].get("query_embedding")
+            embedding = result.get("query_embedding")
 
             if embedding:
                 input_text_request(
@@ -33,9 +33,9 @@ def detect_text_fake_news_controller(text_request, knowledge_base, transformer, 
                     embedding,
                     id_request
                 )
-        if result.get("data"):
-            for item in result["data"]:
-                item.pop("query_embedding", None)
+
+        # hapus sebelum response
+        result.pop("query_embedding", None)
 
         return result
 
@@ -82,6 +82,7 @@ def similarity_controller(text_request, transformer, data):
             query_embedding,
             text_request
         )
+        print("Similarity Search Result:", search)
 
         # jika ditemukan
         if search.get("status") == "success":

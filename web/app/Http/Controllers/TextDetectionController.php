@@ -32,8 +32,6 @@ class TextDetectionController extends Controller
         $inputText = $request->input('query');
         $userId = Auth::check() ? Auth::id() : 2;
 
-        Log::info("Mengecek similarity API untuk teks: " . substr($inputText, 0, 50) . "...");
-
         try {
             // ========================================================
             // A. CEK SIMILARITY SEARCH TERLEBIH DAHULU
@@ -41,8 +39,6 @@ class TextDetectionController extends Controller
             $simResponse = Http::timeout(60)->post('http://127.0.0.1:8004/similarity-search', [
                 'query' => $inputText
             ]);
-            Log::info("Response Similarity API: " . ($simResponse->successful() ? 'Success' : 'Failed'));
-            Log::info("Response Similarity API Body: ", $simResponse->json() ?? []);
             if ($simResponse->successful()) {
                 $simData = $simResponse->json();
 
@@ -51,8 +47,6 @@ class TextDetectionController extends Controller
 
                     $matchedId = $simData['request_id'];
                     $similarityScore = $simData['similarity'] ?? 0;
-
-                    Log::info("Similarity MATCH! Re-use Request ID Lama: $matchedId (Sim: $similarityScore)");
 
                     $oldRequest = Requests::find($matchedId);
 
@@ -77,10 +71,7 @@ class TextDetectionController extends Controller
             // ========================================================
             // B. JIKA TIDAK ADA MATCH, BUAT REQUEST BARU & HIT API DETEKSI
             // ========================================================
-            Log::info("Tidak ada similarity, buat Request baru dan lanjut proses AI.");
-
             DB::beginTransaction();
-
             // Baru buat request database jika memang benar-benar tidak ada kemiripan
             $requestData = Requests::create([
                 'input_text' => $inputText,
@@ -104,7 +95,6 @@ class TextDetectionController extends Controller
             }
 
             $aiApiResponse = $response->json();
-            Log::info('Response Asli Python: ', $aiApiResponse ?? []);
 
             if (!isset($aiApiResponse['status']) || $aiApiResponse['status'] !== 'success') {
                 throw new \Exception('Response AI gagal atau tidak valid');
@@ -135,13 +125,12 @@ class TextDetectionController extends Controller
             if (DB::transactionLevel() > 0) {
                 DB::rollBack();
             }
-
+            Log::error('Error di TextDetectionController: ' . $e->getMessage());
             // Update status error jika requestData baru sudah sempat dibuat
             if (isset($requestData)) {
                 Requests::where('id', $requestData->id)->update(['status' => 'error']);
             }
 
-            Log::error('Error deteksi teks: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 'error',
@@ -247,7 +236,6 @@ class TextDetectionController extends Controller
         $confidencePercentage = round($finalConfidence * 100, 2);
 
         $featureVector = $aiApiResponse['feature_vector'] ?? [];
-        Log::info('Feature Vector Stage 2: ', $featureVector);
         $requestData->update([
             'final_label' => $finalLabel,
             'final_confidence' => $finalConfidence,

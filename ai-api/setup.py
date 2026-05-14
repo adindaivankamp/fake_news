@@ -290,47 +290,117 @@ def seed_csv_to_mysql(path_csv):
 # MAIN
 # ==========================================
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Setup / Seeder ChromaDB")
+
+    parser = argparse.ArgumentParser(
+        description="Setup / Seeder ChromaDB"
+    )
+
     parser.add_argument(
         "--step",
         type=str,
-        choices=["seed", "clear","delete", "model","nli" ,"playwright","mysql_seed","mysql_clean","all"],
-
+        choices=[
+            "seed",
+            "clear",
+            "delete",
+            "model",
+            "nli",
+            "playwright",
+            "mysql_seed",
+            "mysql_clean",
+            "fresh",
+            "all"
+        ],
         default="all",
         help="Step yang dijalankan"
     )
 
     args = parser.parse_args()
 
-    # Init Chroma dari config (bukan dari sini lagi)
+    # =========================
+    # INIT COLLECTION
+    # =========================
     text_request = get_chroma_collection("text_request")
     knowledge_base = get_chroma_collection("knowledge_base")
 
+    # =========================
+    # COMMANDS
+    # =========================
+
     if args.step == "clear":
+
         clear_knowledge_base(knowledge_base)
         clear_text_request(text_request)
-    elif args.step == "seed":
-        seed_parquet_to_chroma(knowledge_base)
-    elif args.step == "model":
-        download_model()
-    elif args.step == "nli":
-        download_nli_model()
-    elif args.step == "playwright":
-        download_playwright()
+
     elif args.step == "delete":
+
         delete_chroma_collection()
-    elif args.step == "mysql_seed":
-        seed_csv_to_mysql(CSV_PATH)
-    elif args.step == "mysql_clean":
-        clean_mysql_knowledge_base()
-    elif args.step == "all":
-        clear_knowledge_base(knowledge_base)
-        clear_text_request(text_request)
+
+    elif args.step == "seed":
+
         seed_parquet_to_chroma(knowledge_base)
-        clean_mysql_knowledge_base()
+
+    elif args.step == "model":
+
+        download_model()
+
+    elif args.step == "nli":
+
+        download_nli_model()
+
+    elif args.step == "playwright":
+
+        download_playwright()
+
+    elif args.step == "mysql_seed":
+
         seed_csv_to_mysql(CSV_PATH)
-        
-        # 2. Models
+
+    elif args.step == "mysql_clean":
+
+        clean_mysql_knowledge_base()
+
+    # =========================
+    # FRESH
+    # mirip migrate:fresh --seed
+    # =========================
+    elif args.step == "fresh":
+
+        print("=== DELETE CHROMA ===")
+        delete_chroma_collection()
+
+        # recreate collection
+        text_request = get_chroma_collection("text_request")
+        knowledge_base = get_chroma_collection("knowledge_base")
+
+        print("=== CLEAN MYSQL ===")
+        clean_mysql_knowledge_base()
+
+        print("=== SEED CHROMA ===")
+        seed_parquet_to_chroma(knowledge_base)
+
+        print("=== SEED MYSQL ===")
+        seed_csv_to_mysql(CSV_PATH)
+
+    # =========================
+    # ALL
+    # full setup environment
+    # =========================
+    elif args.step == "all":
+
+        print("=== RUN FRESH ===")
+
+        delete_chroma_collection()
+
+        text_request = get_chroma_collection("text_request")
+        knowledge_base = get_chroma_collection("knowledge_base")
+
+        clean_mysql_knowledge_base()
+
+        seed_parquet_to_chroma(knowledge_base)
+        seed_csv_to_mysql(CSV_PATH)
+
+        print("=== DOWNLOAD MODELS ===")
+
         download_model()
         download_nli_model()
         download_playwright()
