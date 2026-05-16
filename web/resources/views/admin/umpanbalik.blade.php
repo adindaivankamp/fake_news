@@ -9,9 +9,24 @@
 @section('content')
 
 <!-- ===== HEADER TITLE ===== -->
-<div class="feedback-title">
-    <h1>Manajemen Umpan Balik</h1>
-    <p>Pantau dan tanggapi masukan dari pengguna untuk meningkatkan akurasi sistem.</p>
+<div class="feedback-header-top">
+    <div class="feedback-title">
+        <h1>Manajemen Umpan Balik</h1>
+        <p>Pantau dan tanggapi masukan dari pengguna untuk meningkatkan akurasi sistem.</p>
+    </div>
+
+    <div class="search-wrapper">
+        <input
+            type="text"
+            id="searchFeedback"
+            class="search-input"
+            placeholder="Search..."
+        >
+
+        <button class="search-btn">
+            <i class="fa fa-search"></i>
+        </button>
+    </div>
 </div>
 
 <!-- ===== STATS ===== -->
@@ -169,7 +184,10 @@ document.addEventListener('DOMContentLoaded',function(){
         result.data.forEach(item=>{
 
             container.innerHTML += `
-            <div class="umpanbalik-item new">
+            <div class="umpanbalik-item new feedback-item"
+                data-user="${item.username.toLowerCase()}"
+                data-feedback="${item.feedback.toLowerCase()}"
+                >
 
                 <div class="umpanbalik-left">
 
@@ -225,6 +243,44 @@ document.addEventListener('DOMContentLoaded',function(){
 
     });
 
+    /* =====================
+    SEARCH FEEDBACK
+    ===================== */
+
+    document
+    .getElementById('searchFeedback')
+    .addEventListener('keyup',function(){
+
+        const keyword=
+        this.value.toLowerCase();
+
+        const cards=
+        document.querySelectorAll(
+            '.feedback-item'
+        );
+
+        cards.forEach(card=>{
+
+            const username=
+            card.dataset.user;
+
+            const feedback=
+            card.dataset.feedback;
+
+            const match=
+
+            username.includes(keyword)
+
+            ||
+
+            feedback.includes(keyword);
+
+            card.style.display=
+            match ? 'flex' : 'none';
+
+        });
+
+    });
 
     document.addEventListener('click',function(e){
 
