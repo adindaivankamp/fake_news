@@ -8,9 +8,21 @@ use Carbon\Carbon;
 
 class UmpanBalikController extends Controller
 {
-     public function index()
+    public function index()
     {
-        return view('admin.umpanbalik');
+        // Total feedback
+        $totalFeedback = DB::table('feedbacks')->count();
+
+        // sementara dummy sampai ada status baca
+        $belumDibaca = $totalFeedback;
+
+        return view(
+            'admin.umpanbalik',
+            compact(
+                'totalFeedback',
+                'belumDibaca'
+            )
+        );
     }
 
     public function getFeedbackData()

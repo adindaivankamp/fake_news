@@ -25,8 +25,8 @@
                 <i class="fa fa-comments"></i>
             </div>
         </div>
-        <h2>1,284</h2>
-        <p class="positive">↑ +12% dari bulan lalu</p>
+        <h2>{{ number_format($totalFeedback) }}</h2>
+        <p class="positive">↑ Data dari database</p>
     </div>
 
     <!-- BELUM DIBACA -->
@@ -37,7 +37,7 @@
                 <i class="fa fa-envelope"></i>
             </div>
         </div>
-        <h2>42</h2>
+        <h2>{{ $belumDibaca }}</h2>
         <p class="negative">Perlu perhatian segera!</p>
     </div>
 
