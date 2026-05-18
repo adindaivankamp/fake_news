@@ -33,7 +33,7 @@
     @else
         <nav class="lh-nav-icons {{ $isMobileLayout ? 'lh-nav-icons--mobile' : 'lh-nav-icons--desktop' }}">
     @endif
-        <a href="{{ route('landing') }}" class="lh-nav-btn {{ $isLandingActive ? 'lh-nav-btn--active' : '' }}" aria-label="Beranda Utama" @if($isLandingActive) aria-current="page" @endif>
+        <a href="{{ route('landing') }}" class="lh-nav-btn {{ $isWhatsAppVariant ? 'wa-nav-btn' : '' }} {{ $isLandingActive ? 'lh-nav-btn--active' : '' }}" aria-label="Beranda Utama" @if($isLandingActive) aria-current="page" @endif>
             <iconify-icon icon="mdi:home" width="24" height="24"></iconify-icon>
             <span class="lh-nav-tooltip" role="tooltip">
                 <iconify-icon icon="mdi:home" width="17" height="17"></iconify-icon>
