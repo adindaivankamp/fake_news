@@ -102,10 +102,20 @@
         </ul>
 
         <div class="logout">
-            <a href="#">
-                <i class="fa fa-sign-out-alt"></i>
-                <span>Keluar Akun</span>
-            </a>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <button type="submit" class="logout-btn">
+
+                    <i class="fa fa-sign-out-alt"></i>
+
+                    Keluar Akun
+
+                </button>
+
+            </form>
+
         </div>
 
     </div>

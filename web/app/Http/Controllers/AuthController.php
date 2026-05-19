@@ -94,4 +94,13 @@ class AuthController extends Controller
         // Redirect untuk user biasa (misalnya diarahkan ke route 'beranda' atau 'landing')
         return redirect()->route('beranda')->with('success', 'Login berhasil');
     }
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+    }
 }

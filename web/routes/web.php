@@ -117,6 +117,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/admin/cekberita', [PencarianController::class, 'adminIndex']);
 
     });
+
+    // Admin logout 
+    Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 /*
 |--------------------------------------------------------------------------
 | WHATSAPP WEBHOOK & API (NO AUTH)

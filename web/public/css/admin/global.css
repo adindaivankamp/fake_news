@@ -183,21 +183,45 @@ body {
 }
 
 /* Logout */
-.logout {
-    padding: 20px;
-    border-top: 1px solid rgba(214, 10, 10, 0.1);
+.logout{
+    padding:20px;
+    border-top:1px solid rgba(214,10,10,0.1);
 }
 
-.logout a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #cfcfe8;
-    text-decoration: none;
+.logout form{
+    width:100%;
 }
 
-.logout a:hover {
-    color: #fff;
+.logout-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    width:100%;
+    padding:0;
+
+    background:none;
+    border:none;
+    outline:none;
+
+    color:#cfcfe8;
+    font-size:16px;
+    font-weight:500;
+    font-family:inherit;
+
+    cursor:pointer;
+    text-decoration:none;
+    text-align:left;
+}
+
+.logout-btn:hover{
+    color:#fff;
+}
+
+.logout-btn i{
+    width:30px;
+    font-size:20px;
+    text-align:center;
 }
 
 /* =========================
