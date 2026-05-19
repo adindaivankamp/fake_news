@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </a>
         </li>`;
     }).join('');
-}P
+}
 
         const safeSummary = escapeHtml(summary || 'Belum ada penjelasan detail untuk hasil pencarian ini.');
 
