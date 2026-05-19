@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let confidence = data.confidence || data.confidence_score?.hoax || 50;
         let summary = data.summary;
         let sources = data.sources;
-
+        let requestId = data.raw_data.request_id || null;
         // Normalize and map verdict label
         const normalizedVerdict = String(verdict || '').toLowerCase();
         const verdictMap = {
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: JSON.stringify({
                         feedback: text,
-                        verdict: verdictInfo.label || normalizedVerdict || null,
+                        request_id: requestId, // Sertakan request_id untuk referensi jika tersedia
                     }),
                 })
                     .then(resp => resp.json())

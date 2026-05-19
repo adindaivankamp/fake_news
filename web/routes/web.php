@@ -17,6 +17,7 @@ use App\Http\Controllers\DetectionController;
 use App\Http\Controllers\ImageDetectionController;
 use App\Http\Controllers\PopulerHistoryController;
 use App\Http\Controllers\CsvController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,9 @@ Route::post('/api/detect', [DetectionController::class, 'detect'])->name('detect
 
 // Unduh CSV
 Route::get('/riwayat/unduh-csv', [CsvController::class, 'unduhCsv'])->name('riwayat.unduh_csv');
+
+
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.form');
 
 
 /*
