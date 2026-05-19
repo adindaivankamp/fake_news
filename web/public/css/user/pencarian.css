@@ -660,7 +660,10 @@ a { text-decoration: none; color: inherit; }
     background: rgba(0,0,0,0.45);
 }
 .feedback-modal__box {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: #fff;
     border-radius: 12px;
     max-width: 720px;
