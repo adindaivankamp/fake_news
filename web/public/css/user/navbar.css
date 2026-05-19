@@ -1,7 +1,8 @@
 /* ==========================================================
-   NAVBAR
+   NAVBAR DESKTOP
    ========================================================== */
-.lh-navbar {
+.lh-navbar,
+.lh-navbar--desktop {
     position: relative;
     z-index: 10;
     width: 100%;
@@ -14,7 +15,6 @@
     padding: 0 clamp(18px, 2.6vw, 38px);
 }
 
-/* Mobile Search */
 .lh-mobile-search {
     display: none;
 }
@@ -26,7 +26,8 @@
 }
 
 /* Logo */
-.lh-logo {
+.lh-logo,
+.lh-logo--desktop {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -52,19 +53,23 @@
 .lh-logo__hoax  { color: var(--color-primary); }
 
 /* Nav icon buttons */
-.lh-nav-icons {
+.lh-nav-icons,
+.lh-nav-icons--desktop {
     position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.lh-nav-btn {
+.lh-nav-btn,
+.lh-nav-btn--desktop {
     position: relative;
     width: 42px;
     height: 42px;
+    min-width: 42px;
+    max-width: 42px;
     padding: 0;
-    border-radius: var(--radius-circle);
+    border-radius: var(--radius-circle, 50%);
     background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
     display: flex;
     align-items: center;
@@ -78,8 +83,14 @@
     flex-shrink: 0;
 }
 
-.lh-nav-btn:hover {
+.lh-nav-btn:hover,
+.lh-nav-btn:focus-visible,
+.lh-nav-btn--desktop:hover,
+.lh-nav-btn--desktop:focus-visible,
+.lh-nav-btn--active {
     width: min(240px, 33vw);
+    min-width: min(240px, 33vw);
+    max-width: min(240px, 33vw);
     background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
     transform: translateY(-1px);
     box-shadow: 0 10px 18px rgba(115, 7, 11, 0.32);
@@ -87,26 +98,36 @@
     padding: 0 12px 0 10px;
 }
 
-/* Keep WhatsApp label visible without hover when needed. */
+/* Generic persistent-open state (can be used by any button). */
+.lh-nav-btn--persist-open,
 .lh-nav-btn--whatsapp-visible {
     width: min(340px, 44vw);
+    min-width: min(340px, 44vw);
+    max-width: min(340px, 44vw);
     justify-content: flex-start;
     padding: 0 12px 0 10px;
 }
 
+.lh-nav-btn--persist-open:hover,
+.lh-nav-btn--persist-open:focus-visible,
 .lh-nav-btn--whatsapp-visible:hover,
 .lh-nav-btn--whatsapp-visible:focus-visible {
     width: min(340px, 44vw);
+    min-width: min(340px, 44vw);
+    max-width: min(340px, 44vw);
     justify-content: flex-start;
     padding: 0 12px 0 10px;
 }
 
 .lh-nav-btn:hover,
-.lh-nav-btn:focus-visible {
+.lh-nav-btn:focus-visible,
+.lh-nav-btn--desktop:hover,
+.lh-nav-btn--desktop:focus-visible {
     z-index: 20;
 }
 
-.lh-nav-btn:focus-visible {
+.lh-nav-btn:focus-visible,
+.lh-nav-btn--desktop:focus-visible {
     outline: 2px solid #f3b8bf;
     outline-offset: 2px;
 }
@@ -131,9 +152,11 @@
     opacity: 0;
     transform: translateX(-6px);
     transition: max-width 0.24s ease, opacity 0.18s ease, transform 0.18s ease;
+    min-width: 0;
 }
 
-.lh-nav-btn > iconify-icon:first-child {
+.lh-nav-btn > iconify-icon:first-child,
+.lh-nav-btn--desktop > iconify-icon:first-child {
     display: block;
     line-height: 1;
     flex-shrink: 0;
@@ -148,14 +171,67 @@
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .lh-nav-btn:hover .lh-nav-tooltip,
-.lh-nav-btn:focus-visible .lh-nav-tooltip {
+.lh-nav-btn:focus-visible .lh-nav-tooltip,
+.lh-nav-btn--desktop:hover .lh-nav-tooltip,
+.lh-nav-btn--desktop:focus-visible .lh-nav-tooltip,
+.lh-nav-btn--active .lh-nav-tooltip {
     opacity: 1;
     margin-left: 8px;
     max-width: 176px;
     transform: translateX(0);
+}
+
+/* Force desktop label visibility behavior to avoid conflicts from other stylesheets. */
+@media (min-width: 561px) {
+    .lh-nav-btn .lh-nav-tooltip,
+    .lh-nav-btn--desktop .lh-nav-tooltip {
+        display: inline-flex;
+        opacity: 0;
+        max-width: 0;
+        margin-left: 0;
+        transform: translateX(-6px);
+    }
+
+    .lh-nav-btn:hover .lh-nav-tooltip,
+    .lh-nav-btn:focus-visible .lh-nav-tooltip,
+    .lh-nav-btn--desktop:hover .lh-nav-tooltip,
+    .lh-nav-btn--desktop:focus-visible .lh-nav-tooltip,
+    .lh-nav-btn--active .lh-nav-tooltip {
+        opacity: 1;
+        max-width: 176px;
+        margin-left: 8px;
+        transform: translateX(0);
+    }
+
+    /* WhatsApp page variant: ensure desktop hover label still works even with whatsapp.css loaded after navbar.css. */
+    .wa-navbar .lh-nav-btn:hover,
+    .wa-navbar .lh-nav-btn:focus-visible,
+    .wa-navbar .lh-nav-btn--active {
+        width: min(240px, 33vw);
+        justify-content: flex-start;
+        padding: 0 12px 0 10px;
+    }
+
+    .wa-navbar .lh-nav-btn .lh-nav-tooltip {
+        display: inline-flex;
+        opacity: 0;
+        max-width: 0;
+        margin-left: 0;
+        transform: translateX(-6px);
+    }
+
+    .wa-navbar .lh-nav-btn:hover .lh-nav-tooltip,
+    .wa-navbar .lh-nav-btn:focus-visible .lh-nav-tooltip,
+    .wa-navbar .lh-nav-btn--active .lh-nav-tooltip {
+        opacity: 1;
+        max-width: 176px;
+        margin-left: 8px;
+        transform: translateX(0);
+    }
 }
 
 .lh-nav-tooltip--left {
@@ -175,30 +251,9 @@
     text-overflow: clip;
 }
 
-/* Active state for nav buttons (desktop/tablet) */
-@media (min-width: 561px) {
-    .lh-nav-btn--active {
-        width: min(240px, 33vw);
-        background: linear-gradient(90deg, #73070B 0%, #B8201D 100%);
-        justify-content: flex-start;
-        padding: 0 12px 0 10px;
-        box-shadow: 0 10px 18px rgba(115, 7, 11, 0.32);
-    }
-
-    .lh-nav-btn--active .lh-nav-tooltip {
-        opacity: 1;
-        margin-left: 8px;
-        max-width: 176px;
-        transform: translateX(0);
-    }
-
-    .lh-nav-btn--active:hover {
-        width: min(240px, 33vw);
-    }
-}
-
 @media (max-width: 900px) and (min-width: 561px) {
-    .lh-navbar {
+    .lh-navbar,
+    .lh-navbar--desktop {
         padding: 0 12px;
         height: 68px;
     }
@@ -207,31 +262,9 @@
         width: 108px;
     }
 
-    .lh-nav-icons {
-        gap: 8px;
-    }
-
-    .lh-nav-btn {
-        width: 42px;
-        height: 42px;
-    }
-
-    .lh-nav-btn:hover,
-    .lh-nav-btn:focus-visible {
-        width: min(215px, 41vw);
-        padding: 0 12px 0 10px;
-    }
-
-    .lh-nav-btn--whatsapp-visible,
-    .lh-nav-btn--whatsapp-visible:hover,
-    .lh-nav-btn--whatsapp-visible:focus-visible {
-        width: min(260px, 62vw);
-    }
-
-    .lh-nav-btn:hover .lh-nav-tooltip,
-    .lh-nav-btn:focus-visible .lh-nav-tooltip {
-        margin-left: 7px;
-        max-width: 148px;
+    .lh-nav-icons,
+    .lh-nav-icons--desktop {
+        gap: 6px;
     }
 
     .lh-nav-tooltip {
@@ -239,9 +272,13 @@
     }
 }
 
+/* ==========================================================
+   NAVBAR MOBILE
+   ========================================================== */
+
 @media (max-width: 560px) {
-    /* fixed bottom navbar */
-    .lh-navbar {
+    .lh-navbar,
+    .lh-navbar--mobile {
         position: fixed;
         left: 0;
         right: 0;
@@ -252,13 +289,13 @@
         justify-content: center;
         padding: 0;
         gap: 0;
-        background: rgba(255,255,255,0.98);
-        box-shadow: 0 -6px 18px rgba(12,12,12,0.06);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 -4px 14px rgba(12, 12, 12, 0.05);
         z-index: 1100;
     }
 
-    /* place logo at top-left of viewport */
-    .lh-logo {
+    .lh-logo,
+    .lh-logo--mobile {
         position: fixed;
         top: 12px;
         left: 12px;
@@ -277,171 +314,143 @@
         display: block;
     }
 
-    .lh-logo__text { display: none; }
-
-    /* hide the mobile search placeholder when using bottom nav */
-    .lh-mobile-search { display: none; }
-
-    .lh-nav-icons {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        width: 100%;
-        max-width: 520px;
-        padding: 0 10px;
-        gap: 4px;
+    .lh-logo__text {
+        display: none;
     }
 
-    .lh-nav-btn {
-        width: 52px;
-        height: 52px;
+    .lh-mobile-search {
+        display: none;
+    }
+
+    .lh-nav-icons,
+    .lh-nav-icons--mobile {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        max-width: 520px;
+        padding: 0 8px;
+        gap: 6px;
+    }
+
+    .lh-nav-btn,
+    .lh-nav-btn--mobile {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        max-width: 50px;
         padding: 0;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: transparent;
-        box-shadow: none;
-        transition: 
-            transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.25s ease,
-            color 0.25s ease,
-            box-shadow 0.25s ease,
-            width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-            height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        border: none;
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,242,242,0.96) 100%);
+        border: 1px solid rgba(115, 7, 11, 0.08);
+        box-shadow: 0 6px 14px rgba(115, 7, 11, 0.08);
+        transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.22s ease, box-shadow 0.22s ease, color 0.22s ease, border-color 0.22s ease;
         cursor: pointer;
         color: #73070B;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .lh-nav-btn:active { transform: scale(0.92); }
+    .lh-nav-btn::after,
+    .lh-nav-btn--mobile::after {
+        display: none !important;
+    }
 
     .lh-nav-btn:hover,
-    .lh-nav-btn:focus-visible { 
-        background: rgba(115,7,11,0.08);
-        transform: scale(1.05);
+    .lh-nav-btn:focus-visible,
+    .lh-nav-btn--mobile:hover,
+    .lh-nav-btn--mobile:focus-visible {
+        width: 50px !important;
+        max-width: 50px !important;
+        border-radius: 50% !important;
+        padding: 0 !important;
+        background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(244,236,236,0.98) 100%);
+        transform: translateY(-1px) scale(1.03);
+        box-shadow: 0 9px 18px rgba(115, 7, 11, 0.12);
+        border-color: rgba(115, 7, 11, 0.12);
     }
 
-    .lh-nav-btn > iconify-icon:first-child {
-        width: 26px !important;
-        height: 26px !important;
+    .lh-nav-btn:active,
+    .lh-nav-btn--mobile:active {
+        transform: scale(0.94);
+    }
+
+    .lh-nav-btn:hover > iconify-icon,
+    .lh-nav-btn:focus-visible > iconify-icon,
+    .lh-nav-btn--mobile:hover > iconify-icon,
+    .lh-nav-btn--mobile:focus-visible > iconify-icon,
+    .lh-nav-btn--active > iconify-icon {
+        transform: scale(1.03);
         color: #73070B;
-        transition: color 0.3s ease;
     }
 
     .lh-nav-tooltip,
-    .lh-nav-btn .lh-nav-tooltip { display: none !important; }
+    .lh-nav-btn .lh-nav-tooltip {
+        display: none !important;
+    }
 
-    /* keep all mobile buttons circular (including whatsapp desktop-expanded style) */
     .lh-nav-btn--whatsapp-visible,
     .lh-nav-btn--whatsapp-visible:hover,
     .lh-nav-btn--whatsapp-visible:focus-visible,
     .wa-nav-btn--active,
-    .wa-nav-btn--whatsapp {
-        width: 52px !important;
-        height: 52px !important;
+    .wa-nav-btn--whatsapp,
+    .lh-nav-btn--search,
+    .lh-nav-btn--user,
+    .lh-nav-btn--active,
+    .lh-nav-btn--search.lh-nav-btn--active {
+        width: 50px !important;
+        height: 50px !important;
+        min-width: 50px !important;
+        max-width: 50px !important;
         padding: 0 !important;
         border-radius: 50% !important;
-        justify-content: center !important;
-        overflow: visible;
     }
 
-    /* center search button on mobile, neutral by default */
     .lh-nav-btn--search {
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        background: transparent;
-        transform: none;
-        box-shadow: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #73070B;
-        transition: 
-            transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.25s ease,
-            box-shadow 0.25s ease,
-            color 0.25s ease;
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,242,242,0.96) 100%);
+        box-shadow: 0 6px 14px rgba(115, 7, 11, 0.08);
+        transform: translateY(-1px);
     }
 
     .lh-nav-btn--search > iconify-icon:first-child {
-        width: 28px !important;
-        height: 28px !important;
-        color: #73070B;
-        transition: color 0.3s ease;
+        width: 24px !important;
+        height: 24px !important;
     }
 
-    /* Active state on mobile: red circular background and elevation */
     .lh-nav-btn--active {
-        width: 56px;
-        height: 56px;
-        padding: 0;
-        border-radius: 50%;
-        justify-content: center;
-        background: linear-gradient(90deg,#73070B 0%,#B8201D 100%);
+        background: linear-gradient(180deg, #b61a1c 0%, #73070b 100%);
         color: #ffffff;
-        transform: translateY(-10px) scale(1);
-        box-shadow: 0 10px 22px rgba(184,32,29,0.28);
-        transition: 
-            transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.3s ease-out,
-            box-shadow 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-            color 0.3s ease,
-            width 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-            height 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 8px 16px rgba(184, 32, 29, 0.18);
+        transform: translateY(-1px) scale(1);
     }
 
     .lh-nav-btn--active:hover {
-        transform: translateY(-12px) scale(1.08);
-        box-shadow: 0 14px 28px rgba(184,32,29,0.35);
+        width: 50px !important;
+        max-width: 50px !important;
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 10px 18px rgba(184, 32, 29, 0.22);
     }
 
-    .lh-nav-btn--active > iconify-icon:first-child {
+    .lh-nav-btn--active > iconify-icon {
         color: #ffffff !important;
-        transition: color 0.3s ease;
     }
 
-    /* Keep the center search slightly larger when active */
     .lh-nav-btn--search.lh-nav-btn--active {
-        width: 64px;
-        height: 64px;
-        transform: translateY(-16px);
-        box-shadow: 0 12px 28px rgba(184,32,29,0.32);
-        transition: 
-            transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-            box-shadow 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-            background 0.3s ease-out,
-            color 0.3s ease;
+        background: linear-gradient(180deg, #b61a1c 0%, #73070b 100%);
+        color: #ffffff;
+        box-shadow: 0 8px 16px rgba(184, 32, 29, 0.18);
+        transform: translateY(-1px) scale(1);
     }
 
     .lh-nav-btn--search.lh-nav-btn--active:hover {
-        transform: translateY(-18px);
-        box-shadow: 0 16px 32px rgba(184,32,29,0.38);
-    }
-
-    .lh-nav-btn--user { width: 56px; height: 56px; }
-
-    .lh-nav-btn--active::after {
-        content: "";
-        position: absolute;
-        inset: -3px;
-        border-radius: 50%;
-        border: 1px solid rgba(184, 32, 29, 0.28);
-        pointer-events: none;
-        animation: pulse-ring 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    @keyframes pulse-ring {
-        0% {
-            inset: -8px;
-            border-color: rgba(184, 32, 29, 0.6);
-            opacity: 1;
-        }
-        100% {
-            inset: -3px;
-            border-color: rgba(184, 32, 29, 0.28);
-            opacity: 1;
-        }
+        width: 50px !important;
+        max-width: 50px !important;
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 10px 18px rgba(184, 32, 29, 0.22);
     }
 }

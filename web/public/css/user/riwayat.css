@@ -1,382 +1,332 @@
-/* Riwayat Page Layout */
-.riwayat-page {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-height: 100vh;
-    background: #fff8f8;
-    overflow: hidden;
-}
+/* ============================================================
+   RIWAYAT PAGE
+   ============================================================ */
 
-.riwayat-page .lh-hero-bg {
-    z-index: 0;
-    opacity: 0.78;
-}
-
-.riwayat-page .lh-navbar,
-.riwayat-page .riwayat-content {
-    position: relative;
-    z-index: 5;
-}
-
-.riwayat-content {
-    flex: 1;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 24px clamp(20px, 3vw, 32px) 44px;
-}
-
-.riwayat-container {
-    max-width: 1240px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Make page content center and adaptive */
-.riwayat-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Keep content inside a centered column and adapt padding */
-.riwayat-container {
-    padding: 0 clamp(12px, 3vw, 24px);
-    box-sizing: border-box;
-}
-
-/* Cards should not exceed a readable measure and stay centered */
-.riwayat-group {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-/* Ensure inner boxes use full width of the card */
-.riwayat-item-container,
-.riwayat-query-box,
-.riwayat-results-box {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Empty state: center vertically within available viewport and keep consistent card feel */
-.riwayat-empty,
-.riwayat-empty-state {
-    min-height: calc(60vh - 80px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: clamp(24px, 6vw, 60px) 20px;
-}
-
-/* Make the CTA visually balanced and centered always */
-.riwayat-empty .btn-mulai-pencarian,
-.riwayat-empty-state .btn-mulai-pencarian,
-.btn-mulai-pencarian {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 140px;
-    max-width: 220px;
-    padding: 10px 18px;
-    height: auto;
-}
-
-/* Improve spacing inside cards on small screens */
-@media (max-width: 768px) {
-    .riwayat-group { max-width: 720px; }
-    .riwayat-item-container { margin: 0 12px 12px; }
-    .riwayat-query-box, .riwayat-results-box { padding: 14px; }
-}
-
-@media (max-width: 480px) {
-    .riwayat-group { max-width: 100%; padding: 0 8px; }
-    .riwayat-container { padding: 0 12px; }
-    .riwayat-empty, .riwayat-empty-state { min-height: 50vh; padding: 20px 12px; }
-    .riwayat-header h1 { font-size: 22px; }
-}
-
-/* Header dengan tombol hapus */
-.riwayat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 22px;
-    gap: 20px;
-}
-
-.riwayat-header h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: clamp(28px, 2.8vw, 38px);
-    font-weight: 800;
-    color: #101827;
-    margin: 0;
-    letter-spacing: -0.04em;
-}
-
-.btn-hapus-semua {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 20px;
-    background: linear-gradient(180deg, #c31f24 0%, #8f1215 100%);
-    color: white;
-    border: none;
-    border-radius: 999px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    box-shadow: 0 10px 22px rgba(143, 18, 21, 0.22);
-}
-
-.btn-hapus-semua:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px rgba(143, 18, 21, 0.28);
-}
-
-/* Riwayat List */
+/* Riwayat List - Reduced gap for cleaner look */
 .riwayat-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
 }
 
-/* Group by date */
+/* Group by date - Softer borders & shadows */
 .riwayat-group {
     position: relative;
-    padding: 22px;
-    padding-top: 54px; /* room for date label */
-    border: 2px solid #a12a2a;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.98);
+    padding: 16px;
+    padding-top: 44px;
+    border: 1px solid #dcc5c5;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff 0%, #fef7f7 100%);
     overflow: visible;
-    box-shadow: 0 6px 18px rgba(145, 18, 21, 0.08);
+    box-shadow: 0 8px 24px rgba(161, 28, 34, 0.12);
     box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Group date label */
+.riwayat-group:hover {
+    box-shadow: 0 16px 40px rgba(161, 28, 34, 0.18);
+    transform: translateY(-2px);
+    border-color: #c41e3a;
+}
+
+/* Group date label - More subtle */
 .riwayat-group-date {
     position: absolute;
     top: 0;
-    left: 28px;
+    left: 20px;
     transform: translateY(-50%);
-    padding: 6px 14px 7px;
+    padding: 4px 10px 5px;
     background: linear-gradient(180deg, #a91c22 0%, #8f1215 100%);
-    border-radius: 12px 12px 4px 4px;
+    border-radius: 8px 8px 2px 2px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
     color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 8px 18px rgba(143, 18, 21, 0.24);
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 6px rgba(143, 18, 21, 0.08);
     z-index: 100;
 }
 
-/* Item Container - 2 Box Layout */
+/* Item Container - Tighter spacing */
 .riwayat-item-container {
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Box 1: Query Box */
-.riwayat-query-box {
+/* Section Card */
+.riwayat-section {
     display: flex;
     flex-direction: column;
+    gap: 0;
+    border: 1.5px solid #e8d0d0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #ffffff 0%, #fffbfb 100%);
+    box-shadow: 0 6px 20px rgba(161, 28, 34, 0.08);
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.riwayat-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(161, 28, 34, 0.15);
+    border-color: #c41e3a;
+}
+
+.riwayat-section-toggle {
+    appearance: none;
+    border: 0;
+    background: linear-gradient(135deg, rgba(163, 28, 34, 0.02), rgba(255, 200, 210, 0.04));
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
-    padding: 16px 18px;
-    border: 1px solid #ec5b5b;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 6px 14px rgba(145, 18, 21, 0.06);
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
     transition: all 0.2s ease;
 }
 
-.riwayat-query-box:hover {
-    box-shadow: 0 10px 24px rgba(145, 18, 21, 0.12);
+.riwayat-section-toggle:hover {
+    background: linear-gradient(135deg, rgba(163, 28, 34, 0.04), rgba(255, 200, 210, 0.08));
 }
 
-.riwayat-query-content {
-    flex: 1;
+.riwayat-section-toggle:focus-visible {
+    outline: 2px solid rgba(196, 30, 58, 0.24);
+    outline-offset: -2px;
 }
 
-.riwayat-box-header {
+.riwayat-section-head {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.riwayat-section-kicker {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #c41e3a;
+    line-height: 1.2;
 }
 
 .riwayat-box-title {
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: #1a1a1a;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.riwayat-query {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 10px;
-    line-height: 1.4;
-    word-break: break-word;
-}
-
-.riwayat-status {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8e7072;
+    text-transform: none;
+    letter-spacing: 0;
     margin: 0;
 }
 
+.riwayat-section-toggle-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.riwayat-section-preview {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #6f6667;
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.riwayat-section-chevron {
+    color: #c41e3a;
+    transition: transform 0.22s ease;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.riwayat-section.is-open .riwayat-section-chevron {
+    transform: rotate(180deg);
+}
+
+.riwayat-section.is-open .riwayat-section-toggle {
+    background: linear-gradient(180deg, rgba(163, 28, 34, 0.06), rgba(163, 28, 34, 0.025));
+}
+
+.riwayat-result-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.riwayat-result-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.riwayat-result-chip.hoax {
+    color: #fff;
+    background: linear-gradient(135deg, #c41e3a 0%, #e63952 100%);
+    border-color: #ff6b85;
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
+}
+
+.riwayat-result-chip.palsu {
+    color: #fff;
+    background: linear-gradient(135deg, #ff9800 0%, #ffb340 100%);
+    border-color: #ffc869;
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.25);
+}
+
+.riwayat-result-chip.benar {
+    color: #fff;
+    background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+    border-color: #81c784;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+}
+
+.riwayat-section-panel {
+    padding: 14px 16px;
+    background: linear-gradient(180deg, #fffbfb 0%, #fef7f8 100%);
+    border-top: 1px solid rgba(196, 30, 58, 0.08);
+}
+
+.riwayat-section-panel[hidden] {
+    display: none;
+}
+
+.riwayat-query-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transition: none;
+}
+
+.riwayat-query-box:hover {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* Query Text - Cleaner hierarchy */
+.riwayat-query {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.65;
+    word-break: break-word;
+}
+
+/* Status Badge - Refined */
 .riwayat-status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
+    gap: 5px;
+    padding: 5px 10px;
     background-color: #fff3f3;
-    border: 1px solid #ec8080;
-    border-radius: 6px;
+    border: 1px solid #f0d0d0;
+    border-radius: 5px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .riwayat-status-badge.hoax {
     color: #c41e3a;
-    background-color: #ffe8e8;
-    border-color: #ec5b5b;
+    background-color: #fff5f5;
+    border-color: #f0d0d0;
 }
 
 .riwayat-status-badge.palsu {
-    color: #ff9800;
-    background-color: #fff9e6;
+    color: #f57c00;
+    background-color: #fffaf5;
     border-color: #ffe8cc;
 }
 
 .riwayat-status-badge.benar {
-    color: #4caf50;
-    background-color: #e8f5e9;
-    border-color: #c8e6c9;
+    color: #388e3c;
+    background-color: #f1f8f4;
+    border-color: #d4f1e4;
 }
 
-.riwayat-item-expand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #c41e3a;
-    transition: transform 0.3s ease;
-    padding: 0;
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.riwayat-item-expand:hover .riwayat-expand-icon {
-    opacity: 0.7;
-}
-
-.riwayat-expand-icon {
-    transition: transform 0.3s ease;
-    color: #c41e3a;
-}
-
-.riwayat-expand-icon.expanded {
-    transform: rotate(180deg);
-}
-
-/* Box 2: Results Box (FAKTA) */
+/* Results Box - Clean minimal style */
 .riwayat-results-box {
-    padding: 16px 18px;
-    border: 1px solid #ec5b5b;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 6px 14px rgba(145, 18, 21, 0.06);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transition: none;
 }
 
+.riwayat-results-box:hover {
+    box-shadow: none;
+}
+
+/* Result Section - Improved spacing */
 .riwayat-result-section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0;
 }
 
+/* Result Title - Consistent with query */
 .riwayat-result-title {
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
+    font-size: 11px;
     font-weight: 700;
-    color: #1a1a1a;
+    color: #888;
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
+/* Result Content - Better readability */
 .riwayat-result-content {
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: #1a1a1a;
-    line-height: 1.6;
-    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.7;
+    margin-top: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.riwayat-result-percent {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-    width: fit-content;
-    padding: 8px 12px;
-    border-radius: 10px;
-    background: #fff3f3;
-    border: 1px solid #ec5b5b;
-    color: #c41e3a;
-}
-
-.riwayat-result-percent.benar {
-    background: #e8f5e9;
-    border-color: #a5d6a7;
-    color: #2e7d32;
-}
-
-.riwayat-result-percent-value {
-    font-size: 20px;
-    font-weight: 800;
-}
-
-.riwayat-result-percent-label {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-}
-
-.riwayat-result-summary {
-    margin: 0;
-    white-space: normal;
-    word-break: break-word;
 }
 
 .riwayat-result-content p {
@@ -386,84 +336,233 @@
 }
 
 .riwayat-result-content a {
-    color: #c41e3a;
+    color: #e63952;
     text-decoration: underline;
-    transition: opacity 0.2s ease;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    word-break: break-all;
+    font-weight: 500;
 }
 
 .riwayat-result-content a:hover {
-    opacity: 0.8;
+    color: #c41e3a;
+    text-decoration-thickness: 2px;
+    filter: brightness(1.1);
 }
 
+/* Result Percent - Refined style */
+.riwayat-result-percent {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    width: fit-content;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #fff5f5, #ffe8eb);
+    border: 2px solid #f0c8d0;
+    color: #c41e3a;
+    box-shadow: 0 2px 8px rgba(196, 30, 58, 0.15);
+    transition: all 0.2s ease;
+}
+
+.riwayat-result-percent:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
+}
+
+.riwayat-result-percent.benar {
+    background: linear-gradient(135deg, #f1f8f4, #dcf1e8);
+    border-color: #b8e6d5;
+    color: #388e3c;
+}
+
+.riwayat-result-percent-value {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.riwayat-result-percent-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.riwayat-result-summary {
+    color: #3d3d3d;
+    font-size: 13px;
+}
+
+.riwayat-result-footnote {
+    font-size: 11px;
+    line-height: 1.45;
+    color: #9a8888;
+    padding-top: 2px;
+    font-style: italic;
+}
+
+/* Source badges - Cleaner */
 .riwayat-sources {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     margin: 0;
 }
 
 .riwayat-source-badge {
     display: inline-block;
-    padding: 5px 12px;
-    background-color: #f3f3f3;
-    border: 1px solid #d8d8d8;
+    padding: 4px 10px;
+    background-color: #f8f8f8;
+    border: 1px solid #e8e8e8;
     border-radius: 999px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 11px;
-    color: #666;
+    font-size: 10px;
+    color: #777;
     white-space: nowrap;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
-/* Actions */
+.riwayat-source-badge:hover {
+    background-color: #f0e8e8;
+    border-color: #dcc5c5;
+    color: #c41e3a;
+}
+
+/* Header Section - Cleaner spacing */
+.riwayat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 16px;
+}
+
+.riwayat-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(26px, 2.5vw, 36px);
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #c41e3a 0%, #e63952 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Delete Button - Refined */
+.btn-hapus-semua {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: linear-gradient(180deg, #c31f24 0%, #8f1215 100%);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(143, 18, 21, 0.25);
+}
+
+.btn-hapus-semua:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 24px rgba(143, 18, 21, 0.35);
+    background: linear-gradient(180deg, #e63952 0%, #a81a21 100%);
+}
+
+.btn-hapus-semua:active {
+    transform: translateY(0);
+}
+
+/* Action Buttons - Refined */
 .riwayat-item-actions {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     justify-content: flex-start;
-    padding: 0 4px;
+    padding: 0 2px;
 }
 
 .riwayat-action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    min-height: 40px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
     padding: 0;
     background: linear-gradient(180deg, #c31f24 0%, #8f1215 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 12px;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(143, 18, 21, 0.15);
+    box-shadow: 0 4px 12px rgba(143, 18, 21, 0.2);
 }
 
 .riwayat-action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(143, 18, 21, 0.2);
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 8px 20px rgba(143, 18, 21, 0.3);
+    background: linear-gradient(180deg, #e63952 0%, #a81a21 100%);
 }
 
 .riwayat-action-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.95);
 }
 
-/* Empty State */
+/* Expand Button - Clean */
+.riwayat-item-expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #c41e3a;
+    transition: transform 0.25s ease;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.riwayat-item-expand:hover {
+    opacity: 0.8;
+}
+
+.riwayat-expand-icon {
+    transition: transform 0.25s ease;
+    color: #c41e3a;
+}
+
+.riwayat-expand-icon.expanded {
+    transform: rotate(180deg);
+}
+
+/* Empty State - Centered & spacious */
 .riwayat-empty,
 .riwayat-empty-state {
     display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
+    min-height: 50vh;
     padding: 40px 20px;
     text-align: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .riwayat-empty.show,
@@ -472,97 +571,235 @@
 }
 
 .riwayat-empty > iconify-icon,
-.riwayat-empty-state > iconify-icon,
-.riwayat-empty-icon {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 20px;
-    opacity: 0.5;
+.riwayat-empty-state > iconify-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 12px;
+    opacity: 0.4;
     color: #c41e3a;
 }
 
 .riwayat-empty h2,
 .riwayat-empty-state h2 {
     font-family: 'Poppins', sans-serif;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 10px;
+    color: #2d2d2d;
+    margin: 0 0 8px;
 }
 
 .riwayat-empty p,
 .riwayat-empty-state p {
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: #666;
-    margin: 0 0 16px;
-    max-width: 400px;
+    font-size: 13px;
+    color: #777;
+    margin: 0 0 18px;
+    max-width: 350px;
 }
 
-.riwayat-empty .btn-mulai-pencarian,
-.riwayat-empty-state .btn-mulai-pencarian,
 .btn-mulai-pencarian {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: auto;
-    min-width: 170px;
-    max-width: 220px;
+    min-width: 160px;
+    max-width: 200px;
     height: auto;
-    min-height: 44px;
-    padding: 11px 20px;
+    min-height: 42px;
+    padding: 10px 18px;
     border-radius: 999px;
     background: linear-gradient(180deg, #c31f24 0%, #8f1215 100%);
     color: #fff;
     text-decoration: none;
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 8px 18px rgba(143, 18, 21, 0.18);
+    box-shadow: 0 4px 12px rgba(143, 18, 21, 0.12);
     transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
 }
 
-.riwayat-empty .btn-mulai-pencarian iconify-icon,
-.riwayat-empty-state .btn-mulai-pencarian iconify-icon,
+.btn-mulai-pencarian:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(143, 18, 21, 0.16);
+}
+
 .btn-mulai-pencarian iconify-icon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
 }
 
-.riwayat-empty .btn-mulai-pencarian:hover,
-.riwayat-empty-state .btn-mulai-pencarian:hover,
-.btn-mulai-pencarian:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 22px rgba(143, 18, 21, 0.24);
+/* ============================================================
+   RESPONSIVE IMPROVEMENTS
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .riwayat-content {
+        padding: 14px 14px 28px;
+    }
+
+    .riwayat-header {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 14px;
+        gap: 12px;
+    }
+
+    .btn-hapus-semua {
+        align-self: flex-start;
+        padding: 9px 14px;
+        font-size: 11px;
+    }
+
+    .riwayat-query {
+        font-size: 13px;
+    }
+
+    .riwayat-result-content {
+        font-size: 12px;
+    }
+
+    .riwayat-section-toggle {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .riwayat-section-toggle-meta {
+        width: 100%;
+    }
+
+    .riwayat-section-preview {
+        text-align: left;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
+    }
+
+    .riwayat-section-chevron {
+        margin-top: 0;
+    }
+
+    .riwayat-group {
+        padding: 14px;
+        padding-top: 40px;
+    }
+
+    .riwayat-group-date {
+        left: 14px;
+        font-size: 9px;
+        padding: 4px 9px;
+    }
+
+    .riwayat-query-box,
+    .riwayat-results-box {
+        padding: 11px 13px;
+    }
+
+    .riwayat-item-container {
+        gap: 10px;
+    }
 }
 
-/* Feedback Modal */
+@media (max-width: 480px) {
+    .riwayat-content {
+        padding: 12px 10px 24px;
+    }
+
+    .riwayat-header h1 {
+        font-size: 22px;
+    }
+
+    .riwayat-header {
+        margin-bottom: 12px;
+    }
+
+    .btn-hapus-semua {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    .riwayat-query {
+        font-size: 12px;
+    }
+
+    .riwayat-result-content {
+        font-size: 11px;
+    }
+
+    .riwayat-query-box,
+    .riwayat-results-box {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .riwayat-section-panel {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .riwayat-status-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+
+    .riwayat-action-btn {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+        font-size: 11px;
+    }
+
+    .riwayat-item-expand {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
+    }
+
+    .btn-mulai-pencarian {
+        min-height: 40px;
+        min-width: 140px;
+        padding: 9px 16px;
+        font-size: 13px;
+    }
+
+    .riwayat-empty h2 {
+        font-size: 20px;
+    }
+
+    .riwayat-empty p {
+        font-size: 12px;
+    }
+}
+
+/* ============================================================
+   MODAL IMPROVEMENTS
+   ============================================================ */
+
 .riwayat-feedback-modal {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    padding: 20px;
+    padding: 16px;
 }
 
 .riwayat-feedback-content {
     background: white;
-    border-radius: 16px;
-    max-width: 500px;
+    border-radius: 14px;
+    max-width: 480px;
     width: 100%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -572,7 +809,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 16px 18px;
     border-bottom: 1px solid #f0f0f0;
     background: linear-gradient(180deg, #a91c22 0%, #8f1215 100%);
     color: white;
@@ -580,96 +817,71 @@
 
 .riwayat-feedback-header h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     margin: 0;
 }
 
-.riwayat-feedback-close {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.2s ease;
-}
-
-.riwayat-feedback-close:hover {
-    opacity: 0.7;
-}
-
 .riwayat-feedback-body {
-    padding: 20px;
+    padding: 16px 18px;
     flex: 1;
     overflow-y: auto;
+    max-height: 60vh;
 }
 
 .riwayat-feedback-item {
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    color: #1a1a1a;
-    margin: 0 0 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 8px;
+    color: #333;
+    margin: 0 0 12px;
+    padding: 10px;
+    background: #f8f8f8;
+    border-radius: 6px;
     border-left: 3px solid #c41e3a;
 }
 
 .riwayat-feedback-textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #d8d8d8;
-    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     resize: vertical;
-    transition: border-color 0.2s ease;
+    min-height: 80px;
+    transition: border-color 0.2s;
 }
 
 .riwayat-feedback-textarea:focus {
     outline: none;
     border-color: #c41e3a;
-    box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
-}
-
-.riwayat-feedback-hint {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    color: #999;
-    margin: 12px 0 0;
+    box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.08);
 }
 
 .riwayat-feedback-footer {
     display: flex;
-    gap: 12px;
-    padding: 16px 20px;
+    gap: 10px;
+    padding: 12px 18px;
     border-top: 1px solid #f0f0f0;
     justify-content: flex-end;
 }
 
 .riwayat-feedback-cancel,
 .riwayat-feedback-submit {
-    padding: 10px 16px;
+    padding: 8px 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    transition: all 0.2s;
 }
 
 .riwayat-feedback-cancel {
     background: #f0f0f0;
-    color: #333;
+    color: #555;
 }
 
 .riwayat-feedback-cancel:hover {
@@ -679,239 +891,10 @@
 .riwayat-feedback-submit {
     background: linear-gradient(180deg, #c31f24 0%, #8f1215 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(143, 18, 21, 0.15);
+    box-shadow: 0 2px 6px rgba(143, 18, 21, 0.1);
 }
 
 .riwayat-feedback-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(143, 18, 21, 0.2);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .riwayat-content {
-        padding: 16px 16px 32px;
-    }
-
-    .riwayat-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .btn-hapus-semua {
-        align-self: flex-start;
-    }
-
-    .riwayat-query {
-        font-size: 14px;
-    }
-
-    .riwayat-result-title,
-    .riwayat-result-content {
-        font-size: 14px;
-    }
-
-    .riwayat-query-box,
-    .riwayat-results-box {
-        padding: 14px 16px;
-    }
-
-    .riwayat-group {
-        padding-top: 20px;
-        border-radius: 14px;
-    }
-
-    .riwayat-group-date {
-        left: 10px;
-        font-size: 11px;
-        padding: 4px 10px 5px;
-    }
-
-    .riwayat-item-container {
-        margin: 0 12px 12px;
-        gap: 10px;
-    }
-
-    .riwayat-feedback-content {
-        max-width: 90vw;
-    }
-}
-
-@media (max-width: 480px) {
-    .riwayat-header h1 {
-        font-size: 24px;
-    }
-
-    .riwayat-query {
-        font-size: 13px;
-    }
-
-    .riwayat-result-title,
-    .riwayat-result-content {
-        font-size: 13px;
-    }
-
-    .btn-hapus-semua {
-        font-size: 12px;
-        padding: 10px 14px;
-    }
-
-    .riwayat-query-box,
-    .riwayat-results-box {
-        padding: 12px 14px;
-    }
-
-    .riwayat-item-container {
-        margin: 0 8px 10px;
-    }
-
-    .riwayat-status-badge {
-        font-size: 11px;
-        padding: 5px 10px;
-    }
-
-    .riwayat-empty .btn-mulai-pencarian,
-    .riwayat-empty-state .btn-mulai-pencarian,
-    .btn-mulai-pencarian {
-        min-width: 150px;
-        max-width: 180px;
-        min-height: 40px;
-        padding: 10px 16px;
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 560px) {
-    /* Fix navbar to bottom for mobile */
-    .riwayat-page .lh-navbar {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        background: rgba(255,255,255,0.98);
-        box-shadow: 0 -6px 18px rgba(12,12,12,0.06);
-        z-index: 1100;
-        border: none;
-    }
-
-    .riwayat-page .lh-logo {
-        position: fixed;
-        top: 12px;
-        left: 12px;
-        z-index: 1200;
-    }
-
-    .riwayat-page .lh-logo__img {
-        width: 46px;
-    }
-
-    .riwayat-page .lh-nav-icons {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        width: 100%;
-        padding: 0 8px;
-    }
-
-    .riwayat-page .lh-nav-btn {
-        width: 56px;
-        height: 56px;
-        padding: 0;
-        border-radius: 50%;
-        background: transparent;
-        box-shadow: none;
-        color: #73070B;
-        transition: 
-            transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.25s ease,
-            box-shadow 0.25s ease,
-            color 0.25s ease;
-    }
-
-    .riwayat-page .lh-nav-btn:hover,
-    .riwayat-page .lh-nav-btn:focus-visible {
-        background: rgba(115,7,11,0.08);
-        transform: scale(1.05);
-    }
-
-    .riwayat-page .lh-nav-btn:active {
-        transform: scale(0.92);
-    }
-
-    .riwayat-page .lh-nav-btn > iconify-icon:first-child {
-        width: 26px !important;
-        height: 26px !important;
-        transition: color 0.3s ease;
-    }
-
-    .riwayat-page .lh-nav-btn--search {
-        width: 64px;
-        height: 64px;
-        background: transparent;
-        transform: none;
-        box-shadow: none;
-        color: #73070B;
-        transition: 
-            transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.25s ease,
-            box-shadow 0.25s ease,
-            color 0.25s ease;
-    }
-
-    .riwayat-page .lh-nav-btn--search > iconify-icon:first-child {
-        width: 28px !important;
-        height: 28px !important;
-        color: #73070B;
-        transition: color 0.3s ease;
-    }
-
-    .riwayat-page .lh-nav-btn--active {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: linear-gradient(90deg,#73070B 0%,#B8201D 100%);
-        color: #fff;
-        transform: translateY(-10px) scale(1);
-        box-shadow: 0 10px 22px rgba(184,32,29,0.28);
-        transition: 
-            transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-            background 0.3s ease-out,
-            box-shadow 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-            color 0.3s ease;
-    }
-
-    .riwayat-page .lh-nav-btn--active:hover {
-        transform: translateY(-12px) scale(1.08);
-        box-shadow: 0 14px 28px rgba(184,32,29,0.35);
-    }
-
-    .riwayat-page .lh-nav-btn--active > iconify-icon:first-child {
-        color: #fff;
-        transition: color 0.3s ease;
-    }
-
-    .riwayat-page .lh-nav-btn--search.lh-nav-btn--active {
-        width: 64px;
-        height: 64px;
-        transform: translateY(-16px);
-        box-shadow: 0 12px 28px rgba(184,32,29,0.32);
-        transition: 
-            transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-            box-shadow 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-
-    .riwayat-page .lh-nav-btn--search.lh-nav-btn--active:hover {
-        transform: translateY(-18px);
-        box-shadow: 0 16px 32px rgba(184,32,29,0.38);
-    }
-
-    .riwayat-content {
-        padding: 20px 16px 90px;
-        margin-bottom: 0;
-    }
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(143, 18, 21, 0.15);
 }

@@ -74,35 +74,126 @@
                 @endif
 
                 @if(session('phone_number'))
-                    <form method="POST" action="{{ url('/login-wa/verify') }}" class="otp-form">
+                    <form method="POST" action="{{ url('/login-wa/verify') }}" class="otp-form" id="verify-form">
                         @csrf
 
                         <label for="token" class="form-label">Kode OTP</label>
-                        <input
-                            id="token"
-                            type="text"
-                            name="token"
-                            class="form-input form-input--otp"
-                            placeholder="Contoh: 123456"
-                            maxlength="6"
-                            inputmode="numeric"
-                            pattern="[0-9]*"
-                            autocomplete="one-time-code"
-                            required
-                        >
 
-                        <button type="submit" class="btn-primary">
+                        <div class="otp-inputs" id="otp-inputs">
+                            <div class="otp-boxes" role="group" aria-label="Kode OTP 6 digit">
+                                @for ($i = 0; $i < 6; $i++)
+                                    <input
+                                        type="text"
+                                        inputmode="numeric"
+                                        pattern="[0-9]*"
+                                        maxlength="1"
+                                        class="form-input otp-box"
+                                        data-index="{{ $i }}"
+                                        aria-label="Digit {{ $i + 1 }}"
+                                    >
+                                @endfor
+                            </div>
+
+                            <input type="hidden" name="token" id="token-hidden">
+
+                            <p class="otp-timer">Kode akan kadaluarsa dalam <span id="otp-timer">00:60</span></p>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="verify-btn">
                             Verifikasi dan Masuk
                         </button>
                     </form>
 
-                    <form method="POST" action="{{ url('/login-wa/request') }}" class="otp-form otp-form--secondary">
+                    <form method="POST" action="{{ url('/login-wa/request') }}" class="otp-form otp-form--secondary" id="resend-form">
                         @csrf
                         <input type="hidden" name="phone_number" value="{{ session('phone_number') }}">
-                        <button type="submit" class="btn-secondary">
+                        <button type="submit" class="btn-secondary" id="resend-btn">
                             Kirim Ulang OTP
                         </button>
                     </form>
+
+                    <script>
+                        (function(){
+                            const boxes = Array.from(document.querySelectorAll('.otp-box'));
+                            const hidden = document.getElementById('token-hidden');
+                            const verifyForm = document.getElementById('verify-form');
+                            const resendBtn = document.getElementById('resend-btn');
+                            const timerEl = document.getElementById('otp-timer');
+
+                            function updateHidden(){
+                                hidden.value = boxes.map(b => b.value || '').join('');
+                            }
+
+                            boxes.forEach((box, idx) => {
+                                box.addEventListener('input', (e) => {
+                                    const v = e.target.value.replace(/[^0-9]/g, '');
+                                    e.target.value = v.slice(-1);
+                                    updateHidden();
+                                    if(v && idx < boxes.length - 1){
+                                        boxes[idx + 1].focus();
+                                    }
+                                });
+
+                                box.addEventListener('keydown', (e) => {
+                                    if(e.key === 'Backspace' && !e.target.value && idx > 0){
+                                        boxes[idx - 1].focus();
+                                    }
+                                });
+
+                                box.addEventListener('paste', (e) => {
+                                    e.preventDefault();
+                                    const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+                                    for(let i=0;i<paste.length && i<boxes.length;i++){
+                                        boxes[i].value = paste[i];
+                                    }
+                                    updateHidden();
+                                });
+                            });
+
+                            verifyForm.addEventListener('submit', (e) => {
+                                updateHidden();
+                                if(!hidden.value || hidden.value.length < 6){
+                                    e.preventDefault();
+                                    boxes[0].focus();
+                                }
+                            });
+
+                            // Timer: 60 seconds countdown
+                            let remaining = 60;
+                            function formatTime(s){
+                                const mm = String(Math.floor(s/60)).padStart(2,'0');
+                                const ss = String(s%60).padStart(2,'0');
+                                return `${mm}:${ss}`;
+                            }
+
+                            function setResendEnabled(enabled){
+                                resendBtn.disabled = !enabled;
+                                if(enabled){
+                                    resendBtn.classList.remove('btn-disabled');
+                                } else {
+                                    resendBtn.classList.add('btn-disabled');
+                                }
+                            }
+
+                            // Start disabled until countdown finishes
+                            setResendEnabled(false);
+                            timerEl.textContent = formatTime(remaining);
+
+                            const interval = setInterval(() => {
+                                remaining -= 1;
+                                if(remaining <= 0){
+                                    timerEl.textContent = formatTime(0);
+                                    setResendEnabled(true);
+                                    clearInterval(interval);
+                                    return;
+                                }
+                                timerEl.textContent = formatTime(remaining);
+                            }, 1000);
+
+                            // Put focus on first box initially
+                            if(boxes.length) boxes[0].focus();
+                        })();
+                    </script>
                 @else
                     <form method="POST" action="{{ url('/login-wa/request') }}" class="otp-form">
                         @csrf

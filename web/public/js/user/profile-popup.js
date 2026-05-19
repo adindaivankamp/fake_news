@@ -1,6 +1,59 @@
 // Consolidated handler for profile popup and edit modal
 document.addEventListener('DOMContentLoaded', function () {
     try {
+        const mobileNavbarQuery = window.matchMedia('(max-width: 560px)');
+
+        function getNavbarRoot(toggle) {
+            return toggle ? toggle.closest('.lh-navbar') : null;
+        }
+
+        function getInitialActiveButtons(navbar) {
+            if (!navbar) return [];
+            return Array.from(navbar.querySelectorAll('.lh-nav-btn[data-navbar-active-original="true"]'));
+        }
+
+        function markInitialMobileActiveState() {
+            if (!mobileNavbarQuery.matches) return;
+            document.querySelectorAll('.lh-navbar').forEach(navbar => {
+                navbar.querySelectorAll('.lh-nav-btn[aria-current="page"]').forEach(btn => {
+                    btn.dataset.navbarActiveOriginal = 'true';
+                });
+            });
+        }
+
+        function clearMobileActiveState(navbar) {
+            if (!navbar) return;
+            navbar.querySelectorAll('.lh-nav-btn').forEach(btn => btn.classList.remove('lh-nav-btn--active'));
+        }
+
+        function restoreMobileActiveState(navbar) {
+            if (!navbar) return;
+            navbar.querySelectorAll('.lh-nav-btn').forEach(btn => {
+                if (btn.dataset.navbarActiveOriginal === 'true') {
+                    btn.classList.add('lh-nav-btn--active');
+                    btn.setAttribute('aria-current', 'page');
+                } else {
+                    btn.removeAttribute('aria-current');
+                }
+            });
+        }
+
+        function syncNavbarActiveState(toggle, isOpen) {
+            const navbar = getNavbarRoot(toggle);
+            if (!navbar || !mobileNavbarQuery.matches) return;
+
+            clearMobileActiveState(navbar);
+
+            if (isOpen) {
+                toggle.classList.add('lh-nav-btn--active');
+                toggle.setAttribute('aria-current', 'page');
+                return;
+            }
+
+            toggle.removeAttribute('aria-current');
+            restoreMobileActiveState(navbar);
+        }
+
         // Delegated toggle handler
         document.addEventListener('click', function (e) {
             const toggle = e.target.closest('.js-profile-toggle');
@@ -17,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Show popup
                     popup.removeAttribute('hidden');
                     toggle.setAttribute('aria-expanded', 'true');
+                    syncNavbarActiveState(toggle, true);
                     // mark all toggles for this popup
                     document.querySelectorAll('[data-profile-toggle="' + targetId + '"]').forEach(btn => btn.setAttribute('aria-expanded', 'true'));
                     // add overlay
@@ -60,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     popup.setAttribute('hidden', '');
                     document.querySelectorAll('[data-profile-toggle="' + targetId + '"]').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+                    syncNavbarActiveState(toggle, false);
                     const ov = document.getElementById('profile-popup-overlay'); if (ov) ov.remove();
                 }
                 return;
@@ -71,7 +126,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 let clickedInside = false;
                 openPopups.forEach(popup => { if (popup.contains(e.target)) clickedInside = true; });
                 if (!clickedInside) {
-                    openPopups.forEach(popup => { popup.setAttribute('hidden', ''); document.querySelectorAll('[data-profile-toggle="' + popup.id + '"]').forEach(btn => btn.setAttribute('aria-expanded', 'false')); });
+                    openPopups.forEach(popup => {
+                        popup.setAttribute('hidden', '');
+                        document.querySelectorAll('[data-profile-toggle="' + popup.id + '"]').forEach(btn => {
+                            btn.setAttribute('aria-expanded', 'false');
+                            syncNavbarActiveState(btn, false);
+                        });
+                    });
                     const ov = document.getElementById('profile-popup-overlay'); if (ov) ov.remove();
                 }
             }
@@ -80,7 +141,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // Escape key closes popups and modals
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.lh-profile-popup:not([hidden])').forEach(popup => { popup.setAttribute('hidden', ''); document.querySelectorAll('[data-profile-toggle="' + popup.id + '"]').forEach(btn => btn.setAttribute('aria-expanded', 'false')); });
+                document.querySelectorAll('.lh-profile-popup:not([hidden])').forEach(popup => {
+                    popup.setAttribute('hidden', '');
+                    document.querySelectorAll('[data-profile-toggle="' + popup.id + '"]').forEach(btn => {
+                        btn.setAttribute('aria-expanded', 'false');
+                        syncNavbarActiveState(btn, false);
+                    });
+                });
                 const ov = document.getElementById('profile-popup-overlay'); if (ov) ov.remove();
                 // close edit modal if open
                 const editModal = document.getElementById('field-edit-modal'); if (editModal && !editModal.hasAttribute('hidden')) editModal.setAttribute('hidden', '');
@@ -179,6 +246,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }).catch(() => alert('Gagal memperbarui profil'));
             });
         }
+
+        // Mark and restore the initial active button state for mobile.
+        markInitialMobileActiveState();
+        document.querySelectorAll('.lh-navbar').forEach(navbar => {
+            if (!mobileNavbarQuery.matches) return;
+            restoreMobileActiveState(navbar);
+        });
 
         function updateFieldOnServer(fieldType, fieldValue) {
             const fieldMap = { name: 'name', email: 'email', phone: 'phone_number' };
