@@ -44,7 +44,11 @@
         <p class="positive">↑ Data dari database</p>
     </div>
 
-    <!-- BELUM DIBACA -->
+    {{-- =========================
+     CARD BELUM DIBACA
+    ========================= --}}
+
+    {{--
     <div class="stats-card active">
         <div class="stats-top">
             <span>BELUM DIBACA</span>
@@ -55,6 +59,7 @@
         <h2>{{ $belumDibaca }}</h2>
         <p class="negative">Perlu perhatian segera!</p>
     </div>
+    --}}
 
 </div>
 
@@ -62,11 +67,17 @@
 
     <h2>Umpan Balik Terbaru</h2>
 
+    {{-- =========================
+     FILTER
+    ========================= --}}
+
+    {{--
     <div class="umpanbalik-tools">
         <button class="btn-tool">
             <i class="fa fa-filter"></i> Filter
         </button>
     </div>
+    --}}
 </div>
 
 <!-- ===== LIST ===== -->
@@ -173,7 +184,7 @@ document.addEventListener('DOMContentLoaded',function(){
     const closeBtn=
     document.getElementById('closePopup');
 
-    fetch('/umpanbalik-data')
+    fetch('/admin/umpanbalik-data')
 
     .then(response=>response.json())
 
@@ -220,10 +231,11 @@ document.addEventListener('DOMContentLoaded',function(){
 
                 </div>
 
+                {{--
                 <span class="badge new-badge">
-                    Baru
+                   Baru
                 </span>
-
+                    --}}
             </div>
             `;
 

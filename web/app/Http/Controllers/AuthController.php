@@ -33,7 +33,7 @@ class AuthController extends Controller
         $user->login_token = $token;
         $user->token_expired_at = now()->addMinutes(5);
         $user->save();
-        
+        // dd(env('FONNTE_TOKEN'));
         // kirim ke WA
         Http::withHeaders([
             'Authorization' => env('FONNTE_TOKEN')

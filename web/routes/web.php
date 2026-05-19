@@ -112,9 +112,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         Route::get('/delete/{id}', [RiwayatController::class, 'delete']);
         Route::post('/filter', [RiwayatController::class, 'filterRiwayat'])->name('riwayat.filter');
     });
-});
 
+    // Admin - Cek Berita
+    Route::get('/admin/cekberita', [PencarianController::class, 'adminIndex']);
 
+    });
 /*
 |--------------------------------------------------------------------------
 | WHATSAPP WEBHOOK & API (NO AUTH)

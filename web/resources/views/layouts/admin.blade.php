@@ -65,8 +65,8 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('admin/cek-berita') ? 'active' : '' }}">
-                <a href="/admin/cek-berita">
+            <li class="{{ request()->is('admin/cekberita') ? 'active' : '' }}">
+                <a href="/admin/cekberita">
                     <i class="fa fa-search"></i>
                     <span>Cek Berita</span>
                 </a>
