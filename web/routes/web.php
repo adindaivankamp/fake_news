@@ -120,7 +120,6 @@ Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])-
     Route::post('/history-management/soft-delete/{id}', [HistoryManagementController::class, 'softDelete']);
     Route::post('/history-management/restore/{id}', [HistoryManagementController::class, 'restore']);
     Route::delete('/history-management/hard-delete/{id}', [HistoryManagementController::class, 'hardDelete']);
-//});
 
 
 /*
