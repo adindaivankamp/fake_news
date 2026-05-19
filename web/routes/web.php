@@ -91,7 +91,7 @@ Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])-
 */
 
 // Admin routes (kept unprotected here for later grouping) -- uncomment middleware when ready
-// Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -112,7 +112,7 @@ Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])-
         Route::get('/delete/{id}', [RiwayatController::class, 'delete']);
         Route::post('/filter', [RiwayatController::class, 'filterRiwayat'])->name('riwayat.filter');
     });
-//});
+});
 
 
 /*

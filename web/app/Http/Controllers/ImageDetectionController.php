@@ -58,13 +58,41 @@ class ImageDetectionController extends Controller
             ]);
             log::info('Request baru dibuat dengan ID: ' . $url);
             // 4. Panggil API Python
-            $response = Http::timeout(300)
-        ->post('http://localhost:8004/image-detection', [
-            'image_url' => $url
-        ]);
-            Log::info($response->body());
-            if ($response->successful()) {
-                $res = $response->json();
+        //     $response = Http::timeout(300)
+        // ->post('http://localhost:8004/image-detection', [
+        //     'image_url' => $url
+        // ]);
+            // Log::info($response->body());
+            if (true) {
+                // $res = $response->json();
+                $res = [
+    "similarity_score" => 0.2,
+    "avg_date_scaled" => 0.5245532759761746,
+    "prediction" => 0,
+    "confidence" => 0.62,
+    "data" => [
+        [
+            "link" => "https://www.knoxnews.com/story/entertainment/dining/2018/02/27/new-south-knoxville-restaurant-burger-boys-opens-chapman-highway/376340002/",
+            "thumbnail" => "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSzv5K0XQS7GYuUB1nVDW3bYP_fvGnMJPC8sydG8G_5lDhI76o0",
+            "title" => "New South Knoxville restaurant, Burger Boys, opens on ...",
+            "date" => "2018-02-27",
+            "img_distance" => 0.9868010878562927,
+            "pred_label" => "not similar",
+            "date_diff" => 3003,
+            "date_scaled" => 1.385837193911317
+        ],
+        [
+            "link" => "https://www.gettyimages.fi/photos/burger-king-drive-thru",
+            "thumbnail" => "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRVL9EsYnNCvgSui7IGw-W0-5JP9F3gWWupwim8NFpnmE1BbXG",
+            "title" => "Burger King Drive Thru Stock Photos",
+            "date" => "2023-11-22",
+            "img_distance" => 0.3931922912597656,
+            "pred_label" => "similar",
+            "date_diff" => 909,
+            "date_scaled" => 0.0
+        ]
+    ]
+];
                 $links = collect($res['data'])
     ->pluck('link')
     ->toArray();
