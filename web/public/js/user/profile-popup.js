@@ -234,6 +234,116 @@ document.addEventListener('DOMContentLoaded', function () {
             restoreMobileActiveState(navbar);
         });
 
+        /* Mobile navbar moving indicator: creates a single dot that slides under the active icon */
+        function getCenterLeft(btn, container) {
+            if (!btn || !container) return 0;
+            const btnRect = btn.getBoundingClientRect();
+            const contRect = container.getBoundingClientRect();
+            return (btnRect.left - contRect.left) + (btnRect.width / 2);
+        }
+
+        function moveIndicator(indicator, btn, container, animate = true) {
+            if (!indicator || !btn || !container) return;
+            const center = getCenterLeft(btn, container);
+            const offset = Math.round(center - (indicator.offsetWidth / 2));
+            // set CSS var to move via transform (GPU accelerated)
+            if (!animate) {
+                // temporarily disable transition
+                indicator.style.transition = 'none';
+                indicator.style.setProperty('--indicator-x', offset + 'px');
+                // force layout
+                // eslint-disable-next-line no-unused-expressions
+                indicator.offsetHeight;
+                indicator.style.transition = '';
+                return;
+            }
+            indicator.style.setProperty('--indicator-x', offset + 'px');
+        }
+
+        function initMobileNavIndicator() {
+            if (!mobileNavbarQuery.matches) return;
+            
+            // wait for fonts to load using document.fonts.ready, with fallback delay
+            var initializeIndicator = function() {
+                document.querySelectorAll('.lh-nav-icons--mobile, .lh-nav-icons').forEach(container => {
+                    if (!container) return;
+                    container.style.position = container.style.position || 'relative';
+                    let indicator = container.querySelector('.lh-nav-indicator');
+                    if (!indicator) {
+                        indicator = document.createElement('div');
+                        indicator.className = 'lh-nav-indicator';
+                        container.appendChild(indicator);
+                    }
+                    // first, find and mark the active button based on aria-current or .lh-nav-btn--active
+                    let active = container.querySelector('.lh-nav-btn--active');
+                    if (!active) {
+                        active = container.querySelector('.lh-nav-btn[aria-current="page"]');
+                        if (active) {
+                            active.classList.add('lh-nav-btn--active');
+                        }
+                    }
+                    // fallback to first button if none marked
+                    if (!active) {
+                        active = container.querySelector('.lh-nav-btn');
+                    }
+                    if (active) moveIndicator(indicator, active, container, false);
+                });
+            };
+            
+            // wait for fonts to be ready, then initialize
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(initializeIndicator);
+            } else {
+                // fallback for browsers without document.fonts
+                setTimeout(initializeIndicator, 300);
+            }
+        }
+
+        // Move indicator on nav button click (delegated)
+        document.addEventListener('click', function (e) {
+            if (!mobileNavbarQuery.matches) return;
+            const navBtn = e.target.closest('.lh-nav-btn');
+            if (!navBtn) return;
+            const container = navBtn.closest('.lh-nav-icons--mobile') || navBtn.closest('.lh-nav-icons');
+            if (!container) return;
+            const indicator = container.querySelector('.lh-nav-indicator');
+            // Update active class cleanly
+            container.querySelectorAll('.lh-nav-btn').forEach(b => {
+                b.classList.remove('lh-nav-btn--active');
+                b.removeAttribute('aria-current');
+            });
+            navBtn.classList.add('lh-nav-btn--active');
+            navBtn.setAttribute('aria-current', 'page');
+            if (indicator) moveIndicator(indicator, navBtn, container, true);
+        });
+
+        // Reposition indicators on resize / orientation change
+        let _resizeTimer = null;
+        window.addEventListener('resize', function () {
+            if (_resizeTimer) clearTimeout(_resizeTimer);
+            _resizeTimer = setTimeout(function () {
+                document.querySelectorAll('.lh-nav-icons--mobile, .lh-nav-icons').forEach(container => {
+                    const indicator = container.querySelector('.lh-nav-indicator');
+                    const active = container.querySelector('.lh-nav-btn--active') || container.querySelector('.lh-nav-btn[aria-current="page"]');
+                    if (indicator && active) moveIndicator(indicator, active, container, true);
+                });
+            }, 120);
+        });
+        
+        // Also listen for orientation change and font loading
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                document.querySelectorAll('.lh-nav-icons--mobile, .lh-nav-icons').forEach(container => {
+                    const indicator = container.querySelector('.lh-nav-indicator');
+                    const active = container.querySelector('.lh-nav-btn--active') || container.querySelector('.lh-nav-btn[aria-current="page"]');
+                    if (indicator && active) moveIndicator(indicator, active, container, false);
+                });
+            }, 100);
+        });
+
+        // initialize indicator after initial active restore
+        initMobileNavIndicator();
+
         function updateFieldOnServer(fieldType, fieldValue) {
             const fieldMap = { name: 'name', email: 'email', phone: 'phone_number' };
             const fieldKey = fieldMap[fieldType]; if (!fieldKey) return Promise.resolve({ success: false, message: 'Field tidak valid' });
