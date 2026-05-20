@@ -11,17 +11,19 @@ class UserController extends Controller
 {
     public function index()
     {
-        $usersFromDb = Users::all();
+        $usersFromDb = Users::paginate(2);
 
-        $users = $usersFromDb->map(function ($user) {
+        // Pakai ->through() biar format isinya berubah tapi fitur paginasi Laravel nggak rusak
+        $usersFromDb->through(function ($user) {
             return [
                 'nama' => $user->name,
                 'email' => $user->email,
                 'whatsapp' => $user->phone_number
             ];
-        })->toArray();
+        });
 
-        return view('admin.user', compact('users'));
+        // Bawa datanya ke view
+        return view('admin.user', ['users' => $usersFromDb]);
     }
 
     /**

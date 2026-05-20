@@ -121,7 +121,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Manajemen Riwayat
     Route::get('/history-management', [HistoryManagementController::class, 'index']);
     Route::get('/history-management/trash', [HistoryManagementController::class, 'trash']);
-
     Route::post('/history-management/soft-delete/{id}', [HistoryManagementController::class, 'softDelete']);
     Route::post('/history-management/restore/{id}', [HistoryManagementController::class, 'restore']);
     Route::delete('/history-management/hard-delete/{id}', [HistoryManagementController::class, 'hardDelete']);

@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- TAMBAHAN WAJIB -->
+    <meta name="csrf-token"
+          content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Admin Panel')</title>
 
     <!-- GLOBAL CSS -->
-    <link rel="stylesheet" href="{{ asset('css/admin/global.css') }}">
+    <link rel="stylesheet"
+          href="{{ asset('css/admin/global.css') }}">
 
     <!-- PAGE CSS -->
     @stack('styles')
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body>
@@ -22,7 +33,13 @@
 
     <!-- KIRI -->
     <div class="header-left">
-        <img src="{{ asset('img/logo-lensa.png') }}" class="logo-header" alt="Logo">
+
+        <img
+            src="{{ asset('img/logo-lensa.png') }}"
+            class="logo-header"
+            alt="Logo"
+        >
+
     </div>
 
     <!-- KANAN -->
@@ -32,19 +49,22 @@
             @yield('header-search')
         @endif
 
-        <!-- ADMIN INFO -->
         <div class="admin-info">
+
             <div class="admin-text">
                 <strong>Admin</strong>
             </div>
+
             <div class="admin-icon">
                 <i class="fa fa-user"></i>
             </div>
+
         </div>
 
     </div>
 
 </div>
+
 
 <div class="admin-layout">
 
@@ -52,10 +72,16 @@
     <div class="sidebar">
 
         <ul>
+
             <div class="sidebar-toggle">
-                <button id="toggleSidebar" class="toggle-btn">
+
+                <button
+                    id="toggleSidebar"
+                    class="toggle-btn"
+                >
                     <i class="fa fa-bars"></i>
                 </button>
+
             </div>
 
             <li class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
@@ -99,14 +125,23 @@
                     <span>Setting</span>
                 </a>
             </li>
+
         </ul>
 
+
+        <!-- LOGOUT -->
         <div class="logout">
 
-            <form method="POST" action="{{ route('logout') }}">
+            <form
+                method="POST"
+                action="{{ route('logout') }}"
+            >
                 @csrf
 
-                <button type="submit" class="logout-btn">
+                <button
+                    type="submit"
+                    class="logout-btn"
+                >
 
                     <i class="fa fa-sign-out-alt"></i>
 
@@ -120,26 +155,57 @@
 
     </div>
 
-    <!-- MAIN -->
+
+    <!-- MAIN CONTENT -->
     <div class="main-content">
+
         @yield('content')
+
     </div>
 
 </div>
 
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById('toggleSidebar');
-    const sidebar = document.querySelector('.sidebar');
 
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
+document.addEventListener(
+'DOMContentLoaded',
 
-        if (window.innerWidth <= 768) {
-            sidebar.classList.toggle('active');
+function(){
+
+    const toggleBtn =
+    document.getElementById(
+        'toggleSidebar'
+    );
+
+    const sidebar =
+    document.querySelector(
+        '.sidebar'
+    );
+
+    toggleBtn.addEventListener(
+    'click',
+
+    ()=>{
+
+        sidebar.classList.toggle(
+            'collapsed'
+        );
+
+        if(
+            window.innerWidth <= 768
+        ){
+
+            sidebar.classList.toggle(
+                'active'
+            );
+
         }
+
     });
+
 });
+
 </script>
 
 </body>
