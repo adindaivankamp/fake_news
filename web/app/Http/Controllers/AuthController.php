@@ -33,7 +33,7 @@ class AuthController extends Controller
         $user->login_token = $token;
         $user->token_expired_at = now()->addMinutes(5);
         $user->save();
-        
+        // dd(env('FONNTE_TOKEN'));
         // kirim ke WA
         Http::withHeaders([
             'Authorization' => env('FONNTE_TOKEN')
@@ -93,5 +93,14 @@ class AuthController extends Controller
 
         // Redirect untuk user biasa (misalnya diarahkan ke route 'beranda' atau 'landing')
         return redirect()->route('beranda')->with('success', 'Login berhasil');
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }

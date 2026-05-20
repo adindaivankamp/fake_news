@@ -65,8 +65,8 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('admin/cek-berita') ? 'active' : '' }}">
-                <a href="/admin/cek-berita">
+            <li class="{{ request()->is('admin/cekberita') ? 'active' : '' }}">
+                <a href="/admin/cekberita">
                     <i class="fa fa-search"></i>
                     <span>Cek Berita</span>
                 </a>
@@ -102,10 +102,20 @@
         </ul>
 
         <div class="logout">
-            <a href="#">
-                <i class="fa fa-sign-out-alt"></i>
-                <span>Keluar Akun</span>
-            </a>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <button type="submit" class="logout-btn">
+
+                    <i class="fa fa-sign-out-alt"></i>
+
+                    Keluar Akun
+
+                </button>
+
+            </form>
+
         </div>
 
     </div>

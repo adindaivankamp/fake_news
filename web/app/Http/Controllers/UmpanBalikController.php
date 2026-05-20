@@ -10,17 +10,20 @@ class UmpanBalikController extends Controller
 {
     public function index()
     {
-        // Total feedback
-        $totalFeedback = DB::table('feedbacks')->count();
+        // ambil total sesuai data yang benar-benar tampil
+        $totalFeedback = DB::table('feedbacks')
+            ->join('users', 'feedbacks.user_id', '=', 'users.id')
+            ->count();
 
-        // sementara dummy sampai ada status baca
+        /*
+        // sementara dinonaktifkan
         $belumDibaca = $totalFeedback;
+        */
 
         return view(
             'admin.umpanbalik',
             compact(
-                'totalFeedback',
-                'belumDibaca'
+                'totalFeedback'
             )
         );
     }
@@ -32,10 +35,10 @@ class UmpanBalikController extends Controller
         $feedbacks = DB::table('feedbacks')
             ->join('users', 'feedbacks.user_id', '=', 'users.id')
             ->select(
-                'feedbacks.id', 
-                'users.name as username', 
-                'feedbacks.request_id', 
-                'feedbacks.feedback', 
+                'feedbacks.id',
+                'users.name as username',
+                'feedbacks.request_id',
+                'feedbacks.feedback',
                 'feedbacks.created_at'
             )
             ->orderBy('feedbacks.created_at', 'desc')
@@ -44,8 +47,11 @@ class UmpanBalikController extends Controller
 
                 return [
                     'id' => $item->id,
+
                     'username' => $item->username,
+
                     'request_id' => $item->request_id,
+
                     'feedback' => $item->feedback,
 
                     'date' => Carbon::parse(

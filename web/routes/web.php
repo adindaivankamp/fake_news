@@ -123,7 +123,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/history-management/hard-delete/{id}', [HistoryManagementController::class, 'hardDelete']);
 });
 
+    // Admin - Cek Berita
+    Route::get('/admin/cekberita', [PencarianController::class, 'adminIndex']);
 
+    });
+
+    // Admin logout 
+    Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 /*
 |--------------------------------------------------------------------------
 | WHATSAPP WEBHOOK & API (NO AUTH)
