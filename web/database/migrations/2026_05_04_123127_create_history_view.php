@@ -20,6 +20,7 @@ return new class extends Migration
                 u.name AS username,
                 r.input_text,
                 r.created_at,
+                r.deleted_at,
                 r.final_label,
                 r.final_confidence,
                 r.status

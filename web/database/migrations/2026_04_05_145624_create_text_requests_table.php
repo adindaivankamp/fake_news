@@ -19,6 +19,8 @@ return new class extends Migration
             $table->float('final_confidence')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

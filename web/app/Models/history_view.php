@@ -17,6 +17,7 @@ class history_view extends Model
         'username',
         'input_text',
         'created_at',
+        'deleted_at',
         'final_label',
         'final_confidence',
         'status'
