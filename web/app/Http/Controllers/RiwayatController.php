@@ -14,8 +14,8 @@ class RiwayatController extends Controller
     {
          Carbon::setLocale('id');
 
-        $histories = history_view::with('request.image')->orderBy('created_at', 'desc')->get();
-        $data = $histories->map(function ($history) {
+        $histories = history_view::with('request.image')->orderBy('created_at', 'desc')->paginate(10);
+        $data = $histories->through(function ($history) {
             
             $isImageSearch = $history->request && $history->request->image_id != null;
             $isHoax = strtolower($history->final_label) === 'hoax';
@@ -35,7 +35,7 @@ class RiwayatController extends Controller
                 'benar'      => round($persenBenar),
             ];
             
-        })->toArray(); 
+        }); 
         return view('admin.riwayat', compact('data'));
     }
 
