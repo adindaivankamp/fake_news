@@ -15,16 +15,21 @@
 
     <div class="search-wrapper">
 
-        <input 
-            type="text"
-            placeholder="Search..."
-            class="search-input"
-            id="searchInput"
-        >
+        <form action="{{ url()->current() }}" method="GET" class="search-wrapper">
 
-        <button class="search-btn">
-            <i class="fa fa-search"></i>
-        </button>
+            <input 
+                type="text"
+                name="search" 
+                value="{{ request('search') }}" 
+                placeholder="Search..."
+                class="search-input"
+                id="searchInput"
+            >
+                <button type="submit" class="search-btn">
+                    <i class="fa fa-search"></i>
+                </button>
+
+        </form>
 
     </div>
 

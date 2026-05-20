@@ -10,12 +10,22 @@ use Carbon\Carbon;
 
 class RiwayatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
          Carbon::setLocale('id');
 
-        $histories = history_view::with('request.image')->orderBy('created_at', 'desc')->paginate(10);
-        $data = $histories->through(function ($history) {
+         $search = request('search');
+
+        $histories = history_view::with('request')
+            ->when($search, function ($query) use ($search) {
+                $query->where('username', 'like', "%{$search}%")
+                    ->orWhere('input_text', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->appends(['search' => $search]);
+
+            $data = $histories->through(function ($history) {
             
             $isImageSearch = $history->request && $history->request->image_id != null;
             $isHoax = strtolower($history->final_label) === 'hoax';

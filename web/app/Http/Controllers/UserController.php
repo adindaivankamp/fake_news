@@ -9,11 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $usersFromDb = Users::paginate(2);
+        $search = request('search');
+        $usersFromDb = Users::when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phone_number', 'like', "%{$search}%");
+        })
+        ->paginate(10)
+        ->appends(['search' => $search]);
 
-        // Pakai ->through() biar format isinya berubah tapi fitur paginasi Laravel nggak rusak
         $usersFromDb->through(function ($user) {
             return [
                 'nama' => $user->name,
@@ -22,8 +28,8 @@ class UserController extends Controller
             ];
         });
 
-        // Bawa datanya ke view
-        return view('admin.user', ['users' => $usersFromDb]);
+        return view('admin.user', [
+            'users' => $usersFromDb,]);
     }
 
     /**
