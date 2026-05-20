@@ -262,7 +262,8 @@ class TextDetectionController extends Controller
         $sources = [];
         if (!empty($aiApiResponse['urls'])) {
             foreach ($aiApiResponse['urls'] as $url) {
-                $sources[] = ['title' => 'Sumber Referensi', 'url' => $url];
+                // 🔥 PERBAIKAN: Langsung kirim string URL-nya, hapus bentuk array ['title' => ..., 'url' => ...]
+                $sources[] = $url;
             }
         }
 
@@ -332,7 +333,8 @@ class TextDetectionController extends Controller
                 $urls = is_string($stage2Result->url) ? json_decode($stage2Result->url, true) : $stage2Result->url;
                 if (is_array($urls)) {
                     foreach ($urls as $url) {
-                        $sources[] = ['title' => 'Sumber Referensi', 'url' => $url];
+                        // 🔥 PERBAIKAN: Langsung kirim string URL-nya juga di sini
+                        $sources[] = $url;
                     }
                 }
             }
