@@ -126,8 +126,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Admin - Cek Berita
     Route::get('/admin/cekberita', [PencarianController::class, 'adminIndex']);
 
-    });
-
     // Admin logout 
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 /*

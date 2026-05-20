@@ -33,15 +33,15 @@ class GoogleAuthController extends Controller
                 $user = Users::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
-                    'password' => Hash::make(Str::random(24)), // Password dummy biar DB seneng
+                    'password' => Hash::make(Str::random(24)),
+                    'role' => 'user'
                 ]);
             }
 
-            // Langsung login-in usernya
+            // Langsung login in usernya
             Auth::login($user);
 
-            // Arahin ke halaman dashboard (ganti 'dashboard' sama route tujuan lu)
-            return redirect('/dashboard');
+            return redirect('/pencarian');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
