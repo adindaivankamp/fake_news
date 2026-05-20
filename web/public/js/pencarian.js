@@ -246,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let confidence = data.confidence || data.confidence_score?.hoax || 50;
         let summary = data.summary;
         let sources = data.sources;
+        const isSimilar = data.is_similar === true;
 
         // Normalize and map verdict label
         const normalizedVerdict = String(verdict || '').toLowerCase();
@@ -348,15 +349,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 <hr class="lh-result-view__divider">
 
                 <section class="lh-result-view__footer">
+                    ${isSimilar ? `
                     <p>
                         Informasi ini telah ditelusuri beberapa orang dengan hasil yang sama sebelumnya.
                         Ingin memulai penelusuran kembali untuk informasi yang lebih baru?
                     </p>
+                    ` : ''}
                     <div style="display:flex; gap:12px; align-items:center;">
+                        ${isSimilar ? `
                         <button class="lh-btn lh-btn--search lh-result-action" id="btnTelusuriUlang" type="button">
                         <iconify-icon icon="ic:outline-search" width="22" height="22"></iconify-icon>
-                        Telusuri
+                        Telusuri Ulang
                     </button>
+                        ` : ''}
                         <button class="lh-btn lh-btn--upload lh-result-action" id="btnFeedback" type="button">
                             <iconify-icon icon="ic:outline-feedback" width="20" height="20"></iconify-icon>
                             Umpan Balik

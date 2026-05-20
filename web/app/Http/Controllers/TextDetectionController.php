@@ -308,6 +308,7 @@ class TextDetectionController extends Controller
 
             return [
                 'success'    => true,
+                'is_similar' => true,
                 'verdict'    => $verdict,
                 'confidence' => $confidencePercentage,
                 'summary'    => $summaryText,
@@ -347,6 +348,7 @@ class TextDetectionController extends Controller
 
             return [
                 'success'    => true,
+                'is_similar' => true,
                 'verdict'    => $verdict,
                 'confidence' => $confidencePercentage,
                 'summary'    => $summaryText,
