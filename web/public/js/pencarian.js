@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
         const safeSummary = escapeHtml(summary || 'Belum ada penjelasan detail untuk hasil pencarian ini.');
+        const badgeLeftPercent = Math.max(8, Math.min(92, hoaxPercent));
 
         hasilPenelusuran.innerHTML = `
             <article class="lh-result-view">
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="lh-result-meter__track" aria-label="Visualisasi persentase hoax dan fakta">
                         <div class="lh-result-meter__hoax" style="width: ${hoaxPercent}%;"></div>
                         <div class="lh-result-meter__fakta" style="width: ${faktaPercent}%;"></div>
-                        <div class="lh-result-meter__badge">${hoaxPercent}% | ${faktaPercent}%</div>
+                        <div class="lh-result-meter__badge" style="left: ${badgeLeftPercent}%;">${hoaxPercent}% | ${faktaPercent}%</div>
                     </div>
                     <div class="lh-result-meter__labels">
                         <span>Hoax</span>
