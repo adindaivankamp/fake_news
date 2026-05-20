@@ -65,6 +65,26 @@
 
         </div>
     </main>
+
+    <!-- Feedback modal (hidden by default) -->
+    <div id="feedbackModal" class="feedback-modal" style="display:none;">
+        <div class="feedback-modal__overlay" id="feedbackOverlay"></div>
+        <div class="feedback-modal__box" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+            <header class="feedback-modal__header">
+                <h3 id="feedbackTitle">Umpan Balik Hasil Penelusuran</h3>
+            </header>
+            <div class="feedback-modal__body">
+                <textarea id="feedbackText" placeholder="Berikan umpan balik Anda tentang hasil ini..." maxlength="1000"></textarea>
+                <p class="feedback-modal__note">Terima kasih atas kontribusi Anda untuk meningkatkan kualitas verifikasi.</p>
+                <div class="feedback-modal__status" id="feedbackStatus" aria-live="polite"></div>
+            </div>
+            <footer class="feedback-modal__footer">
+                <button class="lh-btn lh-btn--upload" id="btnCancelFeedback" type="button">Batal</button>
+                <button class="lh-btn lh-btn--search" id="btnSubmitFeedback" type="button">Kirim Umpan Balik</button>
+            </footer>
+        </div>
+    </div>
+
 </div>
 @endsection
 
@@ -72,6 +92,7 @@
 <link rel="stylesheet" href="{{ asset('css/user/background.css') }}">
 <link rel="stylesheet" href="{{ asset('css/user/navbar.css') }}">
 <link rel="stylesheet" href="{{ asset('css/user/profile-popup.css') }}">
+<link rel="stylesheet" href="{{ asset('css/user/pencarian.css') }}">
 @endpush
 
 @push('scripts')

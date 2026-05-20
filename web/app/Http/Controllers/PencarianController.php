@@ -68,10 +68,14 @@ class PencarianController extends Controller
      */
     public function telusuriGambar(Request $request): JsonResponse
     {
+        Log::info($request->all());
         $request->merge([
-            'image' => $request->file('gambar')
+            'gambar' => $request->file('gambar')
         ]);
-
+        Log::info('Received image search request', [
+            'user_id' => Auth::id(),
+            'has_image' => $request->hasFile('gambar')
+        ]);
         $imageDetectionController = new ImageDetectionController();
         return $imageDetectionController->detect($request);
     }

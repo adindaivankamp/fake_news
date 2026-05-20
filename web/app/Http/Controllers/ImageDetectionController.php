@@ -17,12 +17,12 @@ class ImageDetectionController extends Controller
     public function detect(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         try {
             // 1. Upload ke Cloudinary
-            $file = $request->file('image');
+            $file = $request->file('gambar');
 
         Log::info('Menerima file: ' . $file->getClientOriginalName());
 
@@ -56,9 +56,12 @@ class ImageDetectionController extends Controller
                 'image_id' => $imgRecord->id,
                 'status' => 'processing'
             ]);
-
+            log::info('Request baru dibuat dengan ID: ' . $url);
             // 4. Panggil API Python
-            $response = Http::post('http://localhost:8000/image-detection', ['image_url' => $url]);
+            $response = Http::timeout(300)
+        ->post('http://localhost:8004/image-detection', [
+            'image_url' => $url
+        ]);
             Log::info($response->body());
             if ($response->successful()) {
                 $res = $response->json();
@@ -76,11 +79,14 @@ class ImageDetectionController extends Controller
                 // 6. Update hasil akhir di tabel 'requests'
                 $isHoax = $res['prediction'] == 1;
                 $finalLabel = $isHoax ? 'HOAX' : 'FAKTA';
+                if ($isHoax) {
+                    $hoaxPercentage = round($res['confidence'] * 100);
+                    $factPercentage = 100 - $hoaxPercentage;
+                } else {
+                    $factPercentage = round($res['confidence'] * 100);
+                    $hoaxPercentage  = 100 - $factPercentage;
+                }
                 
-                // Menghitung persentase untuk tampilan bar di Figma
-                $hoaxPercentage = round($res['confidence'] * 100);
-                $factPercentage = 100 - $hoaxPercentage;
-
                 $newReq->update([
                     'final_label' => $finalLabel,
                     'final_confidence' => $res['confidence'],

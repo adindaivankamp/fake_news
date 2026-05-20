@@ -14,6 +14,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\DetectionController;
+use App\Http\Controllers\ImageDetectionController;
 use App\Http\Controllers\PopulerHistoryController;
 use App\Http\Controllers\CsvController;
 use App\Http\Controllers\HistoryManagementController;
@@ -32,7 +33,7 @@ Route::get('/', function () {
 // Pencarian (public)
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
 Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
-Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
+Route::post('/telusuri-gambar', [ImageDetectionController::class, 'detect'])->name('telusuri.gambar');
 Route::get('/pencarian/populer', [PopulerHistoryController::class, 'index'])->name('pencarian.populer');
 
 // WhatsApp Page
@@ -91,7 +92,7 @@ Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])-
 */
 
 // Admin routes (kept unprotected here for later grouping) -- uncomment middleware when ready
-// Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -120,6 +121,7 @@ Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])-
     Route::post('/history-management/soft-delete/{id}', [HistoryManagementController::class, 'softDelete']);
     Route::post('/history-management/restore/{id}', [HistoryManagementController::class, 'restore']);
     Route::delete('/history-management/hard-delete/{id}', [HistoryManagementController::class, 'hardDelete']);
+});
 
 
 /*

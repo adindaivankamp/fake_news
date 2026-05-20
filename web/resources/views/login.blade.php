@@ -16,35 +16,12 @@
     {{-- @vite(['resources/css/login.css']) --}}
 
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/navbar.css') }}">
 </head>
 <body>
 
     {{-- ===== NAVBAR ===== --}}
-    <header class="lh-navbar">
-        <a href="{{ route('landing') }}" class="lh-logo" aria-label="Lensa Hoax">
-            <img src="{{ asset('img/logo-lensa.png') }}" alt="Logo Lensa Hoax" class="lh-logo__img">
-        </a>
-
-        <nav class="lh-nav-icons" aria-label="Aksi pengguna">
-            {{-- Trending button --}}
-            <a href="{{ route('pencarian.populer') }}" class="lh-nav-btn" aria-label="Tren" title="Trending">
-                <iconify-icon icon="iconamoon:trend-up-fill" width="26" height="26"></iconify-icon>
-                <span class="lh-nav-tooltip" role="tooltip">
-                    <iconify-icon icon="iconamoon:trend-up-fill" width="18" height="18"></iconify-icon>
-                    <span>Pencarian Terpopuler</span>
-                </span>
-            </a>
-
-            {{-- WhatsApp button --}}
-            <a href="{{ route('whatsapp.page') }}" class="lh-nav-btn" aria-label="WhatsApp" title="WhatsApp">
-                <iconify-icon icon="garden:whatsapp-fill-16" width="24" height="24"></iconify-icon>
-                <span class="lh-nav-tooltip" role="tooltip">
-                    <iconify-icon icon="garden:whatsapp-fill-16" width="18" height="18"></iconify-icon>
-                    <span>Dapatkan Melalui WhatsApp</span>
-                </span>
-            </a>
-        </nav>
-    </header>
+    @include('user.partials.navbar')
 
     {{-- ===== MAIN CONTENT ===== --}}
     <main class="login-page">

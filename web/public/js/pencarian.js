@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 if (isSuccess) {
                     // Handle both response formats
-                    const resultData = data.data || data;
+                    const resultData = data;
                     displayResult(resultData);
                     clearImagePreview();
                 } else {
@@ -298,17 +298,17 @@ document.addEventListener('DOMContentLoaded', function () {
         } 
         // 3. Fallback (cadangan) jika link_counter kosong, pakai struktur 'sources' yang lama
         else if (Array.isArray(sources) && sources.length > 0) {
-            sourcesHtml = sources.map(source => {
-                const safeTitle = escapeHtml(source?.title || 'Sumber referensi');
-                const safeUrl = escapeHtml(source?.url || '#');
-                const hasUrl = Boolean(source?.url) && source.url !== '';
-                const sourceLink = hasUrl
-                    ? `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${safeUrl}</a>`
-                    : '-';
+    sourcesHtml = sources.map((url, index) => {
+        const safeUrl = escapeHtml(url);
 
-                return `<li>${safeTitle}. Diakses dari ${sourceLink}</li>`;
-            }).join('');
-        }
+        return `<li>
+            Sumber ${index + 1}:
+            <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" style="word-break: break-all;">
+                ${safeUrl}
+            </a>
+        </li>`;
+    }).join('');
+}
 
         const safeSummary = escapeHtml(summary || 'Belum ada penjelasan detail untuk hasil pencarian ini.');
 
@@ -351,10 +351,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         Informasi ini telah ditelusuri beberapa orang dengan hasil yang sama sebelumnya.
                         Ingin memulai penelusuran kembali untuk informasi yang lebih baru?
                     </p>
-                    <button class="lh-btn lh-btn--search lh-result-action" id="btnTelusuriUlang" type="button">
+                    <div style="display:flex; gap:12px; align-items:center;">
+                        <button class="lh-btn lh-btn--search lh-result-action" id="btnTelusuriUlang" type="button">
                         <iconify-icon icon="ic:outline-search" width="22" height="22"></iconify-icon>
                         Telusuri
                     </button>
+                        <button class="lh-btn lh-btn--upload lh-result-action" id="btnFeedback" type="button">
+                            <iconify-icon icon="ic:outline-feedback" width="20" height="20"></iconify-icon>
+                            Umpan Balik
+                        </button>
+                    </div>
                 </section>
             </article>
         `;
@@ -364,6 +370,77 @@ document.addEventListener('DOMContentLoaded', function () {
             btnTelusuriUlang.addEventListener('click', function () {
                 inputInformasi.focus();
                 inputInformasi.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+
+        // Feedback button handler: open modal
+        const btnFeedback = document.getElementById('btnFeedback');
+        if (btnFeedback) {
+            btnFeedback.addEventListener('click', function () {
+                const feedbackModal = document.getElementById('feedbackModal');
+                const feedbackText = document.getElementById('feedbackText');
+                if (feedbackModal) {
+                    feedbackModal.style.display = 'block';
+                    feedbackText.value = '';
+                    feedbackText.focus();
+                }
+            });
+        }
+
+        // Modal actions (submit / cancel)
+        const btnSubmitFeedback = document.getElementById('btnSubmitFeedback');
+        const btnCancelFeedback = document.getElementById('btnCancelFeedback');
+        const feedbackOverlay = document.getElementById('feedbackOverlay');
+
+        function closeFeedbackModal() {
+            const feedbackModal = document.getElementById('feedbackModal');
+            if (feedbackModal) feedbackModal.style.display = 'none';
+        }
+
+        if (btnCancelFeedback) {
+            btnCancelFeedback.addEventListener('click', closeFeedbackModal);
+        }
+        if (feedbackOverlay) {
+            feedbackOverlay.addEventListener('click', closeFeedbackModal);
+        }
+
+        if (btnSubmitFeedback) {
+            btnSubmitFeedback.addEventListener('click', function () {
+                const feedbackTextEl = document.getElementById('feedbackText');
+                const statusEl = document.getElementById('feedbackStatus');
+                const text = (feedbackTextEl && feedbackTextEl.value || '').trim();
+
+                if (!text) {
+                    if (statusEl) statusEl.textContent = 'Silakan masukkan umpan balik sebelum mengirim.';
+                    return;
+                }
+
+                // Disable button while sending
+                btnSubmitFeedback.disabled = true;
+                if (statusEl) statusEl.textContent = 'Mengirim...';
+
+                // Send feedback to server (POST /feedback)
+                fetch('/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    body: JSON.stringify({
+                        feedback: text,
+                        verdict: verdictInfo.label || normalizedVerdict || null,
+                    }),
+                })
+                    .then(resp => resp.json())
+                    .then(resdata => {
+                        if (statusEl) statusEl.textContent = (resdata.success || resdata.status === 'success') ? 'Terima kasih, umpan balik berhasil dikirim.' : (resdata.message || 'Gagal mengirim umpan balik.');
+                        setTimeout(() => { closeFeedbackModal(); if (statusEl) statusEl.textContent = ''; }, 1400);
+                    })
+                    .catch(err => {
+                        console.error('Feedback error:', err);
+                        if (statusEl) statusEl.textContent = 'Terjadi kesalahan saat mengirim umpan balik.';
+                    })
+                    .finally(() => { btnSubmitFeedback.disabled = false; });
             });
         }
     }

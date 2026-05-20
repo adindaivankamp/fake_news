@@ -30,7 +30,10 @@
 
         </div>
 
-        <button class="btn-export">
+        <button 
+            class="btn-export"
+            onclick="window.location.href='{{ route('riwayat.unduh_csv') }}'"
+        >
             <i class="fa fa-download"></i>
             Export CSV
         </button>
