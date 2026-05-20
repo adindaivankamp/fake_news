@@ -126,12 +126,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/history-management/hard-delete/{id}', [HistoryManagementController::class, 'hardDelete']);
 });
 
-    // Admin - Cek Berita
-    Route::get('/admin/cekberita', [PencarianController::class, 'adminIndex']);
+// Admin - Cek Berita
+Route::get('/admin/cekberita', [PencarianController::class, 'adminIndex']);
 
 
-    // Admin logout 
-    Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+// Admin logout 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 /*
 |--------------------------------------------------------------------------
 | WHATSAPP WEBHOOK & API (NO AUTH)
@@ -182,8 +182,12 @@ Route::middleware(['auth'])->group(function () {
     // Link WhatsApp
     Route::post('/link-wa', [WaController::class, 'linkWhatsApp'])->name('wa.link');
 
-    // User-only: Riwayat Pencarian (search history)
-    Route::get('/riwayat-pencarian', function () {
-        return view('user.riwayat');
-    })->name('riwayat');
+    // Rute untuk halaman riwayat user (Digabung dan diubah namanya menjadi 'riwayat')
+    Route::get('/riwayat-pencarian', [RiwayatController::class, 'riwayatUser'])->name('riwayat');
+
+    // Rute untuk menghapus riwayat user secara spesifik (Soft Delete)
+    Route::delete('/riwayat-saya/{id}', [RiwayatController::class, 'destroyUserHistory']);
+
+    //Rute untuk menghapus semua riwayat user sekaligus
+    Route::delete('/riwayat-saya', [RiwayatController::class, 'destroyAllUserHistory']);
 });

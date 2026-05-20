@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\history_view;
 use App\Models\UserInteractions;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class RiwayatController extends Controller
 {
     public function index()
     {
-         Carbon::setLocale('id');
+        Carbon::setLocale('id');
 
         $histories = history_view::with('request.image')->orderBy('created_at', 'desc')->paginate(10);
         $data = $histories->through(function ($history) {
@@ -20,7 +21,7 @@ class RiwayatController extends Controller
             $isImageSearch = $history->request && $history->request->image_id != null;
             $isHoax = strtolower($history->final_label) === 'hoax';
             $confidence = ($history->final_confidence ?? 0) * 100;
-            
+
             $persenHoax = $isHoax ? $confidence : (100 - $confidence);
             $persenBenar = $isHoax ? (100 - $confidence) : $confidence;
 
@@ -46,7 +47,7 @@ class RiwayatController extends Controller
         // 1. Tangkap input dari frontend
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
-        $label = $request->input('label'); 
+        $label = $request->input('label');
 
         // 2. Mulai bikin query filter ke history_view
         $query = history_view::query();
@@ -60,7 +61,7 @@ class RiwayatController extends Controller
         }
 
         if (!empty($label)) {
-            $dbLabel = strtolower($label) === 'fake' ? 'hoax' : 'valid'; 
+            $dbLabel = strtolower($label) === 'fake' ? 'hoax' : 'valid';
             $query->where('final_label', $dbLabel);
         }
 
@@ -82,6 +83,119 @@ class RiwayatController extends Controller
         return response()->json([
             'status' => 'success',
             'data'   => $data
+        ]);
+    }
+
+    /**
+     * FUNGSI UNTUK HALAMAN RIWAYAT ROLE: USER
+     */
+    public function riwayatUser()
+    {
+        Carbon::setLocale('id');
+
+        // Pastikan user sudah login (jika guest, bisa diarahkan login dulu atau kembalikan data kosong)
+        $userId = Auth::check() ? Auth::id() : 2; // Jika guest pakai ID 2
+
+        // Ambil riwayat khusus milik user ini
+        $histories = history_view::with('request.image')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $data = $histories->map(function ($history) {
+
+            $isImageSearch = $history->request && $history->request->image_id != null;
+            $isHoax = strtolower($history->final_label) === 'hoax' || strtolower($history->final_label) === 'fake';
+            $confidence = ($history->final_confidence ?? 0) * 100;
+
+            // Format deskripsi hasil pencarian (meniru JS lama)
+            if ($isHoax) {
+                $statusStr = 'hoax';
+                $description = "Investigasi mendalam menunjukkan bahwa informasi ini mengandung elemen yang telah dilebih-lebihkan atau tidak sesuai dengan fakta sebenarnya. Berdasarkan analisis, klaim ini diklasifikasikan sebagai informasi yang menyesatkan dengan tingkat hoaks " . round($confidence) . "%.";
+            } else {
+                $statusStr = 'benar';
+                $description = "Hasil verifikasi menunjukkan bahwa informasi ini memiliki tingkat kebenaran sekitar " . round($confidence) . "% dan termasuk informasi yang valid berdasarkan hasil analisis sistem.";
+            }
+
+            // Ambil URL referensi jika dari Stage 2
+            $urlsText = "";
+            if ($history->request && $history->request->stage2Results->isNotEmpty()) {
+                $urls = $history->request->stage2Results->first()->url;
+                if (!empty($urls)) {
+                    $urlArr = is_string($urls) ? json_decode($urls, true) : $urls;
+                    if (is_array($urlArr)) {
+                        $urlsText = " Sumber referensi: " . implode(" | ", $urlArr);
+                        $description .= $urlsText;
+                    }
+                }
+            }
+
+            // Jika ada fact_text dari KnowledgeBase (Stage 1)
+            if ($history->request && $history->request->stage1Results->isNotEmpty()) {
+                $kbId = $history->request->stage1Results->first()->knowledge_id;
+                $kb = \App\Models\KnowledgeBase::find($kbId);
+                if ($kb && !empty($kb->fact_text)) {
+                    $description = ltrim($kb->fact_text, ', ');
+                }
+            }
+
+            return [
+                'id'          => $history->request_id,
+                'query'       => $isImageSearch ? '[Pencarian Berupa Gambar]' : $history->input_text,
+                'status'      => $statusStr,
+                'description' => $description,
+                'date'        => $history->created_at, // Format Y-m-d H:i:s
+                'confidence'  => round($confidence)
+            ];
+        })->toArray();
+
+        // Return ke view 'user.riwayat' sambil membawa array JSON dari data
+        // Pastikan view kamu sesuai ya namanya (misal: 'user.riwayat-pencarian')
+        return view('user.riwayat', compact('data'));
+    }
+
+    /**
+     * FUNGSI UNTUK MENGHAPUS (SOFT DELETE) RIWAYAT USER
+     */
+    public function destroyUserHistory($id)
+    {
+        $userId = Auth::check() ? Auth::id() : 2;
+
+        // Cari riwayat interaksi user dengan request_id tersebut
+        $interaction = UserInteractions::where('user_id', $userId)
+            ->where('request_id', $id)
+            ->first();
+
+        if ($interaction) {
+            // Hapus interaksinya saja (Soft Delete riwayat user)
+            // Data asli di tabel 'requests' akan tetap aman
+            $interaction->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Riwayat berhasil dihapus.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Riwayat tidak ditemukan.'
+        ], 404);
+    }
+
+    /**
+     * FUNGSI UNTUK MENGHAPUS SEMUA RIWAYAT USER SEKALIGUS (SOFT DELETE)
+     */
+    public function destroyAllUserHistory()
+    {
+        $userId = Auth::check() ? Auth::id() : 2;
+
+        // Hapus semua catatan interaksi milik user ini saja
+        UserInteractions::where('user_id', $userId)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Semua riwayat pencarian Anda berhasil dibersihkan.'
         ]);
     }
 }

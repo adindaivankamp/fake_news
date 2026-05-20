@@ -24,14 +24,16 @@ class Requests extends Model
         return $this->belongsTo(Images::class);
     }
 
+    // Cari fungsi ini, lalu tambahkan 'request_id'
     public function stage1Results()
     {
-        return $this->hasMany(Stage1Results::class);
+        return $this->hasMany(Stage1Results::class, 'request_id');
     }
 
+    // Cari fungsi ini juga, lalu tambahkan 'request_id'
     public function stage2Results()
     {
-        return $this->hasMany(Stage2Result::class);
+        return $this->hasMany(Stage2Result::class, 'request_id');
     }
 
     public function imageSearchResults()
