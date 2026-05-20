@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 2, 'name' => 'Guest User', 'email' => 'guest@lensa-hoax.com', 'role' => 'guest', 'phone_number' => '000000000000'],
 
             // Anggota Kelompok lainnya
-            ['id' => 3, 'name' => 'Desi', 'email' => 'desi@student.com', 'role' => 'admin', 'phone_number' => '083841065365'],
+            ['id' => 3, 'name' => 'Desi', 'email' => 'desikarmila211@gmail.com', 'role' => 'admin', 'phone_number' => '083841065365'],
         ];
 
         $userData = [];

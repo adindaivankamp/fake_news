@@ -13,9 +13,16 @@ class RiwayatController extends Controller
     public function index()
     {
          Carbon::setLocale('id');
+<<<<<<< Updated upstream
 
         $histories = history_view::with('request.image')->orderBy('created_at', 'desc')->paginate(10);
         $data = $histories->through(function ($history) {
+=======
+        
+        $histories = history_view::orderBy('created_at', 'desc')->get();
+        dd($histories->count(), $histories);
+        $data = $histories->map(function ($history) {
+>>>>>>> Stashed changes
             
             $isImageSearch = $history->request && $history->request->image_id != null;
             $isHoax = strtolower($history->final_label) === 'hoax';
@@ -25,6 +32,8 @@ class RiwayatController extends Controller
             $persenBenar = $isHoax ? (100 - $confidence) : $confidence;
 
             return [
+                'request_id' => $history->request_id,
+                'deleted_at' => $history->request? $history->request->deleted_at: null,
                 'judul'      => $isImageSearch ? '[GAMBAR] Pencarian oleh: ' . $history->username : '[TEKS] Pencarian oleh: ' . $history->username,
                 'penjelasan' => $isHoax ? "Hasil verifikasi menunjukkan bahwa sebagian besar informasi ini, yakni sekitar " . round($persenHoax) . "%, mengandung unsur hoaks atau ketidaksesuaian fakta. Mohon untuk memvalidasi kembali sumber informasi sebelum menyebarkannya." : "Hasil verifikasi menunjukkan bahwa informasi ini memiliki tingkat kebenaran sekitar " . round($persenBenar) . "% dan termasuk informasi yang valid berdasarkan hasil analisis sistem.",
                 'user'       => $history->username,

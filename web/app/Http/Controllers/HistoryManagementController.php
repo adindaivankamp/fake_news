@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\history_view;
 use App\Models\Requests; // Tabel utamanya
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+
 
 class HistoryManagementController extends Controller
 {
@@ -44,7 +47,10 @@ class HistoryManagementController extends Controller
      */
     public function softDelete($requestId)
     {
+        Log::info("Attempting to soft delete request with ID: $requestId");
+        Log::info(Requests::find($requestId));
         $request = Requests::find($requestId);
+        
         
         if (!$request) {
             return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan'], 404);

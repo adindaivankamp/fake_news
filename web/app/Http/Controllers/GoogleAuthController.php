@@ -48,7 +48,12 @@ class GoogleAuthController extends Controller
             return redirect('/dashboard');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            dd([
+    'message' => $e->getMessage(),
+    'file' => $e->getFile(),
+    'line' => $e->getLine(),
+    'trace' => $e->getTraceAsString(),
+]);
             return redirect('/')->with('error', 'Gagal login pakai Google!');
         }
     }
